@@ -54,11 +54,6 @@ export default async function Dashboard() {
         <Link className="btn btn-primary" href="/">Create screening link <span aria-hidden="true">↗</span></Link>
       </header>
 
-      <aside className="dashboard-notice" aria-label="Demo and AI disclosure">
-        <span className="dashboard-demo">Demo data only</span>
-        <p>AI-assisted pre-screening using synthetic data. Clinical research staff must review all results. This does not determine eligibility or enrollment.</p>
-      </aside>
-
       {error ? <section className="card dashboard-sessions" aria-labelledby="sessions-heading">
         <div className="dashboard-table-heading"><div><h2 id="sessions-heading">Recent sessions</h2></div></div>
         <div className="dashboard-empty">

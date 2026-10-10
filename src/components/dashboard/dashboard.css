@@ -3,9 +3,6 @@
 .dashboard-heading-copy { display: grid; gap: 8px; }
 .dashboard-heading h1 { font-size: clamp(1.8rem, 3.2vw, 2.5rem); }
 .dashboard-heading > .btn { flex-shrink: 0; }
-.dashboard-notice { display: flex; align-items: center; gap: 16px; border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px; background: var(--panel); }
-.dashboard-notice p { font-size: .875rem; color: var(--muted); }
-.dashboard-demo { flex-shrink: 0; padding: 6px 12px; border-radius: 999px; color: var(--verify-text); background: var(--verify-bg); font-size: .8rem; font-weight: 800; }
 .dashboard-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .dashboard-summary-tile { display: flex; flex-direction: column; gap: 16px; padding: 22px; }
 .dashboard-summary-tile h2 { display: flex; align-items: baseline; gap: 8px; min-height: 44px; font-size: .875rem; line-height: 1.5; }
@@ -50,7 +47,6 @@
   .coordinator-dashboard { padding-top: 24px; gap: 20px; }
   .dashboard-heading { flex-direction: column; align-items: stretch; gap: 16px; }
   .dashboard-heading-copy { gap: 6px; }
-  .dashboard-notice { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px; }
   .dashboard-summary { gap: 12px; }
   .dashboard-summary-tile { padding: 16px; gap: 12px; }
   .dashboard-summary-tile h2 { font-size: .8rem; min-height: 58px; }
