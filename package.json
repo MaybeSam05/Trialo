@@ -1,0 +1,27 @@
+{
+  "name": "trialo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@elevenlabs/react": "latest",
+    "@supabase/supabase-js": "2.49.1",
+    "next": "16.4.0",
+    "qrcode": "latest",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/qrcode": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "16.4.0",
+    "typescript": "latest"
+  }
+}
