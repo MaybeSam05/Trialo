@@ -1,4 +1,3 @@
-import { demoTrials } from "@/lib/defaults";
 import type { MatchResult } from "@/lib/types";
 
 // "include": a yes means the person fits. "exclude": a yes may rule them out. "info": collected, never scored.
@@ -12,10 +11,19 @@ const GENERAL = "General";
 // The plan forbids final-decision wording and real health identifiers in questions.
 const BANNED = /\b(eligible|ineligible|accepted|rejected|ssn|social security|medical record number)\b/i;
 
-export const DEFAULT_QUESTIONS: Question[] = demoTrials.flatMap((trial) => [
-  ...trial.inclusion.map((criterion, index) => ({ key: `${trial.id}_inc_${index + 1}`, text: `Do you have ${criterion}?`, kind: "include" as const, trial: trial.name })),
-  ...trial.exclusion.map((criterion, index) => ({ key: `${trial.id}_exc_${index + 1}`, text: `Have you had ${criterion}?`, kind: "exclude" as const, trial: trial.name })),
-]);
+// Sample list (synthetic): one fit question and one flag question per demo trial.
+export const DEFAULT_QUESTIONS: Question[] = [
+  { key: "trial_a_fit", text: "Have you been diagnosed with type 2 diabetes?", kind: "include", trial: "Trial A" },
+  { key: "trial_a_flag", text: "Are you currently pregnant?", kind: "exclude", trial: "Trial A" },
+  { key: "trial_b_fit", text: "Do you know your eGFR kidney function number?", kind: "include", trial: "Trial B" },
+  { key: "trial_b_flag", text: "Are you currently on dialysis?", kind: "exclude", trial: "Trial B" },
+  { key: "trial_c_fit", text: "Have you been diagnosed with chronic kidney disease?", kind: "include", trial: "Trial C" },
+  { key: "trial_c_flag", text: "Have you ever had an organ transplant?", kind: "exclude", trial: "Trial C" },
+  { key: "trial_d_fit", text: "Do you live in New Jersey?", kind: "include", trial: "Trial D" },
+  { key: "trial_d_flag", text: "Are you currently taking part in another clinical trial?", kind: "exclude", trial: "Trial D" },
+  { key: "trial_e_fit", text: "Do you currently take metformin?", kind: "include", trial: "Trial E" },
+  { key: "trial_e_flag", text: "Have you had surgery in the last three months?", kind: "exclude", trial: "Trial E" },
+];
 
 /** Cleans coordinator input. Returns the questions, or an error message to show them. */
 export function validateQuestions(input: unknown): { questions: Question[] } | { error: string } {
