@@ -118,9 +118,11 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     : sensitive ? "gentle"
     : "listening";
 
+  const yourTurn = voice && connected && !ended && !error && !isMuted && !isSpeaking && !waitingForOllie && Boolean(lastAgent);
+
   const status = error ? "Connection problem" : ended ? "Interview finished" : !connected ? "Connecting…"
     : !voice ? (waitingForOllie ? "Ollie is replying…" : "Type or tap your answer")
-    : isSpeaking ? "Ollie is speaking" : waitingForOllie ? "Ollie is thinking…" : isMuted ? "Microphone muted" : "Listening…";
+    : isSpeaking ? "Ollie is speaking" : waitingForOllie ? "Ollie is thinking…" : isMuted ? "Microphone muted" : yourTurn ? "Your turn to speak" : "Listening…";
   const bubble = error ? "Hmm, I couldn't connect. Let's try that again."
     : ended ? "Thank you! The research team will review your answers."
     : !connected ? "Connecting you to Ollie…"
@@ -146,7 +148,13 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     </div>
 
     <div className="iv-stage">
-      <span className="iv-status" aria-live="polite">{status}</span>
+      <span className="iv-status" data-your-turn={yourTurn} role="status" aria-live="polite" aria-atomic="true">
+        {yourTurn && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" focusable="false">
+          <rect x="9" y="2" width="6" height="12" rx="3" />
+          <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" />
+        </svg>}
+        {status}
+      </span>
       <div className="iv-scene">
         <SpeechBubble text={bubble} speaking={isSpeaking || !voice} paced={connected && !ended && !error && Boolean(lastAgent)} reducedMotion={reducedMotion} timeline={timeline} />
         <Mascot face={face} speaking={connected && !ended && !error && isSpeaking} listening={activelyListening} reducedMotion={reducedMotion} />

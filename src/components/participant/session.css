@@ -12,6 +12,10 @@
 .iv-stage { grid-area: stage; background: var(--sky); border-radius: 32px; padding: 24px 32px 28px; display: flex; flex-direction: column; align-items: center; gap: 16px; min-height: 0; }
 .iv-status { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 12px; border-radius: 999px; background: var(--ink); color: var(--card); font-size: 0.875rem; font-weight: 700; }
 .iv-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+/* Reuse the status pill so the turn cue never crowds the mobile answer area. */
+.iv-status[data-your-turn="true"] { background: var(--match-bg); color: var(--match-text); }
+.iv-status[data-your-turn="true"]::before { display: none; }
+.iv-status svg { flex: none; }
 .iv-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; width: 100%; min-height: 0; }
 .iv-question { position: relative; max-width: 560px; background: var(--card); color: var(--ink); border-radius: 24px; padding: 18px 22px; font-size: clamp(1.25rem, 2.2vw, 1.875rem); font-weight: 800; line-height: 1.2; box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
 .iv-question > span { display: block; }
