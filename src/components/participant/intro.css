@@ -1,0 +1,25 @@
+/* Participant: welcome / consent (Figma 01 Welcome + D1 Landing) */
+.hero { background: var(--sky); }
+.hero-inner { width: min(100% - 32px, 1248px); margin: 0 auto; padding: clamp(32px, 6vw, 64px) 0; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
+.hero-copy { display: grid; gap: 20px; max-width: 640px; }
+.hero-guide { display: grid; justify-items: center; gap: 12px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.hero-inner { grid-template-areas: "copy guide"; }
+.intro .hero-copy { grid-area: copy; }
+.intro .hero-guide { grid-area: guide; }
+.sheet-grabber { display: none; }
+.intro-notes { display: grid; gap: 10px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 20px; font-size: 0.9375rem; }
+.intro-meta { font-size: 0.875rem; font-weight: 600; }
+
+@media (max-width: 760px) {
+  .hero-inner { grid-template-columns: 1fr; grid-template-areas: "guide" "copy"; width: 100%; padding: 24px 0 0; gap: 16px; }
+  .hero-guide { padding: 0 16px; }
+  .hero-guide .ollie { width: 170px; }
+  .intro .hero-copy { max-width: none; background: var(--card); border-radius: 28px 28px 0 0; padding: 12px 24px 32px; gap: 16px; }
+  .sheet-grabber { display: block; width: 44px; height: 6px; border-radius: 3px; background: var(--line); justify-self: start; }
+  .intro-notes { background: var(--panel); border: 0; }
+  .actions { display: grid; }
+  .features { grid-template-columns: 1fr; }
+}

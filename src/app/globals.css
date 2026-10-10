@@ -84,14 +84,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .bubble { background: var(--card); color: var(--ink); border-radius: 22px 22px 22px 6px; padding: 16px 20px; max-width: 520px; box-shadow: 0 1px 0 var(--line); }
 .bubble-lg { font-size: clamp(1.25rem, 2.2vw, 1.875rem); font-weight: 800; line-height: 1.2; }
 
-/* Participant: intro */
-.hero { background: var(--sky); }
-.hero-inner { width: min(100% - 32px, 1248px); margin: 0 auto; padding: clamp(32px, 6vw, 64px) 0; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
-.hero-copy { display: grid; gap: 20px; max-width: 640px; }
-.hero-guide { display: grid; justify-items: center; gap: 12px; }
-.actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
 /* Participant: session */
 .session { display: grid; grid-template-columns: 1fr 480px; gap: 32px; min-height: 640px; }
 .stage { background: var(--sky); border-radius: 32px; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: left; }
@@ -144,11 +136,7 @@ td .result { display: grid; gap: 4px; justify-items: start; }
 }
 @media (max-width: 760px) {
   body { font-size: 16px; }
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-guide { order: -1; }
-  .hero-guide .ollie { width: 170px; }
   .stage .ollie { width: 190px; }
-  .features { grid-template-columns: 1fr; }
   .site-nav { gap: 16px; }
   .stage { padding: 24px 16px; border-radius: 24px; }
   .side { padding: 20px; border-radius: 24px; }

@@ -3,6 +3,7 @@
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Ollie, type OllieFace } from "@/components/ollie";
+import { Intro } from "@/components/participant/intro";
 
 type Message = { id: number; role: "user" | "agent"; text: string };
 
@@ -150,39 +151,6 @@ function VoiceScreeningControls({ slug, studyName, messages, resetMessages, last
       </div> : error ? <button className="btn btn-primary" onClick={start}>Try again</button> : null}
     </div>
   </section>;
-}
-
-function Intro({ studyName, onStart }: { studyName: string; onStart: () => void }) {
-  return <>
-    <section className="hero">
-      <div className="hero-inner">
-        <div className="hero-copy">
-          <p className="eyebrow">{studyName}</p>
-          <h1>Let&apos;s find a study that may fit you</h1>
-          <p>This brief interview helps the research team identify studies that may be relevant to you.</p>
-          <div className="card stack">
-            <h2>Before you begin</h2>
-            <p>Your responses may be recorded or transcribed and reviewed by the research team. This is not medical advice and does not determine eligibility or enrollment. You may skip questions or stop at any time.</p>
-          </div>
-          <div className="actions">
-            <button className="btn btn-primary" onClick={onStart}>Start voice interview</button>
-          </div>
-          <p>When you start, your browser will ask to use your microphone.</p>
-        </div>
-        <div className="hero-guide">
-          <p className="bubble">Hi, I&apos;m Ollie! I&apos;ll ask a few questions out loud and walk you through it.</p>
-          <Ollie face="hello" size={300} priority />
-        </div>
-      </div>
-    </section>
-    <section className="page features" aria-label="How it works">
-      {[
-        ["Just talk", "Ollie asks each question out loud and checks your answer with you before saving it."],
-        ["Skip or stop anytime", "You can skip any question or end the interview whenever you like."],
-        ["Reviewed by people", "The research team reviews your answers. Nothing here decides eligibility or enrollment."],
-      ].map(([title, text]) => <div key={title} className="card stack"><h2>{title}</h2><p className="muted">{text}</p></div>)}
-    </section>
-  </>;
 }
 
 function usePrefersReducedMotion() {
