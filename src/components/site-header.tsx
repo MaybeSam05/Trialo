@@ -1,10 +1,10 @@
-import Image from "next/image";
+import { Ollie } from "@/components/ollie";
 import Link from "next/link";
 
 export function SiteHeader({ subtitle, links = [] }: { subtitle: string; links?: { href: string; label: string }[] }) {
   return <header className="site-header">
     <Link className="brand" href={links.length ? "/" : "#main"}>
-      <Image src="/ollie/hello.webp" alt="" width={46} height={46} unoptimized priority />
+      <span aria-hidden="true"><Ollie face="hello" size={46} /></span>
       <div><strong>Trialo</strong><span>{subtitle}</span></div>
     </Link>
     {links.length > 0 && <nav className="site-nav" aria-label="Main">

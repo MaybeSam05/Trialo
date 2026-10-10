@@ -7,7 +7,7 @@ const nunito = Nunito({ subsets: ["latin"], weight: ["400", "600", "700", "800"]
 export const metadata: Metadata = {
   title: "Trialo",
   description: "Clinical trial pre-screening",
-  icons: { icon: "/ollie/hello.webp" },
+  icons: { icon: "/ollie/logo.svg" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

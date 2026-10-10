@@ -68,7 +68,7 @@ export function Mascot({ face, speaking, reducedMotion: pauseMotion, listening =
     return () => animations.forEach((animation) => animation?.cancel());
   }, [reactionFace, reducedMotion]);
 
-  // Blink every few seconds by flashing the closed-eye face.
+  // Blink the eyes without changing the expression or body pose.
   useEffect(() => {
     if (!canBlink) return;
     let timer: ReturnType<typeof setTimeout>;
@@ -82,16 +82,11 @@ export function Mascot({ face, speaking, reducedMotion: pauseMotion, listening =
     return () => { clearTimeout(timer); setBlinking(false); };
   }, [canBlink]);
 
-  const shown: OllieFace = blinking && canBlink ? "resting" : face;
   return <div className="iv-mascot" data-face={face} data-motion={motion} data-listening={listening} data-reduced={reducedMotion} data-fast={speaking || blinking}>
     <div className="iv-shadow" ref={shadow} aria-hidden />
     <div className="iv-body" ref={body}>
       <div className="iv-breathe" data-speaking={speaking}>
-        <span className="ollie-flipper ollie-flipper-left" aria-hidden />
-        <span className="ollie-flipper ollie-flipper-right" aria-hidden />
-        <span className="ollie-foot ollie-foot-left" aria-hidden />
-        <span className="ollie-foot ollie-foot-right" aria-hidden />
-        <Ollie face={shown} size={240} />
+        <Ollie face={face} blinking={blinking && canBlink} size={240} />
       </div>
     </div>
     <div className="ollie-thoughts" aria-hidden><i /><i /><i /></div>

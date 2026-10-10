@@ -1,21 +1,15 @@
 /* Participant-only gestures; the shared Ollie artwork stays reusable. */
 .iv-mascot .iv-breathe { position: relative; }
 .iv-mascot .ollie { z-index: 1; }
-.ollie-flipper { position: absolute; top: 51%; width: 21%; height: 32%; background: var(--blue); border-radius: 70% 35% 65% 40%; box-shadow: inset -4px -4px 0 color-mix(in srgb, var(--ink) 20%, transparent); transform-origin: 50% 14%; }
-.ollie-flipper-left { left: 0; transform: rotate(28deg); }
-.ollie-flipper-right { right: 0; transform: rotate(-28deg) scaleX(-1); }
-.ollie-foot { position: absolute; bottom: 2%; width: 17%; height: 9%; border-radius: 60% 60% 40% 40%; background: var(--focus); }
-.ollie-foot-left { left: 26%; transform: rotate(-12deg); }
-.ollie-foot-right { right: 26%; transform: rotate(12deg); }
 .iv-mascot[data-motion="thinking"] .iv-breathe { animation: ollie-ponder 3.2s ease-in-out infinite; }
-.iv-mascot[data-motion="thinking"] .ollie-flipper-right { animation: ollie-chin 3.2s ease-in-out infinite; }
+.iv-mascot[data-motion="thinking"] .ollie-wing-right { animation: ollie-chin 3.2s ease-in-out infinite; }
 .iv-mascot[data-motion="listening"] .iv-breathe { animation: ollie-listen 3s ease-in-out infinite; }
 .iv-mascot[data-listening="true"] .iv-breathe { animation: ollie-nod 1.2s ease-in-out infinite; }
 .iv-mascot[data-motion="speaking"] .iv-breathe { animation: ollie-talk .6s ease-in-out infinite; }
-.iv-mascot[data-motion="speaking"] .ollie-flipper-right { animation: ollie-explain 1.1s ease-in-out infinite; }
+.iv-mascot[data-motion="speaking"] .ollie-wing-right { animation: ollie-explain 1.1s ease-in-out infinite; }
 .iv-mascot[data-motion="smiling"] .iv-breathe { animation: ollie-sway 1.8s ease-in-out infinite; }
-.iv-mascot[data-motion="smiling"] .ollie-flipper-left { animation: ollie-cheer-left 1.8s ease-in-out infinite; }
-.iv-mascot[data-motion="smiling"] .ollie-flipper-right { animation: ollie-cheer-right 1.8s ease-in-out infinite; }
+.iv-mascot[data-motion="smiling"] .ollie-wing-left { animation: ollie-cheer-left 1.8s ease-in-out infinite; }
+.iv-mascot[data-motion="smiling"] .ollie-wing-right { animation: ollie-cheer-right 1.8s ease-in-out infinite; }
 .ollie-thoughts, .ollie-listen-waves, .ollie-sparkles { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 180ms ease; }
 .iv-mascot[data-motion="thinking"] .ollie-thoughts,
 .iv-mascot[data-motion="listening"] .ollie-listen-waves,
@@ -31,14 +25,14 @@
 .ollie-sparkles i:nth-child(2) { left: auto; right: -1%; top: 4%; width: 9%; animation-delay: .25s; }
 .ollie-sparkles i:nth-child(3) { left: auto; right: -8%; top: 60%; width: 6%; animation-delay: .5s; }
 @keyframes ollie-ponder { 0%,100% { transform: rotate(-4deg); } 50% { transform: translateY(-4px) rotate(5deg); } }
-@keyframes ollie-chin { 0%,100% { transform: rotate(30deg) scaleX(-1); } 50% { transform: rotate(48deg) scaleX(-1); } }
+@keyframes ollie-chin { 0%,100% { transform: rotate(95deg); } 50% { transform: rotate(110deg); } }
 @keyframes ollie-listen { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(-1deg) translateY(-3px); } }
 @keyframes ollie-nod { 0%,100% { transform: rotate(-3deg) scale(1); } 45% { transform: translateY(3px) rotate(-1deg) scale(1.025,.975); } }
 @keyframes ollie-talk { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg) scale(.99,1.015); } }
-@keyframes ollie-explain { 0%,100% { transform: rotate(-28deg) scaleX(-1); } 50% { transform: rotate(-75deg) scaleX(-1); } }
+@keyframes ollie-explain { 0%,100% { transform: rotate(-35deg); } 50% { transform: rotate(-85deg); } }
 @keyframes ollie-sway { 0%,100% { transform: rotate(-4deg); } 50% { transform: translateY(-6px) rotate(4deg); } }
-@keyframes ollie-cheer-left { 0%,100% { transform: rotate(55deg); } 50% { transform: rotate(90deg); } }
-@keyframes ollie-cheer-right { 0%,100% { transform: rotate(-55deg) scaleX(-1); } 50% { transform: rotate(-90deg) scaleX(-1); } }
+@keyframes ollie-cheer-left { 0%,100% { transform: rotate(85deg); } 50% { transform: rotate(110deg); } }
+@keyframes ollie-cheer-right { 0%,100% { transform: rotate(-85deg); } 50% { transform: rotate(-110deg); } }
 @keyframes ollie-dot { 0%,100% { transform: translateY(0); opacity: .45; } 50% { transform: translateY(-5px); opacity: 1; } }
 @keyframes ollie-wave { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
 @keyframes ollie-sparkle { 0%,100% { transform: scale(.55) rotate(-12deg); opacity: .35; } 50% { transform: scale(1) rotate(12deg); opacity: 1; } }
