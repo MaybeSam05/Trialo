@@ -13,3 +13,17 @@
 .ollie[data-expression="listening"] .ollie-pupils { transform: translate(-4px, 0); }
 .ollie[data-expression="listening"] .ollie-wing-right { transform: rotate(-125deg); }
 .ollie[data-expression="gentle"] .ollie-pupils { transform: translateY(3px); }
+
+/* The upper beak stays still while the lower beak opens on each syllable.
+   Live audio still controls the talking expression, closing it in pauses. */
+.ollie-mouth-open { transform-box: view-box; transform-origin: 160px 154px; }
+.ollie[data-expression="talking"] .ollie-mouth-open { animation: ollie-syllables 640ms ease-in-out infinite; }
+@keyframes ollie-syllables {
+  0%, 32%, 66%, 100% { transform: scaleY(.08); }
+  15% { transform: scaleY(1); }
+  48% { transform: scaleY(.65); }
+  82% { transform: scaleY(.9); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ollie[data-expression="talking"] .ollie-mouth-open { animation: none; }
+}

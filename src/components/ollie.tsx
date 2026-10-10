@@ -42,7 +42,7 @@ export function Ollie({ face, size = 260, blinking = false }: { face: OllieFace;
       {face === "confused" && <path d="m178 88 22-6" fill="none" stroke="#12315a" strokeWidth="6" strokeLinecap="round" />}
       <g fill="#ffb8a7"><ellipse cx="108" cy="152" rx="13" ry="7" /><ellipse cx="212" cy="152" rx="13" ry="7" /></g>
       <g className="ollie-beak">
-        {openBeak ? <><path fill="#ee8c15" d="M140 153h40v15c0 17-10 26-20 26s-20-9-20-26Z" /><path fill="#743a28" d="M146 158h28v10c0 12-6 20-14 20s-14-8-14-20Z" /><path fill="#ff8c9c" d="M150 182q10-13 20 0c-5 9-15 9-20 0Z" /></> : <path fill="#ee8c15" d={smiling ? "M137 155h46q-23 34-46 0Z" : "M140 154h40q-20 23-40 0Z"} />}
+        {openBeak ? <g className="ollie-mouth-open"><path fill="#ee8c15" d="M140 153h40v15c0 17-10 26-20 26s-20-9-20-26Z" /><path fill="#743a28" d="M146 158h28v10c0 12-6 20-14 20s-14-8-14-20Z" /><path fill="#ff8c9c" d="M150 182q10-13 20 0c-5 9-15 9-20 0Z" /></g> : <path fill="#ee8c15" d={smiling ? "M137 155h46q-23 34-46 0Z" : "M140 154h40q-20 23-40 0Z"} />}
         <path fill="#ffbd35" d="M137 154c0-9 12-17 23-17s23 8 23 17c-8 5-38 5-46 0Z" />
       </g>
       <g fill="#2474e5">
