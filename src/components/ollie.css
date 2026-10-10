@@ -17,7 +17,7 @@
 /* The upper beak stays still while the lower beak opens on each syllable.
    Live audio still controls the talking expression, closing it in pauses. */
 .ollie-mouth-open { transform-box: view-box; transform-origin: 160px 154px; }
-.ollie[data-expression="talking"] .ollie-mouth-open { animation: ollie-syllables 850ms ease-in-out infinite; }
+.ollie[data-expression="talking"] .ollie-mouth-open { animation: ollie-syllables 1400ms ease-in-out infinite; }
 @keyframes ollie-syllables {
   0%, 32%, 66%, 100% { transform: scaleY(.08); }
   15% { transform: scaleY(1); }
