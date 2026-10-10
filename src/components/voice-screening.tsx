@@ -4,6 +4,7 @@ import { ConversationProvider, useConversationClientTool, useConversationControl
 import { useCallback, useState } from "react";
 import { agentQuestionList, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
+import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 
 const HAPPY_FOR_MS = 1_600;
@@ -45,7 +46,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   const [started, setStarted] = useState(false);
   const [mode, setMode] = useState<InterviewMode>("voice");
   const [wasConnected, setWasConnected] = useState(false);
-  const [savedCount, setSavedCount] = useState(0);
+  const [answeredFields, setAnsweredFields] = useState<readonly string[]>([]);
   const [happyUntil, setHappyUntil] = useState(0);
 
   // Configure an ElevenLabs client tool named record_screening_answer with field and value parameters.
@@ -57,13 +58,13 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
     const response = await fetch(`/api/sessions/${sessionId}/answers`, {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field, value }),
     });
-    if (response.ok) { setSavedCount((count) => count + 1); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
+    if (response.ok) { setAnsweredFields((fields) => addAnsweredField(fields, field)); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
     return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
   });
 
   async function start(nextMode: InterviewMode) {
     try {
-      setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedCount(0); resetMessages();
+      setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setAnsweredFields([]); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
@@ -98,7 +99,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   if (!started) return <Intro studyName={studyName} onStart={() => start("voice")} onType={() => start("text")} />;
 
   return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
-    messages={messages} savedCount={savedCount} lastActivity={lastActivity} happyUntil={happyUntil}
+    messages={messages} progress={interviewProgress(answeredFields, questions?.length)} lastActivity={lastActivity} happyUntil={happyUntil}
     getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send}
     onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={() => start(mode)} />;
 }

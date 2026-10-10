@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { OllieFace } from "@/components/ollie";
 import { Mascot } from "@/components/participant/mascot";
+import type { interviewProgress } from "@/components/participant/progress";
 import { SpeechBubble } from "@/components/participant/speech-bubble";
 import "./session.css";
 
 export type Message = { id: number; role: "user" | "agent"; text: string };
 export type InterviewMode = "voice" | "text";
 
-export const TOTAL_QUESTIONS = 6;
 const QUICK_ANSWERS = ["Yes", "No", "Not sure"];
 
 // Questions on these topics get Ollie's gentle face instead of the regular one.
@@ -15,9 +15,9 @@ const SENSITIVE = /pregnan|mental|depress|anxiet|suicid|self-harm|drug|alcohol|s
 const RESTING_AFTER_MS = 45_000;
 const IDLE_LEVELS: number[] = Array(11).fill(0);
 
-export function Session({ mode, connected, ended, error, isSpeaking, isMuted, messages, savedCount, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onToggleMute, onEnd, onRetry }: {
+export function Session({ mode, connected, ended, error, isSpeaking, isMuted, messages, progress, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onToggleMute, onEnd, onRetry }: {
   mode: InterviewMode; connected: boolean; ended: boolean; error: string; isSpeaking: boolean; isMuted: boolean;
-  messages: Message[]; savedCount: number; lastActivity: number; happyUntil: number;
+  messages: Message[]; progress: ReturnType<typeof interviewProgress>; lastActivity: number; happyUntil: number;
   getInputVolume: () => number; getOutputVolume: () => number;
   onSend: (text: string) => void; onToggleMute: () => void; onEnd: () => void; onRetry: () => void;
 }) {
@@ -116,7 +116,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     : !connected ? "Connecting you to Ollie…"
     : lastAgent || "Hi! I'm getting ready to ask my first question.";
 
-  const answered = Math.min(savedCount, TOTAL_QUESTIONS);
+  const { answered, total, percent } = progress;
   const canAnswer = connected && !ended;
   const selected = tapped?.question === lastAgent ? tapped.answer : null;
 
@@ -129,10 +129,10 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
 
   return <section className="iv" ref={sectionRef} aria-label="Pre-screening interview">
     <div className="iv-topbar">
-      <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={TOTAL_QUESTIONS} aria-valuenow={answered}>
-        <span style={{ width: `${(answered / TOTAL_QUESTIONS) * 100}%` }} />
+      <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={total} aria-valuenow={answered} aria-valuetext={`${answered} of ${total} answers saved`}>
+        <span style={{ width: `${percent}%` }} />
       </span>
-      <span className="iv-count">{answered} of {TOTAL_QUESTIONS}<span className="iv-wide"> answers saved</span></span>
+      <span className="iv-count">{answered} of {total}<span className="iv-wide"> answers saved</span></span>
     </div>
 
     <div className="iv-stage">
