@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Ollie } from "@/components/ollie";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
+import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { DashboardStatusChip } from "@/components/dashboard/status";
 import { getSessionOutcome, type DashboardSession } from "@/components/dashboard/session-outcome";
 import { getSupabase } from "@/lib/supabase";
@@ -48,6 +49,7 @@ export default async function Dashboard() {
           <span className="eyebrow muted">Coordinator workspace</span>
           <h1>Screening dashboard</h1>
           <p className="muted">A first look at your sessions. A person makes the next decision.</p>
+          <LiveUpdates />
         </div>
         <Link className="btn btn-primary" href="/">Create screening link <span aria-hidden="true">↗</span></Link>
       </header>
