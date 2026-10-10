@@ -30,7 +30,7 @@ async function loadSessions() {
       .from("screening_sessions")
       .select("id,status,answers,match_results,created_at,updated_at,studies(*)")
       .order("created_at", { ascending: false })
-      .limit(100);
+      .limit(500);
     if (result.error) throw result.error;
     return { sessions: ((result.data ?? []) as unknown as Row[]).map(toBoardSession), error: false, loadedAt: Date.now() };
   } catch {
@@ -51,7 +51,7 @@ export default async function Dashboard() {
           <p className="muted">A first look at your sessions. A person makes the next decision.</p>
           <LiveUpdates />
         </div>
-        <Link className="btn btn-primary" href="/">Create screening link <span aria-hidden="true">↗</span></Link>
+        <Link className="btn btn-primary" href="/">Create campaign</Link>
       </header>
 
       {error ? <section className="card dashboard-sessions" aria-labelledby="sessions-heading">
