@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Ollie } from "@/components/ollie";
 import { CampaignShare } from "@/components/coordinator/campaign-share";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
+import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import "@/components/coordinator/questions.css";
 
@@ -20,14 +21,14 @@ const when = (iso: string) => {
 /** Short, readable identifier: demo slugs as-is, random slugs shortened. */
 const shortId = (slug: string) => slug.startsWith("demo-") ? slug.replace(/^demo-/, "") : slug.slice(0, 6);
 
-async function loadCampaigns(): Promise<{ campaigns: Campaign[]; error: boolean }> {
+async function loadCampaigns(owner: string): Promise<{ campaigns: Campaign[]; error: boolean }> {
   try {
     const supabase = getSupabase();
-    const [studies, sessions] = await Promise.all([
-      supabase.from("studies").select("*").order("created_at", { ascending: false }).limit(50),
-      supabase.from("screening_sessions").select("study_id,updated_at,created_at").order("created_at", { ascending: false }).limit(2000),
-    ]);
+    // Only this account's campaigns, and only sessions belonging to them.
+    const studies = await supabase.from("studies").select("*").eq("owner_id", owner).order("created_at", { ascending: false }).limit(50);
     if (studies.error) throw studies.error;
+    const ids = (studies.data as Study[]).map((study) => study.id);
+    const sessions = ids.length ? await supabase.from("screening_sessions").select("study_id,updated_at,created_at").in("study_id", ids).order("created_at", { ascending: false }).limit(2000) : { data: [], error: null };
     if (sessions.error) throw sessions.error;
     const stats = new Map<string, { count: number; last: string }>();
     for (const row of sessions.data ?? []) {
@@ -50,7 +51,7 @@ async function loadCampaigns(): Promise<{ campaigns: Campaign[]; error: boolean 
 }
 
 export default async function Campaigns() {
-  const { campaigns, error } = await loadCampaigns();
+  const { campaigns, error } = await loadCampaigns(await requireOwner());
 
   return <>
     <SiteHeader subtitle="Coordinator" links={coordinatorLinks} />

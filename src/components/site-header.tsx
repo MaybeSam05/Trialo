@@ -1,4 +1,5 @@
 import { Ollie } from "@/components/ollie";
+import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { SiteNav, type NavLink } from "@/components/site-nav";
 
@@ -9,6 +10,7 @@ export function SiteHeader({ subtitle, links = [] }: { subtitle: string; links?:
       <div><strong>Trialo</strong><span>{subtitle}</span></div>
     </Link>
     {links.length > 0 && <SiteNav links={links} />}
+    {links.length > 0 && <span className="site-account"><UserButton /></span>}
   </header>;
 }
 

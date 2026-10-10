@@ -28,3 +28,7 @@ alter table public.screening_sessions enable row level security;
 
 -- Coordinator-defined screening questions (see src/lib/questions.ts). Null = legacy keyword matching on `trials`.
 alter table public.studies add column if not exists questions jsonb;
+
+-- Clerk user ID of the coordinator who created the campaign. Coordinators only see their own campaigns and sessions.
+alter table public.studies add column if not exists owner_id text;
+create index if not exists studies_owner_id_idx on public.studies(owner_id);

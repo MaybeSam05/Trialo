@@ -9,9 +9,11 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint .",
-    "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts"
+    "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts",
+    "demo:user": "tsx --env-file=.env.local scripts/create-demo-user.ts"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.14",
     "@elevenlabs/react": "latest",
     "@supabase/supabase-js": "2.49.1",
     "next": "16.4.0",

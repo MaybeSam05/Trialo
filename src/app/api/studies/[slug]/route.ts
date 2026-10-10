@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
 import { validateQuestions } from "@/lib/questions";
+import { ownerOrNull } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 
-// The unguessable slug is the only access control in this demo; add coordinator auth before real use.
 export async function PUT(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const owner = await ownerOrNull();
+    if (!owner) return NextResponse.json({ error: "Sign in to edit campaigns." }, { status: 401 });
     const { slug } = await params;
     const { questions } = await request.json() as { questions?: unknown };
     const checked = validateQuestions(questions);
     if ("error" in checked) return NextResponse.json({ error: checked.error }, { status: 400 });
-    const { data, error } = await getSupabase().from("studies").update({ questions: checked.questions }).eq("slug", slug).select("slug").maybeSingle();
+    const { data, error } = await getSupabase().from("studies").update({ questions: checked.questions }).eq("slug", slug).eq("owner_id", owner).select("slug").maybeSingle();
     if (error) throw error;
     if (!data) return NextResponse.json({ error: "Unknown campaign." }, { status: 404 });
     return NextResponse.json({ questions: checked.questions });

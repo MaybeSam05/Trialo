@@ -5,6 +5,9 @@
  *   npm run seed:demo -- --clear-all   ALSO delete every other campaign and session first (wipes old test data)
  *   npx tsx scripts/seed-demo.ts --dry-run   preview the generated data without touching the database
  *
+ * Demo campaigns keep the account that owned them before (usually the trialo-demo account from
+ * `npm run demo:user`), so re-seeding never hides them. On a fresh database, run `npm run demo:user` after seeding.
+ *
  * Reads NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY from .env.local. No real people or health data.
  */
 import { createClient } from "@supabase/supabase-js";
@@ -149,6 +152,9 @@ async function main() {
     report(sessions);
     return;
   }
+  // Keep the demo campaigns with whoever owned them, so re-seeding never hides them.
+  const { data: previous } = await supabase.from("studies").select("owner_id").like("slug", "demo-%").not("owner_id", "is", null).limit(1);
+  const owner = previous?.[0]?.owner_id ?? null;
   if (clearAll) {
     const { error } = await supabase.from("studies").delete().not("id", "is", null);
     if (error) throw error;
@@ -161,7 +167,7 @@ async function main() {
 
   for (const campaign of CAMPAIGNS) {
     const { data, error } = await supabase.from("studies").insert({
-      slug: campaign.slug, name: campaign.name, trials: [], questions: campaign.questions,
+      slug: campaign.slug, name: campaign.name, trials: [], questions: campaign.questions, owner_id: owner,
       created_at: new Date(Date.now() - campaign.createdDaysAgo * 86_400_000).toISOString(),
     }).select("id").single();
     if (error) throw new Error(error.message.includes("questions") ? "The studies.questions column is missing. Re-run supabase/schema.sql first." : error.message);

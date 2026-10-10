@@ -4,6 +4,7 @@ import { CampaignShare } from "@/components/coordinator/campaign-share";
 import { EditQuestions } from "@/components/coordinator/edit-questions";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { DEMO_QUESTIONS, type Question } from "@/lib/questions";
+import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import "@/components/coordinator/report.css";
 
@@ -11,9 +12,10 @@ export const dynamic = "force-dynamic";
 
 export default async function EditStudy({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const owner = await requireOwner();
   let study: { name: string; questions?: Question[] | null } | null = null;
   try {
-    const result = await getSupabase().from("studies").select("*").eq("slug", slug).maybeSingle();
+    const result = await getSupabase().from("studies").select("*").eq("slug", slug).eq("owner_id", owner).maybeSingle();
     study = result.data;
   } catch { notFound(); }
   if (!study) notFound();

@@ -4,6 +4,7 @@ import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { SessionsBoard, type BoardSession } from "@/components/dashboard/sessions-board";
 import { getSessionOutcome, type DashboardSession } from "@/components/dashboard/session-outcome";
+import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import "@/components/dashboard/dashboard.css";
 
@@ -24,11 +25,13 @@ function toBoardSession(row: Row): BoardSession {
   };
 }
 
-async function loadSessions() {
+async function loadSessions(owner: string) {
   try {
     const result = await getSupabase()
       .from("screening_sessions")
-      .select("id,status,answers,match_results,created_at,updated_at,studies(*)")
+      // studies!inner + owner filter: only sessions from this account's campaigns.
+      .select("id,status,answers,match_results,created_at,updated_at,studies!inner(*)")
+      .eq("studies.owner_id", owner)
       .order("created_at", { ascending: false })
       .limit(500);
     if (result.error) throw result.error;
@@ -39,7 +42,7 @@ async function loadSessions() {
 }
 
 export default async function Dashboard() {
-  const { sessions, error, loadedAt } = await loadSessions();
+  const { sessions, error, loadedAt } = await loadSessions(await requireOwner());
 
   return <>
     <SiteHeader subtitle="Coordinator" links={coordinatorLinks} />

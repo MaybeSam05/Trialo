@@ -55,6 +55,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .site-nav { margin-left: auto; display: flex; gap: 24px; }
 .site-nav a { position: relative; padding: 6px 2px; color: var(--ink); text-decoration: none; font-weight: 600; }
 .site-nav a:hover { color: var(--blue); }
+.site-account { display: inline-flex; align-items: center; min-width: 32px; min-height: 32px; }
 /* Current section: bold, blue, with an underline bar */
 .site-nav a[aria-current="page"] { color: var(--blue); font-weight: 800; }
 .site-nav a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 3px; border-radius: 2px; background: var(--blue); }

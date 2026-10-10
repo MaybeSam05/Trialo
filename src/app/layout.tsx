@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 
@@ -11,5 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={nunito.variable}><body>{children}</body></html>;
+  return <ClerkProvider signInUrl="/portal" signUpUrl="/portal/sign-up" signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/portal">
+    <html lang="en" className={nunito.variable}><body>{children}</body></html>
+  </ClerkProvider>;
 }

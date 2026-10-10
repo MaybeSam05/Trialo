@@ -8,6 +8,7 @@ import { getSessionOutcome } from "@/components/dashboard/session-outcome";
 import { stripExpressions } from "@/components/participant/speech-timeline";
 import { MatchChip } from "@/components/status-chip";
 import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, type Evidence, type Question } from "@/lib/questions";
+import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
 import "@/components/coordinator/report.css";
@@ -62,9 +63,10 @@ const EVIDENCE: Record<Evidence, { title: string; icon: string }> = {
 
 export default async function SessionReport({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const owner = await requireOwner();
   let session: Session | null = null;
   try {
-    const result = await getSupabase().from("screening_sessions").select("id,status,answers,match_results,transcript,created_at,updated_at,studies(*)").eq("id", id).maybeSingle();
+    const result = await getSupabase().from("screening_sessions").select("id,status,answers,match_results,transcript,created_at,updated_at,studies!inner(*)").eq("id", id).eq("studies.owner_id", owner).maybeSingle();
     session = result.data as unknown as Session | null;
   } catch { notFound(); }
   if (!session) notFound();
