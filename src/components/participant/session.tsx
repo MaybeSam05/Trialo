@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { OllieFace } from "@/components/ollie";
 import { Mascot } from "@/components/participant/mascot";
+import { SpeechBubble } from "@/components/participant/speech-bubble";
 import "./session.css";
 
 export type Message = { id: number; role: "user" | "agent"; text: string };
@@ -27,7 +28,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   const [tapped, setTapped] = useState<{ answer: string; question: string } | null>(null);
   const reducedMotion = usePrefersReducedMotion();
   const logRef = useRef<HTMLDivElement>(null);
-  const bubbleRef = useRef<HTMLParagraphElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const voice = mode === "voice";
 
   // Clock for timed expressions (happy flash, resting after silence).
@@ -69,6 +70,22 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     log.scrollTo({ top: log.scrollHeight, behavior: reducedMotion || log.scrollTop === 0 ? "auto" : "smooth" });
   }, [messages.length, reducedMotion]);
 
+  // iPhone keyboard: size the screen to the visible area (iOS keeps 100dvh under the keyboard) and go compact while it's open.
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    const section = sectionRef.current;
+    if (!viewport || !section) return;
+    const update = () => {
+      section.style.setProperty("--iv-vh", `${viewport.height}px`);
+      section.style.setProperty("--iv-top", `${viewport.offsetTop}px`);
+      section.dataset.keyboard = String(viewport.height < window.innerHeight * 0.78);
+    };
+    update();
+    viewport.addEventListener("resize", update);
+    viewport.addEventListener("scroll", update);
+    return () => { viewport.removeEventListener("resize", update); viewport.removeEventListener("scroll", update); };
+  }, []);
+
   // Stay pinned to the newest line when the captions box changes size (layout, rotation, keyboard).
   useEffect(() => {
     const log = logRef.current;
@@ -99,16 +116,6 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     : !connected ? "Connecting you to Ollie…"
     : lastAgent || "Hi! I'm getting ready to ask my first question.";
 
-  // Each new line from Ollie pops into the speech bubble.
-  useEffect(() => {
-    if (reducedMotion) return;
-    const animation = bubbleRef.current?.animate(
-      [{ opacity: 0, transform: "translateY(8px) scale(.96)" }, { opacity: 1, transform: "none" }],
-      { duration: 320, easing: "cubic-bezier(.34, 1.56, .64, 1)" },
-    );
-    return () => animation?.cancel();
-  }, [bubble, reducedMotion]);
-
   const answered = Math.min(savedCount, TOTAL_QUESTIONS);
   const canAnswer = connected && !ended;
   const selected = tapped?.question === lastAgent ? tapped.answer : null;
@@ -120,7 +127,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     setDraft("");
   }
 
-  return <section className="iv" aria-label="Pre-screening interview">
+  return <section className="iv" ref={sectionRef} aria-label="Pre-screening interview">
     <div className="iv-topbar">
       <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={TOTAL_QUESTIONS} aria-valuenow={answered}>
         <span style={{ width: `${(answered / TOTAL_QUESTIONS) * 100}%` }} />
@@ -131,7 +138,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     <div className="iv-stage">
       <span className="iv-status" aria-live="polite">{status}</span>
       <div className="iv-scene">
-        <p className="iv-question" ref={bubbleRef} aria-live="polite">{bubble}</p>
+        <SpeechBubble text={bubble} speaking={isSpeaking || !voice} paced={connected && !ended && !error && Boolean(lastAgent)} reducedMotion={reducedMotion} />
         <Mascot face={face} speaking={isSpeaking} reducedMotion={reducedMotion} />
       </div>
       {voice && !ended && <div className="iv-levels" aria-hidden>{(connected && !reducedMotion ? levels : IDLE_LEVELS).map((level, index) => <span key={index} style={{ height: `${Math.round(6 + level * 34)}px` }} />)}</div>}
