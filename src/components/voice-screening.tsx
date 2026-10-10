@@ -1,7 +1,7 @@
 "use client";
 
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { agentQuestionList, applicableCount, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
 import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
@@ -54,7 +54,7 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
 function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped }: {
   slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string;
 }) {
-  const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
+  const { startSession, endSession, sendUserMessage, sendUserActivity, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
   const { isSpeaking } = useConversationMode();
   const { isMuted, setMuted } = useConversationInput();
@@ -116,6 +116,14 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   const connected = status === "connected";
   if (connected && !wasConnected) setWasConnected(true);
   const ended = wasConnected && status === "disconnected" && !error;
+
+  // Text mode has no audio, so ElevenLabs reads reading/typing time as silence and hangs up
+  // after a few seconds. While the page is open, keep telling it the participant is still there.
+  useEffect(() => {
+    if (mode !== "text" || !connected || ended) return;
+    const timer = setInterval(() => { if (document.visibilityState === "visible") sendUserActivity(); }, 4_000);
+    return () => clearInterval(timer);
+  }, [mode, connected, ended, sendUserActivity]);
 
   function send(text: string) {
     sendUserMessage(text);
