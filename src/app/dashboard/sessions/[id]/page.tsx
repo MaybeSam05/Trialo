@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Ollie } from "@/components/ollie";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
+import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { DashboardStatusChip } from "@/components/dashboard/status";
 import { getSessionOutcome } from "@/components/dashboard/session-outcome";
 import { MatchChip, SessionChip } from "@/components/status-chip";
@@ -59,6 +60,7 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
             <span className="muted">Started {new Date(session.created_at).toLocaleString()}</span>
             <span className="muted">Session {session.id.slice(0, 8)}</span>
           </div>
+          <LiveUpdates />
         </div>
       </div>
       <p className="panel">Demo data only. These results come from published pre-screen criteria and need review by clinical research staff. They never determine eligibility.</p>
