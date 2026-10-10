@@ -29,14 +29,12 @@ export const NAME_FIELD = "preferred_name";
 /** Keeps a typed name to letters, spaces and simple punctuation, since it's passed into Ollie's instructions. */
 export const cleanName = (raw: string) => raw.replace(/[^\p{L}\p{M} '.-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 40);
 
-export const DEMO_CAMPAIGN_NAME = "Trialo demo: allergy and sleep studies";
-// Synthetic demo preset: 5 everyday questions after the profile, showing a follow-up and age limits.
+export const DEMO_CAMPAIGN_NAME = "Trialo demo: asthma study";
+// Synthetic demo preset: 3 questions after the profile, showing an age limit, a follow-up and a flag.
 export const DEMO_QUESTIONS: Question[] = [
-  { key: "allergies", text: "Do you have seasonal allergies, like hay fever?", kind: "include", trial: "Allergy study", minAge: 12 },
-  { key: "allergy_medicine", text: "Do you take allergy medicine during allergy season?", kind: "include", trial: "Allergy study", when: { key: "allergies", equals: "yes" } },
-  { key: "recent_cold", text: "Have you had a cold or the flu in the last two weeks?", kind: "exclude", trial: "Allergy study" },
-  { key: "short_sleep", text: "Do you usually sleep less than seven hours a night?", kind: "include", trial: "Sleep study", minAge: 18 },
-  { key: "night_shifts", text: "Do you work night shifts?", kind: "exclude", trial: "Sleep study", minAge: 18 },
+  { key: "asthma", text: "Have you been diagnosed with asthma?", kind: "include", trial: "Asthma study", minAge: 12 },
+  { key: "inhaler_weekly", text: "Do you use an inhaler at least once a week?", kind: "include", trial: "Asthma study", when: { key: "asthma", equals: "yes" } },
+  { key: "smokes", text: "Do you currently smoke or vape?", kind: "exclude", trial: "Asthma study" },
 ];
 
 /** Readable, unique field name for Ollie, e.g. "Are you on dialysis?" -> "are_you_on_dialysis". */
