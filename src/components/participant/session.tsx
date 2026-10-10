@@ -24,6 +24,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   const [now, setNow] = useState(0);
   const [mouthOpen, setMouthOpen] = useState(false);
   const [levels, setLevels] = useState<number[]>(IDLE_LEVELS);
+  const [userSpeaking, setUserSpeaking] = useState(false);
   const [draft, setDraft] = useState("");
   const [tapped, setTapped] = useState<{ answer: string; question: string } | null>(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -54,13 +55,18 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
 
   // Sound-level bars follow Ollie's voice while speaking and the microphone while listening.
   useEffect(() => {
-    if (!connected || !voice || reducedMotion) return;
+    if (!connected || !voice) return;
+    let lastVoiceAt = 0;
     const timer = setInterval(() => {
-      const volume = Math.min(1, (isSpeaking ? getOutputVolume() : getInputVolume()) * 2.5);
+      const input = isMuted || isSpeaking ? 0 : getInputVolume();
+      if (input > 0.025) lastVoiceAt = Date.now();
+      setUserSpeaking(!isMuted && !isSpeaking && Date.now() - lastVoiceAt < 350);
+      if (reducedMotion) return;
+      const volume = Math.min(1, (isSpeaking ? getOutputVolume() : input) * 2.5);
       setLevels((current) => current.map((_, index) => Math.max(0.12, volume * (0.55 + 0.45 * Math.abs(Math.sin(Date.now() / 140 + index * 1.7))))));
     }, 90);
     return () => clearInterval(timer);
-  }, [connected, voice, isSpeaking, reducedMotion, getInputVolume, getOutputVolume]);
+  }, [connected, voice, isSpeaking, isMuted, reducedMotion, getInputVolume, getOutputVolume]);
 
   // Keep the newest caption in view.
   useEffect(() => {
@@ -96,21 +102,23 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   }, []);
 
   const lastAgent = [...messages].reverse().find((message) => message.role === "agent")?.text ?? "";
-  const waitingForOllie = !voice && messages.at(-1)?.role === "user";
+  const activelyListening = voice && connected && !ended && !error && !isMuted && !isSpeaking && userSpeaking;
+  const waitingForOllie = !isSpeaking && !activelyListening && messages.at(-1)?.role === "user";
   const sensitive = SENSITIVE.test(lastAgent);
   const face: OllieFace = error ? "confused"
     : ended ? "celebrate"
     : !connected ? "thinking"
+    : isSpeaking ? (reducedMotion || mouthOpen ? "talking" : sensitive ? "gentle" : "hello")
+    : activelyListening ? "listening"
     : now < happyUntil ? "happy"
     : waitingForOllie ? "thinking"
-    : isSpeaking ? (reducedMotion || mouthOpen ? "talking" : sensitive ? "gentle" : "hello")
     : now - lastActivity > RESTING_AFTER_MS ? "resting"
     : sensitive ? "gentle"
     : "listening";
 
   const status = error ? "Connection problem" : ended ? "Interview finished" : !connected ? "Connecting…"
     : !voice ? (waitingForOllie ? "Ollie is replying…" : "Type or tap your answer")
-    : isSpeaking ? "Ollie is speaking" : isMuted ? "Microphone muted" : "Listening…";
+    : isSpeaking ? "Ollie is speaking" : waitingForOllie ? "Ollie is thinking…" : isMuted ? "Microphone muted" : "Listening…";
   const bubble = error ? "Hmm, I couldn't connect. Let's try that again."
     : ended ? "Thank you! The research team will review your answers."
     : !connected ? "Connecting you to Ollie…"
@@ -139,7 +147,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
       <span className="iv-status" aria-live="polite">{status}</span>
       <div className="iv-scene">
         <SpeechBubble text={bubble} speaking={isSpeaking || !voice} paced={connected && !ended && !error && Boolean(lastAgent)} reducedMotion={reducedMotion} />
-        <Mascot face={face} speaking={isSpeaking} reducedMotion={reducedMotion} />
+        <Mascot face={face} speaking={connected && !ended && !error && isSpeaking} listening={activelyListening} reducedMotion={reducedMotion} />
       </div>
       {voice && !ended && <div className="iv-levels" aria-hidden>{(connected && !reducedMotion ? levels : IDLE_LEVELS).map((level, index) => <span key={index} style={{ height: `${Math.round(6 + level * 34)}px` }} />)}</div>}
     </div>

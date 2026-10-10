@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Ollie, type OllieFace } from "@/components/ollie";
+import "./mascot.css";
 
 // One-shot body reactions played when Ollie's expression changes (spring-like overshoot, Duolingo style).
 const SPRING = "cubic-bezier(.34, 1.56, .64, 1)";
@@ -39,21 +40,33 @@ const REACTIONS: Partial<Record<OllieFace, Reaction>> = {
 
 const BLINKABLE: OllieFace[] = ["hello", "listening", "thinking", "confused"];
 
+function subscribeToMotion(onChange: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
 /** Ollie with an idle breath, blinking, ground shadow and springy reactions. */
-export function Mascot({ face, speaking, reducedMotion }: { face: OllieFace; speaking: boolean; reducedMotion: boolean }) {
+export function Mascot({ face, speaking, reducedMotion: pauseMotion, listening = false }: { face: OllieFace; speaking: boolean; reducedMotion: boolean; listening?: boolean }) {
+  const deviceReducedMotion = useSyncExternalStore(subscribeToMotion, () => window.matchMedia("(prefers-reduced-motion: reduce)").matches, () => false);
+  const reducedMotion = pauseMotion || deviceReducedMotion;
   const body = useRef<HTMLDivElement>(null);
   const shadow = useRef<HTMLDivElement>(null);
   const [blinking, setBlinking] = useState(false);
   const canBlink = !reducedMotion && BLINKABLE.includes(face);
+  // Lip-sync changes the face rapidly. Keep the body gesture stable for the
+  // entire speaking turn instead of restarting it on every mouth movement.
+  const motion = speaking ? "speaking" : face === "happy" || face === "celebrate" ? "smiling" : face;
+  const reactionFace = speaking ? "talking" : face;
 
   // Play the reaction for the new expression.
   useEffect(() => {
-    const reaction = REACTIONS[face];
+    const reaction = REACTIONS[reactionFace];
     if (!reaction || reducedMotion) return;
     const options: KeyframeAnimationOptions = { duration: reaction.duration, easing: reaction.easing ?? SPRING };
     const animations = [body.current?.animate(reaction.body, options), reaction.shadow && shadow.current?.animate(reaction.shadow, options)];
     return () => animations.forEach((animation) => animation?.cancel());
-  }, [face, reducedMotion]);
+  }, [reactionFace, reducedMotion]);
 
   // Blink every few seconds by flashing the closed-eye face.
   useEffect(() => {
@@ -70,12 +83,19 @@ export function Mascot({ face, speaking, reducedMotion }: { face: OllieFace; spe
   }, [canBlink]);
 
   const shown: OllieFace = blinking && canBlink ? "resting" : face;
-  return <div className="iv-mascot" data-face={face} data-fast={speaking || blinking}>
+  return <div className="iv-mascot" data-face={face} data-motion={motion} data-listening={listening} data-reduced={reducedMotion} data-fast={speaking || blinking}>
     <div className="iv-shadow" ref={shadow} aria-hidden />
     <div className="iv-body" ref={body}>
       <div className="iv-breathe" data-speaking={speaking}>
+        <span className="ollie-flipper ollie-flipper-left" aria-hidden />
+        <span className="ollie-flipper ollie-flipper-right" aria-hidden />
+        <span className="ollie-foot ollie-foot-left" aria-hidden />
+        <span className="ollie-foot ollie-foot-right" aria-hidden />
         <Ollie face={shown} size={240} />
       </div>
     </div>
+    <div className="ollie-thoughts" aria-hidden><i /><i /><i /></div>
+    <div className="ollie-listen-waves" aria-hidden><i /><i /><i /></div>
+    <div className="ollie-sparkles" aria-hidden><i /><i /><i /></div>
   </div>;
 }

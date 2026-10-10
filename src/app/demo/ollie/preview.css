@@ -1,0 +1,9 @@
+.ollie-preview header { display: grid; gap: 12px; max-width: 750px; }
+.ollie-preview > button { justify-self: start; }
+.ollie-preview-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
+.ollie-preview-grid .card { min-width: 0; display: grid; gap: 12px; align-content: start; }
+.ollie-preview-stage { display: grid; place-items: center; padding: 32px 16px; background: var(--sky); border-radius: 18px; margin-bottom: 8px; }
+.ollie-preview-stage .ollie { width: clamp(110px,13vw,190px); }
+.ollie-preview-grid p { font-size: .9rem; }
+@media(max-width:1080px) { .ollie-preview-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:540px) { .ollie-preview-grid { grid-template-columns: 1fr; } .ollie-preview-stage .ollie { width: 180px; } }

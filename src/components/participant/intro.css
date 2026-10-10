@@ -13,6 +13,12 @@
 .intro-notes { display: grid; gap: 10px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 20px; font-size: 0.9375rem; }
 .intro-meta { font-size: 0.875rem; font-weight: 600; }
 
+/* A friendly greeting as the participant arrives from the QR link. */
+.intro .hero-guide .ollie { transform-origin: 50% 85%; animation: ollie-welcome 1s ease-out both, ollie-welcome-breathe 3.6s 1s ease-in-out infinite; }
+@keyframes ollie-welcome { 0% { transform: translateY(16px) scale(.92); } 45% { transform: translateY(-10px) rotate(-7deg); } 70% { transform: rotate(5deg); } 100% { transform: translateY(0) rotate(0); } }
+@keyframes ollie-welcome-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px) rotate(2deg); } }
+@media (prefers-reduced-motion: reduce) { .intro .hero-guide .ollie { animation: none; } }
+
 @media (max-width: 760px) {
   .hero-inner { grid-template-columns: 1fr; grid-template-areas: "guide" "copy"; width: 100%; padding: 24px 0 0; gap: 16px; }
   .hero-guide { padding: 0 16px; }
