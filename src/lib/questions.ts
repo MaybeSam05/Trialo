@@ -47,12 +47,20 @@ export function validateQuestions(input: unknown): { questions: Question[] } | {
   return { questions };
 }
 
-/** Parses pasted text or CSV: one question per line, optionally "text, kind, trial". */
+const KIND_ALIASES: Record<string, QuestionKind> = {
+  include: "include", inclusion: "include", fit: "include",
+  exclude: "exclude", exclusion: "exclude", flag: "exclude",
+  info: "info", collect: "info",
+};
+
+export const QUESTION_TEMPLATE_CSV = "question,type,study\nHave you been diagnosed with type 2 diabetes?,fit,Trial A\nAre you currently pregnant?,flag,Trial A\nHow did you hear about this study?,info,\n";
+
+/** Parses pasted text or CSV: one question per line, optionally "question, type, study". Type defaults to fit. */
 export function parseQuestionText(raw: string): Question[] {
   return raw.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).flatMap((line, index) => {
     if (index === 0 && /^"?(question|text)"?\s*,/i.test(line)) return [];
     const cells = [...line.matchAll(/"([^"]*)"|([^,]+)/g)].map((match) => (match[1] ?? match[2]).trim());
-    const kind = KINDS.find((value) => value === cells[1]?.toLowerCase()) ?? "info";
+    const kind = KIND_ALIASES[cells[1]?.toLowerCase() ?? ""] ?? "include";
     return [{ key: "", text: cells[0], kind, trial: cells[2] ?? "" }];
   });
 }

@@ -11,7 +11,7 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
 
   async function save() {
     setSaving(true); setMessage(null);
-    const response = await fetch(`/api/studies/${slug}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ questions }) });
+    const response = await fetch(`/api/studies/${slug}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ questions: questions.filter((question) => question.text.trim()) }) });
     const body = await response.json() as { questions?: Question[]; error?: string };
     setSaving(false);
     if (!response.ok || !body.questions) { setMessage({ text: body.error ?? "Could not save.", error: true }); return; }
@@ -21,7 +21,7 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
 
   return <section className="card stack">
     <QuestionEditor questions={questions} onChange={setQuestions} />
-    <div className="actions"><button className="btn btn-primary" onClick={save} disabled={saving || questions.length === 0}>{saving ? "Saving…" : "Save questions"}</button></div>
+    <div className="actions"><button className="btn btn-primary" onClick={save} disabled={saving || !questions.some((question) => question.text.trim())}>{saving ? "Saving…" : "Save questions"}</button></div>
     {message && <p className={message.error ? "error" : "chip chip-match"} role={message.error ? "alert" : "status"}>{message.text}</p>}
   </section>;
 }
