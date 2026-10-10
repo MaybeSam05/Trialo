@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CampaignShare } from "@/components/coordinator/campaign-share";
 import { EditQuestions } from "@/components/coordinator/edit-questions";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { DEMO_QUESTIONS, type Question } from "@/lib/questions";
@@ -21,7 +22,13 @@ export default async function EditStudy({ params }: { params: Promise<{ slug: st
     <SiteHeader subtitle="Coordinator" links={coordinatorLinks} />
     <main id="main" className="page">
       <Link className="report-back" href="/dashboard/studies">&larr; All campaigns</Link>
-      <div className="titles"><h1>{study.name}</h1><p className="muted">Changes apply to interviews that start after you save. Sessions already in progress keep the old questions.</p></div>
+      <div className="edit-head">
+        <div className="titles"><h1>{study.name}</h1><p className="muted">Changes apply to interviews that start after you save. Sessions already in progress keep the old questions.</p></div>
+        <div className="study-actions">
+          <CampaignShare slug={slug} name={study.name} />
+          <Link className="btn btn-secondary" href={`/s/${slug}`} target="_blank">Preview</Link>
+        </div>
+      </div>
       <EditQuestions slug={slug} initial={study.questions ?? DEMO_QUESTIONS} />
     </main>
   </>;
