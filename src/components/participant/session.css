@@ -18,8 +18,8 @@
 /* Words Ollie hasn't reached yet (voice mode with alignment) */
 .iv-ahead { color: color-mix(in srgb, var(--muted) 75%, var(--card)); }
 .iv-question::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 20px; height: 20px; border-radius: 4px; background: var(--card); transform: translateX(-50%) rotate(45deg); }
-.iv-levels { display: flex; align-items: center; gap: 7px; height: 40px; }
-.iv-levels span { width: 7px; border-radius: 4px; background: var(--blue); transition: height 90ms linear; }
+.iv-levels { display: flex; flex: none; align-items: center; gap: 7px; height: 40px; }
+.iv-levels span { max-height: 100%; width: 7px; border-radius: 4px; background: var(--blue); transition: height 90ms linear; }
 
 /* Mascot: ground shadow, springy body, idle breath */
 .iv-mascot { position: relative; display: grid; justify-items: center; flex: none; }
@@ -81,7 +81,15 @@
   .iv-question { flex: 1; max-width: none; max-height: 100%; overflow-y: auto; padding: 14px 16px; border-radius: 20px; font-size: clamp(1.0625rem, 0.6rem + 1.9dvh, 1.4rem); }
   .iv-question > span { display: block; }
 .iv-question::after { left: -8px; top: 50%; bottom: auto; width: 18px; height: 18px; transform: translateY(-50%) rotate(45deg); }
-  .iv-levels { height: 30px; }
+  /* Keep the waveform in its own row, even at maximum speaking volume. */
+  .iv-levels { height: 40px; }
+  /* Animated wings and sound waves need room beside the speech bubble.
+     Let short screens scroll the stage instead of squeezing it into the sheet. */
+  .iv-stage { overflow-y: auto; }
+  .iv-status { flex-shrink: 0; }
+  .iv-scene { flex-shrink: 0; min-height: min-content; }
+  .iv-scene > .iv-mascot { margin-inline-end: 24px; }
+  .iv-question { min-width: 0; overflow-wrap: anywhere; }
   .iv-sheet { flex: none; margin-top: -20px; position: relative; border: 0; border-radius: 24px 24px 0 0; padding: 16px 16px calc(12px + env(safe-area-inset-bottom)); gap: 12px; }
   .iv-captions { flex: none; gap: 4px; }
   .iv-log { max-height: clamp(52px, 13dvh, 130px); min-height: 52px; padding: 10px 14px; gap: 8px; }
