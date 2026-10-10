@@ -22,3 +22,7 @@
   .portal-copy ul, .portal-ollie { display: none; }
   .portal-form { place-items: start center; padding: 20px 12px 32px; }
 }
+
+/* Clerk draws input borders as shadows that ignore theme variables; give fields the app's border */
+.portal-form .cl-formFieldInput { border: 1.5px solid var(--line) !important; box-shadow: none !important; background: var(--card) !important; }
+.portal-form .cl-formFieldInput:focus { border-color: var(--blue) !important; }

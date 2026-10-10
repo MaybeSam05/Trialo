@@ -12,7 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <ClerkProvider signInUrl="/portal" signUpUrl="/portal/sign-up" signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/portal">
-    <html lang="en" className={nunito.variable}><body>{children}</body></html>
-  </ClerkProvider>;
+  return <html lang="en" className={nunito.variable}>
+    <body>
+      <ClerkProvider signInUrl="/portal" signUpUrl="/portal/sign-up" signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/portal">
+        {children}
+      </ClerkProvider>
+    </body>
+  </html>;
 }

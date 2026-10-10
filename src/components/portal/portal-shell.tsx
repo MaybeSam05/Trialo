@@ -36,6 +36,6 @@ export const portalAppearance = {
   elements: {
     card: { boxShadow: "none", border: "1.5px solid var(--line)" },
     formButtonPrimary: { fontWeight: 700, minHeight: "48px" },
-    formFieldInput: { minHeight: "46px" },
+    formFieldInput: { minHeight: "46px", border: "1.5px solid var(--line)", boxShadow: "none" },
   },
 };
