@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { QuestionEditor } from "./question-editor";
-import type { Question } from "@/lib/questions";
+import { DEMO_QUESTIONS, type Question } from "@/lib/questions";
 
 export function EditQuestions({ slug, initial }: { slug: string; initial: Question[] }) {
   const [questions, setQuestions] = useState(initial);
@@ -20,7 +20,7 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
   }
 
   return <section className="card stack">
-    <QuestionEditor questions={questions} onChange={setQuestions} />
+    <QuestionEditor questions={questions} onChange={setQuestions} onLoadDemo={() => setQuestions(DEMO_QUESTIONS)} />
     <div className="actions"><button className="btn btn-primary" onClick={save} disabled={saving || !questions.some((question) => question.text.trim())}>{saving ? "Saving…" : "Save questions"}</button></div>
     {message && <p className={message.error ? "error" : "chip chip-match"} role={message.error ? "alert" : "status"}>{message.text}</p>}
   </section>;

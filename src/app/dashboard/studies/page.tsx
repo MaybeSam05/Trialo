@@ -29,7 +29,7 @@ export default async function Campaigns() {
       {error ? <p className="error" role="alert">{error}</p> : studies.length === 0 ? <section className="card stack"><h2>No campaigns yet</h2><p className="muted">Create one to get a participant link.</p></section>
         : <ul className="study-list">{studies.map((study) => <li key={study.slug} className="card">
           <span><strong>{study.name}</strong><br /><span className="muted">Created {new Date(study.created_at).toLocaleDateString("en-US", { timeZone: "UTC" })}</span></span>
-          <span className="actions">
+          <span className="study-actions">
             <Link className="btn btn-secondary" href={`/s/${study.slug}`}>Open participant link</Link>
             <Link className="btn btn-primary" href={`/dashboard/studies/${study.slug}`}>Edit questions</Link>
           </span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { DEFAULT_QUESTIONS, MAX_QUESTIONS, parseQuestionText, QUESTION_TEMPLATE_CSV, type Question, type QuestionKind } from "@/lib/questions";
+import { makeKey, MAX_QUESTIONS, parseQuestionText, PROFILE_QUESTIONS, QUESTION_TEMPLATE_CSV, SEX_OPTIONS, type Question, type QuestionKind } from "@/lib/questions";
 import "./questions.css";
 
 const KINDS: { value: QuestionKind; label: string; hint: string }[] = [
@@ -10,9 +10,9 @@ const KINDS: { value: QuestionKind; label: string; hint: string }[] = [
   { value: "info", label: "Info only", hint: "Collected, never scored" },
 ];
 const TEMPLATE_HREF = `data:text/csv;charset=utf-8,${encodeURIComponent(QUESTION_TEMPLATE_CSV)}`;
-const blank = (): Question => ({ key: "", text: "", kind: "include", trial: "" });
+const short = (text: string) => text.length > 42 ? `${text.slice(0, 40).trim()}…` : text || "untitled";
 
-export function QuestionEditor({ questions, onChange }: { questions: Question[]; onChange: (questions: Question[]) => void }) {
+export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions: Question[]; onChange: (questions: Question[]) => void; onLoadDemo?: () => void }) {
   const [notice, setNotice] = useState<{ text: string; error: boolean } | null>(null);
   const [pasting, setPasting] = useState(false);
   const [paste, setPaste] = useState("");
@@ -27,12 +27,20 @@ export function QuestionEditor({ questions, onChange }: { questions: Question[];
     [next[index], next[index + by]] = [next[index + by], next[index]];
     onChange(next);
   };
+  // Questions that depended on a deleted one go back to being asked to everyone.
+  const remove = (index: number) => {
+    const gone = questions[index].key;
+    onChange(questions.filter((_, position) => position !== index).map((question) => question.when?.key === gone ? { ...question, when: undefined } : question));
+  };
   // New rows render on the next frame, so focus the last question input after it exists.
-  const focusLast = () => requestAnimationFrame(() => list.current?.querySelector<HTMLInputElement>("li:last-child input")?.focus());
-  const addBlank = () => { onChange([...questions, blank()]); focusLast(); };
+  const focusLast = () => requestAnimationFrame(() => list.current?.querySelector<HTMLInputElement>("li:last-child .qe-text")?.focus());
+  const addBlank = () => {
+    onChange([...questions, { key: makeKey("", questions.map((question) => question.key)), text: "", kind: "include", trial: "" }]);
+    focusLast();
+  };
 
   function addParsed(raw: string, source: string) {
-    const parsed = parseQuestionText(raw);
+    const parsed = parseQuestionText(raw, questions);
     if (!parsed.length) { setNotice({ text: `No questions found in ${source}. Put one question per line.`, error: true }); return; }
     const added = parsed.slice(0, room);
     onChange([...questions, ...added]);
@@ -45,74 +53,114 @@ export function QuestionEditor({ questions, onChange }: { questions: Question[];
     addParsed(await file.text(), file.name);
   }
 
-  const uploader = <div className={`qe-drop${dragging ? " is-dragging" : ""}`}
-    onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)}
-    onDrop={(event) => { event.preventDefault(); setDragging(false); addFile(event.dataTransfer.files[0]); }}>
-    <span className="qe-drop-icon" aria-hidden>↑</span>
-    <h3>Upload your screening questions</h3>
-    <p className="muted">Drop a CSV or text file here, one question per line. Optional columns: type (fit, flag or info) and study. <a href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download a template</a></p>
-    <div className="qe-drop-actions">
-      <button type="button" className="btn btn-primary" disabled={room <= 0} onClick={() => fileInput.current?.click()}>Choose file</button>
-      <button type="button" className="qe-link" aria-expanded={pasting} onClick={() => setPasting(!pasting)}>{pasting ? "Cancel pasting" : "Paste text instead"}</button>
-    </div>
-    {pasting && <div className="qe-paste">
-      <textarea rows={5} value={paste} aria-label="Paste questions, one per line" placeholder={"Have you been diagnosed with type 2 diabetes?, fit, Trial A\nAre you currently pregnant?, flag, Trial A"} onChange={(event) => setPaste(event.target.value)} />
-      <button type="button" className="btn btn-secondary" disabled={!paste.trim()} onClick={() => addParsed(paste, "your pasted text")}>Add pasted questions</button>
-    </div>}
-    <input ref={fileInput} type="file" accept=".csv,.txt,text/csv,text/plain" hidden onChange={(event) => { addFile(event.target.files?.[0]); event.target.value = ""; }} />
-  </div>;
-
+  const fileField = <input ref={fileInput} type="file" accept=".csv,.txt,text/csv,text/plain" hidden onChange={(event) => { addFile(event.target.files?.[0]); event.target.value = ""; }} />;
   const status = notice && <p className={`qe-notice${notice.error ? " is-error" : ""}`} role={notice.error ? "alert" : "status"}>{notice.text}</p>;
 
   if (questions.length === 0) return <div className="qe">
-    {uploader}
+    <div className={`qe-drop${dragging ? " is-dragging" : ""}`}
+      onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)}
+      onDrop={(event) => { event.preventDefault(); setDragging(false); addFile(event.dataTransfer.files[0]); }}>
+      <span className="qe-drop-icon" aria-hidden>↑</span>
+      <h3>Upload your screening questions</h3>
+      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>sex=female</code> or <code>diabetes=yes</code>, plus <code>min_age</code> and <code>max_age</code>. <a href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download the template</a></p>
+      <div className="qe-drop-actions">
+        <button type="button" className="btn btn-primary" onClick={() => fileInput.current?.click()}>Choose file</button>
+        <button type="button" className="qe-link" aria-expanded={pasting} onClick={() => setPasting(!pasting)}>{pasting ? "Cancel pasting" : "Paste text instead"}</button>
+      </div>
+      {pasting && <div className="qe-paste">
+        <textarea rows={5} value={paste} aria-label="Paste questions, one per line" placeholder={"id,question,type,study,ask_if,min_age,max_age\ndiabetes,Have you been diagnosed with type 2 diabetes?,fit,Trial A,,18,75"} onChange={(event) => setPaste(event.target.value)} />
+        <button type="button" className="btn btn-secondary" disabled={!paste.trim()} onClick={() => addParsed(paste, "your pasted text")}>Add pasted questions</button>
+      </div>}
+      {fileField}
+    </div>
     {status}
     <div className="qe-or"><span>or</span></div>
     <div className="qe-start">
       <button type="button" className="btn btn-secondary" onClick={addBlank}>Create questions here</button>
-      <button type="button" className="qe-link" onClick={() => { onChange(DEFAULT_QUESTIONS); setNotice(null); }}>Start from sample questions</button>
+      {onLoadDemo && <button type="button" className="btn btn-secondary" onClick={onLoadDemo}>Use demo preset</button>}
     </div>
+    <ProfileBlock />
   </div>;
 
   return <div className="qe">
+    <ProfileBlock />
     <div className="qe-toolbar">
-      <p><strong>{questions.length} question{questions.length === 1 ? "" : "s"}</strong> <span className="muted">· Ollie asks them in this order</span></p>
-      <button type="button" className="qe-link" onClick={() => { if (confirmClear(questions.length)) { onChange([]); setNotice(null); } }}>Remove all</button>
+      <p><strong>{questions.length} screening question{questions.length === 1 ? "" : "s"}</strong> <span className="muted">· asked in this order, after the profile</span></p>
+      <button type="button" className="qe-link" onClick={() => { if (questions.length <= 1 || window.confirm(`Remove all ${questions.length} questions?`)) { onChange([]); setNotice(null); } }}>Remove all</button>
     </div>
     {status}
     <ol className="qe-list" ref={list}>
-      {questions.map((question, index) => <li key={index} className="qe-item">
-        <span className="qe-num" aria-hidden>{index + 1}</span>
-        <div className="qe-body">
-          <input className="qe-text" aria-label={`Question ${index + 1}`} value={question.text} maxLength={300} placeholder="Type a yes or no question"
-            onChange={(event) => update(index, { text: event.target.value })} />
-          <div className="qe-meta">
-            <div className="qe-kinds" role="radiogroup" aria-label={`How question ${index + 1} is scored`}>
-              {KINDS.map((kind) => <label key={kind.value} className="qe-kind" title={kind.hint}>
-                <input type="radio" name={`kind-${index}`} value={kind.value} checked={question.kind === kind.value} onChange={() => update(index, { kind: kind.value })} />
-                <span>{kind.label}</span>
-              </label>)}
+      {questions.map((question, index) => {
+        const earlier = questions.slice(0, index).filter((other) => other.text.trim());
+        const condition = question.when ? `${question.when.key}=${question.when.equals}` : "";
+        const dependsOnLater = question.when && !PROFILE_QUESTIONS.some((profile) => profile.key === question.when!.key) && !earlier.some((other) => other.key === question.when!.key);
+        const parent = questions.findIndex((other) => other.key === question.when?.key);
+        return <li key={question.key || index} className="qe-item">
+          <span className="qe-num" aria-hidden>{index + 1}</span>
+          <div className="qe-body">
+            <input className="qe-text" aria-label={`Question ${index + 1}`} value={question.text} maxLength={300} placeholder="Type a yes or no question"
+              onChange={(event) => update(index, { text: event.target.value })} />
+            <div className="qe-meta">
+              <div className="qe-kinds" role="radiogroup" aria-label={`How question ${index + 1} is scored`}>
+                {KINDS.map((kind) => <label key={kind.value} className="qe-kind" title={kind.hint}>
+                  <input type="radio" name={`kind-${index}`} value={kind.value} checked={question.kind === kind.value} onChange={() => update(index, { kind: kind.value })} />
+                  <span>{kind.label}</span>
+                </label>)}
+              </div>
+              <input className="qe-trial" aria-label={`Study for question ${index + 1}`} value={question.trial} maxLength={60} placeholder="Study (optional)"
+                onChange={(event) => update(index, { trial: event.target.value })} />
             </div>
-            <input className="qe-trial" aria-label={`Study for question ${index + 1}`} value={question.trial} maxLength={60} placeholder="Study (optional)"
-              onChange={(event) => update(index, { trial: event.target.value })} />
+            <div className="qe-rules">
+              <label className="qe-rule">
+                <span>Ask</span>
+                <select value={condition} aria-label={`Who gets question ${index + 1}`} onChange={(event) => {
+                  const [key, equals] = event.target.value.split("=");
+                  update(index, { when: key ? { key, equals } : undefined });
+                }}>
+                  <option value="">everyone</option>
+                  <optgroup label="By sex at birth">
+                    {SEX_OPTIONS.map((sex) => <option key={sex} value={`sex_at_birth=${sex}`}>only if sex at birth is {sex}</option>)}
+                  </optgroup>
+                  {earlier.length > 0 && <optgroup label="Follow-up to an earlier question">
+                    {earlier.flatMap((other) => ["yes", "no"].map((answer) => <option key={`${other.key}=${answer}`} value={`${other.key}=${answer}`}>
+                      only if Q{questions.indexOf(other) + 1} ({short(other.text)}) is {answer}
+                    </option>))}
+                  </optgroup>}
+                  {dependsOnLater && <option value={condition}>only if Q{parent + 1} is {question.when!.equals} (must come earlier)</option>}
+                </select>
+              </label>
+              <span className="qe-rule qe-ages">
+                <span>Ages</span>
+                <input type="number" inputMode="numeric" min={0} max={120} placeholder="any" aria-label={`Minimum age for question ${index + 1}`} value={question.minAge ?? ""}
+                  onChange={(event) => update(index, { minAge: event.target.value === "" ? undefined : Number(event.target.value) })} />
+                <span aria-hidden>to</span>
+                <input type="number" inputMode="numeric" min={0} max={120} placeholder="any" aria-label={`Maximum age for question ${index + 1}`} value={question.maxAge ?? ""}
+                  onChange={(event) => update(index, { maxAge: event.target.value === "" ? undefined : Number(event.target.value) })} />
+              </span>
+            </div>
+            {dependsOnLater && <p className="qe-warn" role="alert">This follows up on question {parent + 1}, which comes later. Move it below question {parent + 1}.</p>}
           </div>
-        </div>
-        <div className="qe-tools">
-          <button type="button" className="qe-icon" aria-label={`Move question ${index + 1} up`} disabled={index === 0} onClick={() => move(index, -1)}>↑</button>
-          <button type="button" className="qe-icon" aria-label={`Move question ${index + 1} down`} disabled={index === questions.length - 1} onClick={() => move(index, 1)}>↓</button>
-          <button type="button" className="qe-icon qe-delete" aria-label={`Delete question ${index + 1}`} onClick={() => onChange(questions.filter((_, position) => position !== index))}>✕</button>
-        </div>
-      </li>)}
+          <div className="qe-tools">
+            <button type="button" className="qe-icon" aria-label={`Move question ${index + 1} up`} disabled={index === 0} onClick={() => move(index, -1)}>↑</button>
+            <button type="button" className="qe-icon" aria-label={`Move question ${index + 1} down`} disabled={index === questions.length - 1} onClick={() => move(index, 1)}>↓</button>
+            <button type="button" className="qe-icon qe-delete" aria-label={`Delete question ${index + 1}`} onClick={() => remove(index)}>✕</button>
+          </div>
+        </li>;
+      })}
     </ol>
     <div className="qe-add">
       <button type="button" className="btn btn-secondary" disabled={room <= 0} onClick={addBlank}>+ Add a question</button>
       <button type="button" className="btn btn-secondary" disabled={room <= 0} onClick={() => fileInput.current?.click()}>Upload more</button>
-      <input ref={fileInput} type="file" accept=".csv,.txt,text/csv,text/plain" hidden onChange={(event) => { addFile(event.target.files?.[0]); event.target.value = ""; }} />
+      {fileField}
     </div>
-    <p className="muted qe-note">Demo data only. Don&apos;t ask for names, record numbers or other identifying details, and avoid wording like &ldquo;eligible&rdquo;.</p>
+    <p className="muted qe-note">Demo data only. Don&apos;t ask for record numbers or other identifying details, and avoid wording like &ldquo;eligible&rdquo;.</p>
   </div>;
 }
 
-function confirmClear(count: number) {
-  return count <= 1 || window.confirm(`Remove all ${count} questions?`);
+function ProfileBlock() {
+  return <details className="qe-profile">
+    <summary><strong>Always asked first:</strong> {PROFILE_QUESTIONS.map((question) => question.key.replaceAll("_", " ")).join(", ")}</summary>
+    <ol>{PROFILE_QUESTIONS.map((question) => <li key={question.key}>{question.text}</li>)}</ol>
+    <p className="muted">Participants can skip any of these. Use the &ldquo;Ask&rdquo; and &ldquo;Ages&rdquo; settings on each question to tailor the rest. Someone may get fewer or more questions depending on their answers.</p>
+  </details>;
 }

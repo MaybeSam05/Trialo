@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Ollie } from "@/components/ollie";
 import { QuestionEditor } from "@/components/coordinator/question-editor";
-import type { Question } from "@/lib/questions";
+import { DEMO_CAMPAIGN_NAME, DEMO_QUESTIONS, type Question } from "@/lib/questions";
 import { LinkPanel, type CreatedStudy } from "@/components/coordinator/link-panel";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import "@/components/coordinator/questions.css";
@@ -15,6 +15,13 @@ export default function Home() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const ready = name.trim() !== "" && questions.some((question) => question.text.trim());
+
+  // One click to a full, realistic setup for testing and showcasing.
+  function loadDemo() {
+    if (questions.length > 0 && !window.confirm("Replace your questions with the demo preset?")) return;
+    setName(DEMO_CAMPAIGN_NAME);
+    setQuestions(DEMO_QUESTIONS);
+  }
 
   async function createStudy(event: React.FormEvent) {
     event.preventDefault();
@@ -36,6 +43,7 @@ export default function Home() {
           <h1>Set up a screening campaign</h1>
           <p className="muted">Add the questions you already ask people, and Ollie turns them into a voice or text interview with one shareable link. Synthetic data only.</p>
         </div>
+        <button type="button" className="btn btn-secondary setup-head-actions" onClick={loadDemo}>Load demo preset</button>
       </div>
       <form className="setup" onSubmit={createStudy}>
         <section className="card setup-step" aria-labelledby="step-name">
@@ -46,7 +54,7 @@ export default function Home() {
         <section className="card setup-step" aria-labelledby="step-questions">
           <header><span className="step-num" aria-hidden>2</span><div><h2 id="step-questions">Add your screening questions</h2>
             <p className="muted">Upload the questions you already use, or write them here.</p></div></header>
-          <QuestionEditor questions={questions} onChange={setQuestions} />
+          <QuestionEditor questions={questions} onChange={setQuestions} onLoadDemo={loadDemo} />
         </section>
         <div className="setup-submit">
           <button className="btn btn-primary" disabled={loading || !ready}>{loading ? "Creating…" : "Create link and QR code"}</button>

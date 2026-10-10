@@ -33,6 +33,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .error { color: var(--exclude-text); background: var(--exclude-bg); border-radius: 12px; padding: 10px 14px; font-weight: 600; }
 .eyebrow { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
 .stack { display: grid; gap: 16px; align-content: start; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 12px 24px; border-radius: 16px; border: 2px solid transparent; font-weight: 700; cursor: pointer; text-decoration: none; }

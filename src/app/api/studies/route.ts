@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import QRCode from "qrcode";
 import { demoTrials } from "@/lib/defaults";
-import { DEFAULT_QUESTIONS, validateQuestions } from "@/lib/questions";
+import { DEMO_QUESTIONS, validateQuestions } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
 
 export async function POST(request: Request) {
@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { name, questions: rawQuestions } = await request.json() as { name?: string; questions?: unknown };
     if (!name?.trim()) return NextResponse.json({ error: "A campaign name is required." }, { status: 400 });
 
-    const checked = rawQuestions === undefined ? { questions: DEFAULT_QUESTIONS } : validateQuestions(rawQuestions);
+    const checked = rawQuestions === undefined ? { questions: DEMO_QUESTIONS } : validateQuestions(rawQuestions);
     if ("error" in checked) return NextResponse.json({ error: checked.error }, { status: 400 });
 
     const slug = crypto.randomUUID().replaceAll("-", "").slice(0, 12);
