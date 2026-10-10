@@ -13,7 +13,7 @@ export function LinkPanel({ created, onReset }: { created: CreatedStudy; onReset
       <p className="muted">Share this link or scan the QR code. Each participant receives a new screening session.</p>
       <div className="actions">
         <Link className="btn btn-primary" href="/dashboard">Open coordinator dashboard</Link>
-        {onReset && <button type="button" className="btn btn-secondary" onClick={onReset}>Set up another campaign</button>}
+        {onReset && <button type="button" className="btn btn-secondary" onClick={onReset}>Create another campaign</button>}
       </div>
     </div>
     <Image className="qr" src={created.qrCode} alt={`QR code for ${created.slug}`} width={220} height={220} unoptimized />

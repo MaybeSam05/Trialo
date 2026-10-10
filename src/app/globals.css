@@ -21,6 +21,9 @@
 }
 
 * { box-sizing: border-box; }
+/* Netlify injects its HUD badge (/.netlify/scripts/hud) bottom-right, where it covers tables and form controls.
+   Turn it off in Netlify's site settings; this keeps it out of the way until then. */
+#nl-badge-frame { display: none !important; }
 body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-nunito), system-ui, sans-serif; font-size: 17px; line-height: 1.5; }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: clamp(2rem, 4.2vw, 3.375rem); line-height: 1.1; font-weight: 800; letter-spacing: -0.01em; }
@@ -50,8 +53,11 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .brand strong { display: block; font-size: 1.3rem; line-height: 1.2; }
 .brand span { display: block; font-size: 0.875rem; font-weight: 600; color: var(--muted); }
 .site-nav { margin-left: auto; display: flex; gap: 24px; }
-.site-nav a { color: var(--ink); text-decoration: none; font-weight: 600; }
+.site-nav a { position: relative; padding: 6px 2px; color: var(--ink); text-decoration: none; font-weight: 600; }
 .site-nav a:hover { color: var(--blue); }
+/* Current section: bold, blue, with an underline bar */
+.site-nav a[aria-current="page"] { color: var(--blue); font-weight: 800; }
+.site-nav a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 3px; border-radius: 2px; background: var(--blue); }
 
 /* Page shell */
 .page { width: min(100% - 32px, 1344px); margin: 0 auto; padding: 32px 0 48px; display: grid; gap: 28px; }
