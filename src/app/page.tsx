@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { Ollie } from "@/components/ollie";
+import { LinkPanel, type CreatedStudy } from "@/components/coordinator/link-panel";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
-
-type CreatedStudy = { link: string; qrCode: string; slug: string };
 
 export default function Home() {
   const [name, setName] = useState("Trialo multi-trial screening");
@@ -42,16 +39,7 @@ export default function Home() {
         </form>
         {error && <p className="error" role="alert">{error}</p>}
       </section>
-      {created && <section className="card split">
-        <div className="stack">
-          <span className="chip chip-match">Link ready</span>
-          <h2>Participant link is ready</h2>
-          <p><a href={created.link}>{created.link}</a></p>
-          <p className="muted">Share this link or scan the QR code. Each participant receives a new screening session.</p>
-          <div className="actions"><Link className="btn btn-secondary" href="/dashboard">Open coordinator dashboard</Link></div>
-        </div>
-        <Image className="qr" src={created.qrCode} alt={`QR code for ${created.slug}`} width={220} height={220} unoptimized />
-      </section>}
+      {created && <LinkPanel created={created} />}
     </main>
   </>;
 }
