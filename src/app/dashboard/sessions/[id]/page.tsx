@@ -6,7 +6,8 @@ import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { DashboardStatusChip } from "@/components/dashboard/status";
 import { getSessionOutcome } from "@/components/dashboard/session-outcome";
 import { stripExpressions } from "@/components/participant/speech-timeline";
-import { MatchChip, SessionChip } from "@/components/status-chip";
+import { MatchChip } from "@/components/status-chip";
+import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, type Evidence, type Question } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
 import "@/components/coordinator/report.css";
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 type Session = {
   id: string; status: string; answers: Record<string, unknown> | null; match_results: MatchResult[] | null;
-  transcript: unknown; created_at: string; updated_at: string; studies: { name: string } | null;
+  transcript: unknown; created_at: string; updated_at: string; studies: { name: string; questions?: Question[] | null } | null;
 };
 type Turn = { who: string; text: string };
 
@@ -36,16 +37,43 @@ function toTurns(transcript: unknown): Turn[] | string | null {
 const label = (field: string) => field.replaceAll("_", " ").replace(/^\w/, (letter) => letter.toUpperCase());
 const show = (value: unknown) => typeof value === "string" ? value : JSON.stringify(value);
 
+type AnswerRow = { key: string; number: string; text: string; value: string | null; skipped: boolean };
+
+/** Answers in interview order with the original question text; extra fields (older campaigns) come last. */
+function answerRows(answers: Record<string, unknown>, questions: Question[] | null): AnswerRow[] {
+  const has = (key: string) => answers[key] !== undefined && answers[key] !== null && answers[key] !== "";
+  const rows: AnswerRow[] = PROFILE_QUESTIONS.map((question, index) => ({ key: question.key, number: `P${index + 1}`, text: question.text, value: has(question.key) ? show(answers[question.key]) : null, skipped: false }));
+  (questions ?? []).forEach((question, index) => rows.push({
+    key: question.key, number: String(index + 1), text: question.text,
+    value: has(question.key) ? show(answers[question.key]) : null,
+    skipped: !has(question.key) && !applies(question, answers, questions ?? []),
+  }));
+  const known = new Set([...rows.map((row) => row.key), NAME_FIELD]);
+  for (const [key, value] of Object.entries(answers)) if (!known.has(key)) rows.push({ key, number: "", text: label(key), value: show(value), skipped: false });
+  return rows;
+}
+
+const EVIDENCE: Record<Evidence, { title: string; icon: string }> = {
+  supports: { title: "Supports this result", icon: "✓" },
+  against: { title: "Doesn't fit", icon: "✕" },
+  verify: { title: "Needs verification", icon: "?" },
+  skipped: { title: "Didn't apply", icon: "–" },
+};
+
 export default async function SessionReport({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let session: Session | null = null;
   try {
-    const result = await getSupabase().from("screening_sessions").select("id,status,answers,match_results,transcript,created_at,updated_at,studies(name)").eq("id", id).maybeSingle();
+    const result = await getSupabase().from("screening_sessions").select("id,status,answers,match_results,transcript,created_at,updated_at,studies(*)").eq("id", id).maybeSingle();
     session = result.data as unknown as Session | null;
   } catch { notFound(); }
   if (!session) notFound();
 
-  const answers = Object.entries(session.answers ?? {});
+  const answers = session.answers ?? {};
+  const questions = Array.isArray(session.studies?.questions) ? session.studies.questions : null;
+  const rows = answerRows(answers, questions);
+  const answeredCount = rows.filter((row) => row.value !== null).length;
+  const name = typeof answers[NAME_FIELD] === "string" ? answers[NAME_FIELD] as string : "";
   const results = session.match_results ?? [];
   const transcript = toTurns(session.transcript);
 
@@ -59,7 +87,8 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
           <h1>{session.studies?.name ?? "Unknown study"}</h1>
           <div className="report-meta">
             <DashboardStatusChip status={getSessionOutcome({ status: session.status, match_results: session.match_results })} />
-            <SessionChip status={session.status} />
+            <span className="chip">{session.status === "completed" ? "Interview complete" : "Interview not finished"}</span>
+            {name && <span className="muted">Preferred name: {name}</span>}
             <span className="muted">Started {new Date(session.created_at).toLocaleString()}</span>
             <span className="muted">Session {session.id.slice(0, 8)}</span>
           </div>
@@ -72,16 +101,30 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
           <section className="card stack" aria-labelledby="results-h">
             <h2 id="results-h">Study results</h2>
             {results.length === 0 ? <p className="muted">No results yet. They appear once the participant has answered the questions.</p>
-              : <div>{results.map((result) => <div key={result.trialId} className="trial-result">
-                <strong>{result.trialName}</strong>
-                <MatchChip status={result.status} />
-                <p className="muted">{result.reason}</p>
-              </div>)}</div>}
+              : <div>{results.map((result) => {
+                const scored = (questions ?? []).filter((question) => question.trial === result.trialName && question.kind !== "info");
+                const groups = (Object.keys(EVIDENCE) as Evidence[]).map((kind) => ({ kind, items: scored.filter((question) => answerEvidence(question, answers, questions ?? []) === kind) })).filter((group) => group.items.length);
+                return <div key={result.trialId} className="trial-result">
+                  <strong>{result.trialName}</strong>
+                  <MatchChip status={result.status} />
+                  <p className="muted">{result.reason}</p>
+                  {groups.length > 0 && <div className="evidence">{groups.map((group) => <div key={group.kind} className={`evidence-group is-${group.kind}`}>
+                    <p className="evidence-title"><span aria-hidden>{EVIDENCE[group.kind].icon}</span>{EVIDENCE[group.kind].title}</p>
+                    <ul>{group.items.map((question) => <li key={question.key}>
+                      <span>{question.text}</span>
+                      <span className="evidence-answer">{answers[question.key] !== undefined && answers[question.key] !== "" ? `“${show(answers[question.key])}”` : group.kind === "skipped" ? "Not asked" : "No answer"}</span>
+                    </li>)}</ul>
+                  </div>)}</div>}
+                </div>;
+              })}</div>}
           </section>
           <section className="card stack" aria-labelledby="answers-h">
-            <h2 id="answers-h">Answers</h2>
-            {answers.length === 0 ? <p className="muted">No answers were saved in this session.</p>
-              : <dl className="answer-list">{answers.map(([field, value]) => <div key={field}><dt>{label(field)}</dt><dd>{show(value)}</dd></div>)}</dl>}
+            <h2 id="answers-h">Answers <span className="muted answer-count">{answeredCount} of {rows.length} answered, in interview order</span></h2>
+            {answeredCount === 0 ? <p className="muted">No answers were saved in this session.</p>
+              : <dl className="answer-list">{rows.map((row) => <div key={row.key} className={row.value === null ? "is-empty" : undefined}>
+                <dt>{row.number && <span className="answer-num">{row.number}</span>}{row.text}</dt>
+                <dd>{row.value ?? (row.skipped ? "Not asked (didn't apply)" : session.status === "completed" ? "Not answered" : "No answer yet")}</dd>
+              </div>)}</dl>}
           </section>
         </div>
         <aside className="report-side">

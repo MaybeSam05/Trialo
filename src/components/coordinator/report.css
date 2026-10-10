@@ -8,7 +8,7 @@
 .trial-result:first-of-type { padding-top: 0; }
 .trial-result:last-child { border-bottom: 0; padding-bottom: 0; }
 .answer-list { display: grid; margin: 0; }
-.answer-list div { display: grid; grid-template-columns: minmax(120px, 1fr) 2fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.answer-list div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .answer-list div:last-child { border-bottom: 0; }
 .answer-list dt { font-weight: 700; }
 .answer-list dd { margin: 0; overflow-wrap: anywhere; }
@@ -16,6 +16,25 @@
 .turn { display: grid; gap: 2px; }
 .turn .who { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .link-panel .qr { justify-self: start; }
+
+/* Answers in interview order */
+.answer-count { display: block; margin-top: 2px; font-size: 0.875rem; font-weight: 600; }
+.answer-list dt { display: flex; gap: 10px; align-items: baseline; }
+.answer-num { flex: none; min-width: 28px; padding: 1px 6px; border-radius: 999px; background: var(--panel); color: var(--muted); font-size: 0.75rem; font-weight: 800; text-align: center; }
+.answer-list .is-empty dd { color: var(--muted); font-style: italic; }
+
+/* Why a study got its result */
+.evidence { justify-self: stretch; display: grid; gap: 10px; margin-top: 4px; }
+.evidence-group { padding: 10px 14px; border-radius: 12px; background: var(--panel); }
+.evidence-title { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: 800; }
+.evidence-title span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 0.75rem; }
+.evidence-group.is-supports .evidence-title span { background: var(--match-bg); color: var(--match-text); }
+.evidence-group.is-against .evidence-title span { background: var(--exclude-bg); color: var(--exclude-text); }
+.evidence-group.is-verify .evidence-title span { background: var(--missing-bg); color: var(--missing-text); }
+.evidence-group.is-skipped .evidence-title span { background: var(--card); color: var(--muted); }
+.evidence ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; font-size: 0.9375rem; }
+.evidence li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; }
+.evidence-answer { color: var(--muted); font-weight: 600; }
 
 @media (max-width: 1080px) {
   .report-grid { grid-template-columns: 1fr; }

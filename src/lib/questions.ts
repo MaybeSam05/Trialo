@@ -208,6 +208,17 @@ export function applicableCount(questions: Question[], answers: Record<string, u
   return PROFILE_QUESTIONS.length + questions.filter((question) => applies(question, answers, questions)).length;
 }
 
+export type Evidence = "supports" | "against" | "verify" | "skipped";
+
+/** How one scored answer bears on its study's result, using the same rules as matchQuestions. */
+export function answerEvidence(question: Question, answers: Record<string, unknown>, questions: Question[]): Evidence {
+  if (!applies(question, answers, questions)) return question.kind === "include" ? "against" : "skipped";
+  const answered = yesNo(String(answers[question.key] ?? ""));
+  if (!answered) return "verify";
+  const fits = question.kind === "include" ? answered === "yes" : answered === "no";
+  return fits ? "supports" : "against";
+}
+
 /** Scores yes/no answers per trial group. A missing or unclear answer always needs review, never a rejection. */
 export function matchQuestions(answers: Record<string, unknown>, questions: Question[]): MatchResult[] {
   const scored = questions.filter((question) => question.kind !== "info");
