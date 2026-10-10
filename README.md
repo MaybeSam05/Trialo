@@ -18,6 +18,15 @@ Minimal hackathon implementation of a QR-based clinical-trial pre-screening flow
 3. Copy `.env.example` to `.env.local` and fill in the Supabase URL, Supabase service-role key, ElevenLabs API key, and Ollie's Agent ID.
 4. Run `npm run dev`.
 
+## Demo data
+
+`npm run seed:demo` fills Supabase with realistic, fully synthetic data: three campaigns with their own question lists and about 55 sessions over the past two weeks (completed, unsure, exclusions, drop-offs, links opened but never started, and two people "answering now"). It replaces only campaigns whose slug starts with `demo-`, so it is safe to re-run.
+
+- `npm run seed:demo -- --clear-all` also deletes every other campaign and session first (use it to wipe old test data).
+- `npx tsx scripts/seed-demo.ts --dry-run` previews the data without touching the database.
+
+Requires `.env.local` and the `studies.questions` column from `supabase/schema.sql`.
+
 ## Configure Ollie
 
 In ElevenLabs Agent settings, add a **client tool** named `record_screening_answer`:

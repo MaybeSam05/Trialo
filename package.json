@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts"
   },
   "dependencies": {
     "@elevenlabs/react": "latest",
@@ -25,6 +26,7 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "16.4.0",
+    "tsx": "^4.20.6",
     "typescript": "latest"
   }
 }
