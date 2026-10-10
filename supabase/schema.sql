@@ -25,3 +25,6 @@ create index if not exists screening_sessions_conversation_id_idx on public.scre
 -- Keep RLS enabled and do not add anonymous read/write policies.
 alter table public.studies enable row level security;
 alter table public.screening_sessions enable row level security;
+
+-- Coordinator-defined screening questions (see src/lib/questions.ts). Null = legacy keyword matching on `trials`.
+alter table public.studies add column if not exists questions jsonb;

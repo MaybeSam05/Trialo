@@ -2,12 +2,13 @@
 
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useState } from "react";
+import { agentQuestionList, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 
 const HAPPY_FOR_MS = 1_600;
 
-export function VoiceScreening({ slug, studyName }: { slug: string; studyName: string }) {
+export function VoiceScreening({ slug, studyName, questions }: { slug: string; studyName: string; questions: Question[] | null }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [lastActivity, setLastActivity] = useState(0);
   const onMessage = useCallback(({ message, role, event_id }: { message: string; role: "user" | "agent"; event_id: number }) => {
@@ -27,13 +28,13 @@ export function VoiceScreening({ slug, studyName }: { slug: string; studyName: s
   }, []);
 
   return <ConversationProvider onMessage={onMessage}>
-    <VoiceScreeningControls slug={slug} studyName={studyName} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); }}
+    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); }}
       addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, messages, resetMessages, addOwnAnswer, lastActivity }: {
-  slug: string; studyName: string; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number;
+function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
@@ -74,7 +75,9 @@ function VoiceScreeningControls({ slug, studyName, messages, resetMessages, addO
       const tokenBody = await tokenResponse.json() as { token?: string; error?: string };
       if (!tokenResponse.ok || !tokenBody.token) throw new Error(tokenBody.error ?? "Could not connect to Ollie.");
 
-      const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId, textOnly: nextMode === "text" });
+      const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId, textOnly: nextMode === "text",
+        // Ollie's prompt reads these with {{study_name}} / {{study_questions}} (see README).
+        dynamicVariables: { study_name: studyName, study_questions: questions ? agentQuestionList(questions) : "" } });
       await fetch(`/api/sessions/${sessionBody.sessionId}/conversation`, {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId }),
       });

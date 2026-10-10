@@ -1,0 +1,23 @@
+/* Coordinator: question builder */
+.qe { display: grid; gap: 16px; }
+.qe-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.qe-item { display: grid; gap: 8px; padding: 14px; border: 1.5px solid var(--line); border-radius: 16px; background: var(--card); }
+.qe-row { display: flex; align-items: center; gap: 10px; }
+.qe-num { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--panel); font-weight: 800; font-size: 0.875rem; }
+.qe input, .qe select, .qe textarea { min-height: 44px; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 12px; background: var(--card); color: var(--ink); width: 100%; }
+.qe-meta { flex-wrap: wrap; padding-left: 38px; }
+.qe-meta select { flex: 2 1 200px; width: auto; }
+.qe-meta input { flex: 1 1 140px; width: auto; }
+.qe-tools { display: flex; gap: 6px; margin-left: auto; }
+.qe-icon { min-width: 44px; min-height: 44px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; font-weight: 700; }
+.qe-icon:hover:not(:disabled) { border-color: var(--blue); }
+.qe-icon:disabled { opacity: 0.4; cursor: not-allowed; }
+.qe-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.qe-paste { display: grid; gap: 10px; }
+.qe-paste summary { cursor: pointer; font-weight: 700; }
+.qe-paste[open] { padding: 14px; border: 1.5px dashed var(--line); border-radius: 16px; }
+.qe-note { font-size: 0.875rem; }
+.study-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.study-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; justify-content: space-between; }
+@media (max-width: 760px) { .qe-meta { padding-left: 0; } }
+.form.form-wide { max-width: none; }

@@ -16,4 +16,5 @@ export function SiteHeader({ subtitle, links = [] }: { subtitle: string; links?:
 export const coordinatorLinks = [
   { href: "/", label: "New link" },
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/studies", label: "Campaigns" },
 ];

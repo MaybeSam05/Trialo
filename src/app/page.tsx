@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { Ollie } from "@/components/ollie";
+import { QuestionEditor } from "@/components/coordinator/question-editor";
+import { DEFAULT_QUESTIONS, type Question } from "@/lib/questions";
 import { LinkPanel, type CreatedStudy } from "@/components/coordinator/link-panel";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 
 export default function Home() {
   const [name, setName] = useState("Trialo multi-trial screening");
+  const [questions, setQuestions] = useState<Question[]>(DEFAULT_QUESTIONS);
   const [created, setCreated] = useState<CreatedStudy | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,7 +17,7 @@ export default function Home() {
   async function createStudy(event: React.FormEvent) {
     event.preventDefault();
     setLoading(true); setError("");
-    const response = await fetch("/api/studies", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name }) });
+    const response = await fetch("/api/studies", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, questions }) });
     const body = await response.json();
     setLoading(false);
     if (!response.ok) { setError(body.error ?? "Could not create the screening link."); return; }
@@ -32,10 +35,13 @@ export default function Home() {
         </div>
       </div>
       <section className="card stack">
-        <form className="form" onSubmit={createStudy}>
+        <form className="form form-wide" onSubmit={createStudy}>
           <label htmlFor="study-name">Screening campaign name</label>
           <input id="study-name" value={name} onChange={(event) => setName(event.target.value)} required />
-          <div className="actions"><button className="btn btn-primary" disabled={loading}>{loading ? "Creating..." : "Create link and QR code"}</button></div>
+          <h2>Screening questions</h2>
+          <p className="muted">Ollie asks these in order, in voice or text. Start from the sample list, then edit, add, upload or paste your own.</p>
+          <QuestionEditor questions={questions} onChange={setQuestions} />
+          <div className="actions"><button className="btn btn-primary" disabled={loading || questions.length === 0}>{loading ? "Creating..." : "Create link and QR code"}</button></div>
         </form>
         {error && <p className="error" role="alert">{error}</p>}
       </section>

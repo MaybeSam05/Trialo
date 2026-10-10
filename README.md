@@ -26,6 +26,17 @@ In ElevenLabs Agent settings, add a **client tool** named `record_screening_answ
 - Parameters: `field` (string, the normalized answer key) and `value` (string, the confirmed answer).
 - Add this instruction to Ollie's system prompt: "After the participant confirms each answer, call `record_screening_answer` with a concise field name and the exact confirmed value. Do not call it before consent."
 
+### Coordinator-defined questions
+
+Coordinators edit each campaign's questions at `/` (when creating) or `/dashboard/studies/<slug>` (afterwards). Questions are stored in `studies.questions` (run the last statement of `supabase/schema.sql` once on existing databases; until then campaigns fall back to the demo trials). Each question is yes/no and is marked as *include* (a yes fits), *exclude* (a yes is a flag) or *info* (collected, not scored).
+
+The app passes two dynamic variables when a session starts, so Ollie's system prompt must use them instead of a fixed question list:
+
+- `{{study_name}}`: the campaign name.
+- `{{study_questions}}`: a numbered list such as `1. [field: q1] Do you have type 2 diabetes?`.
+
+Add to Ollie's system prompt: "Ask the questions in {{study_questions}} one at a time, in order, in plain language. After the participant confirms an answer, call `record_screening_answer` with `field` set to the exact field name in brackets and `value` set to yes, no or not sure. If {{study_questions}} is empty, use your default questions." Then declare both variables in the agent's dynamic-variable settings.
+
 Set Ollie's post-call webhook to:
 
 `https://YOUR_DEPLOYED_DOMAIN/api/elevenlabs/post-call`
