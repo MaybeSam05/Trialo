@@ -20,7 +20,8 @@ export function Intro({ studyName, onStart, onType }: { studyName: string; onSta
         <h1>Let&apos;s find a study that may fit you</h1>
         <p className="muted intro-lede">About 5 minutes. Talk to Ollie{onType ? " or type your answers" : ""}. Skip any question or stop at any time.</p>
         <div className="intro-notes">
-          <p><strong>Ollie is an AI assistant</strong>, not a clinician. Demo only: please don&apos;t share real health details. Answers are reviewed by the research team. This isn&apos;t medical advice and doesn&apos;t decide eligibility.</p>
+          <p className="intro-demo"><strong>Demo only.</strong> Please don&apos;t share real health details.</p>
+          <p className="intro-ai"><strong>Ollie is an AI assistant</strong>, not a clinician. The research team reviews your answers. This isn&apos;t medical advice and doesn&apos;t decide eligibility.</p>
           <p className="intro-tip"><strong>Using your voice?</strong> Allow the microphone when your browser asks.</p>
         </div>
         <label className="intro-name">
@@ -29,7 +30,7 @@ export function Intro({ studyName, onStart, onType }: { studyName: string; onSta
         </label>
         <div className="actions">
           <button className="btn btn-primary" onClick={() => onStart(typed)}>Start voice interview</button>
-          {onType && <button className="btn btn-secondary" onClick={() => onType(typed)}>I&apos;d rather type</button>}
+          {onType && <button className="btn btn-secondary" onClick={() => onType(typed)}>Start text interview</button>}
         </div>
         <p className="intro-meta">About 5 minutes · In an emergency, call 911.</p>
       </div>
