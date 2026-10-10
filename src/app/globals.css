@@ -20,26 +20,6 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page: #0d1b2a;
-    --sky: #1d4467;
-    --panel: #17304a;
-    --card: #13283d;
-    --line: #244560;
-    --blue: #5aa8ff;
-    --on-blue: #0d1b2a;
-    --ink: #e6f2fb;
-    --muted: #9ab9d3;
-
-    --match-bg: #0f3a2b;   --match-text: #8ee6c0;
-    --missing-bg: #3d2e0a; --missing-text: #ffd27a;
-    --exclude-bg: #4a1c1f; --exclude-text: #ffb3b3;
-    --verify-bg: #16305c;  --verify-text: #a9c8ff;
-    color-scheme: dark;
-  }
-}
-
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font-nunito), system-ui, sans-serif; font-size: 17px; line-height: 1.5; }
 h1, h2, h3, p { margin: 0; }
