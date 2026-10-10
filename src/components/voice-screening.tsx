@@ -6,6 +6,7 @@ import { agentQuestionList, applicableCount, type Question } from "@/lib/questio
 import { Intro } from "@/components/participant/intro";
 import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
+import { SpeechTimeline, type Alignment } from "@/components/participant/speech-timeline";
 
 const HAPPY_FOR_MS = 1_600;
 
@@ -28,14 +29,19 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
     setMessages((current) => [...current, { id: -Date.now(), role: "user", text }]);
   }, []);
 
-  return <ConversationProvider onMessage={onMessage}>
-    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); }}
-      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} />
+  // Ollie's speech clock, fed by ElevenLabs' per-character audio alignment; captions follow it exactly.
+  const [timeline] = useState(() => new SpeechTimeline());
+  const onAudioAlignment = useCallback((alignment: Alignment) => timeline.add(alignment, performance.now()), [timeline]);
+  const onInterruption = useCallback(() => timeline.interrupt(performance.now()), [timeline]);
+
+  return <ConversationProvider onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption}>
+    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); }}
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity }: {
-  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number;
+function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity, timeline }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
@@ -102,6 +108,6 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
 
   return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
     messages={messages} progress={interviewProgress(answeredFields, questions ? applicableCount(questions, savedAnswers) : null)} lastActivity={lastActivity} happyUntil={happyUntil}
-    getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send}
+    getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send} timeline={mode === "voice" ? timeline : null}
     onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={() => start(mode)} />;
 }

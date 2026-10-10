@@ -3,6 +3,7 @@ import type { OllieFace } from "@/components/ollie";
 import { Mascot } from "@/components/participant/mascot";
 import type { interviewProgress } from "@/components/participant/progress";
 import { SpeechBubble } from "@/components/participant/speech-bubble";
+import type { SpeechTimeline } from "@/components/participant/speech-timeline";
 import "./session.css";
 
 export type Message = { id: number; role: "user" | "agent"; text: string };
@@ -15,11 +16,12 @@ const SENSITIVE = /pregnan|mental|depress|anxiet|suicid|self-harm|drug|alcohol|s
 const RESTING_AFTER_MS = 45_000;
 const IDLE_LEVELS: number[] = Array(11).fill(0);
 
-export function Session({ mode, connected, ended, error, isSpeaking, isMuted, messages, progress, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onToggleMute, onEnd, onRetry }: {
+export function Session({ mode, connected, ended, error, isSpeaking, isMuted, messages, progress, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onToggleMute, onEnd, onRetry, timeline }: {
   mode: InterviewMode; connected: boolean; ended: boolean; error: string; isSpeaking: boolean; isMuted: boolean;
   messages: Message[]; progress: ReturnType<typeof interviewProgress>; lastActivity: number; happyUntil: number;
   getInputVolume: () => number; getOutputVolume: () => number;
   onSend: (text: string) => void; onToggleMute: () => void; onEnd: () => void; onRetry: () => void;
+  timeline?: SpeechTimeline | null;
 }) {
   const [now, setNow] = useState(0);
   const [mouthOpen, setMouthOpen] = useState(false);
@@ -146,7 +148,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     <div className="iv-stage">
       <span className="iv-status" aria-live="polite">{status}</span>
       <div className="iv-scene">
-        <SpeechBubble text={bubble} speaking={isSpeaking || !voice} paced={connected && !ended && !error && Boolean(lastAgent)} reducedMotion={reducedMotion} />
+        <SpeechBubble text={bubble} speaking={isSpeaking || !voice} paced={connected && !ended && !error && Boolean(lastAgent)} reducedMotion={reducedMotion} timeline={timeline} />
         <Mascot face={face} speaking={connected && !ended && !error && isSpeaking} listening={activelyListening} reducedMotion={reducedMotion} />
       </div>
       {voice && !ended && <div className="iv-levels" aria-hidden>{(connected && !reducedMotion ? levels : IDLE_LEVELS).map((level, index) => <span key={index} style={{ height: `${Math.round(6 + level * 34)}px` }} />)}</div>}

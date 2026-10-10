@@ -15,6 +15,8 @@
 .iv-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; width: 100%; min-height: 0; }
 .iv-question { position: relative; max-width: 560px; background: var(--card); color: var(--ink); border-radius: 24px; padding: 18px 22px; font-size: clamp(1.25rem, 2.2vw, 1.875rem); font-weight: 800; line-height: 1.2; box-shadow: 0 4px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
 .iv-question > span { display: block; }
+/* Words Ollie hasn't reached yet (voice mode with alignment) */
+.iv-ahead { color: color-mix(in srgb, var(--muted) 75%, var(--card)); }
 .iv-question::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 20px; height: 20px; border-radius: 4px; background: var(--card); transform: translateX(-50%) rotate(45deg); }
 .iv-levels { display: flex; align-items: center; gap: 7px; height: 40px; }
 .iv-levels span { width: 7px; border-radius: 4px; background: var(--blue); transition: height 90ms linear; }
