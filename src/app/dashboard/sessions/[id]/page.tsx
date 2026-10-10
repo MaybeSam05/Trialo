@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Ollie } from "@/components/ollie";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
+import { DashboardStatusChip } from "@/components/dashboard/status";
+import { getSessionOutcome } from "@/components/dashboard/session-outcome";
 import { MatchChip, SessionChip } from "@/components/status-chip";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
@@ -52,6 +54,7 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
         <div className="titles">
           <h1>{session.studies?.name ?? "Unknown study"}</h1>
           <div className="report-meta">
+            <DashboardStatusChip status={getSessionOutcome({ status: session.status, match_results: session.match_results })} />
             <SessionChip status={session.status} />
             <span className="muted">Started {new Date(session.created_at).toLocaleString()}</span>
             <span className="muted">Session {session.id.slice(0, 8)}</span>

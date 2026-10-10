@@ -1,9 +1,9 @@
 import type { MatchResult, ScreeningSession } from "@/lib/types";
 
 const matchChips: Record<MatchResult["status"], { label: string; tone: string }> = {
-  potential_match: { label: "Potential match", tone: "match" },
-  needs_information: { label: "Needs information", tone: "missing" },
-  possible_exclusion: { label: "Possible exclusion", tone: "exclude" },
+  potential_match: { label: "Potential match for follow-up", tone: "match" },
+  needs_information: { label: "Needs review", tone: "missing" },
+  possible_exclusion: { label: "Unlikely match", tone: "exclude" },
 };
 
 const sessionChips: Record<ScreeningSession["status"], { label: string; tone: string }> = {

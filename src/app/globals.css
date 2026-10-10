@@ -62,22 +62,17 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .ollie img { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 140ms ease; }
 .ollie img[data-active="true"] { opacity: 1; }
 .bubble { background: var(--card); color: var(--ink); border-radius: 22px 22px 22px 6px; padding: 16px 20px; max-width: 520px; box-shadow: 0 1px 0 var(--line); }
-.bubble-lg { font-size: clamp(1.25rem, 2.2vw, 1.875rem); font-weight: 800; line-height: 1.2; }
 
 /* Participant: session */
 .session { display: grid; grid-template-columns: 1fr 480px; gap: 32px; min-height: 640px; }
 .stage { background: var(--sky); border-radius: 32px; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: left; }
 .side { display: flex; flex-direction: column; gap: 18px; border-radius: 28px; padding: 32px; }
-.side .grow { flex: 1; }
-.live-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 12px; border-radius: 999px; background: var(--ink); color: var(--card); font-size: 0.875rem; font-weight: 700; }
-.live-chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .levels { display: flex; align-items: center; gap: 7px; height: 48px; }
 .levels span { width: 7px; border-radius: 4px; background: var(--blue); transition: height 90ms linear; }
 .progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 0.875rem; font-weight: 700; }
 .transcript { display: grid; gap: 10px; max-height: 280px; overflow-y: auto; }
 .transcript p { margin: 0; }
 .transcript .who { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.row-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* Status chips (always paired with a text label) */
 .chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 10px; border-radius: 999px; font-size: 0.875rem; font-weight: 700; white-space: nowrap; background: var(--panel); color: var(--ink); }
@@ -96,8 +91,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .tile .value { display: flex; align-items: baseline; gap: 8px; }
 .tile .value strong { font-size: 2rem; font-weight: 800; line-height: 1; }
 .tile .value span { font-size: 0.875rem; font-weight: 600; color: var(--muted); }
-.table-card { padding: 0; overflow: hidden; }
-.table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; }
 th, td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
 tbody tr:last-child td { border-bottom: 0; }
@@ -120,7 +113,6 @@ td .result { display: grid; gap: 4px; justify-items: start; }
   .site-nav { gap: 16px; }
   .stage { padding: 24px 16px; border-radius: 24px; }
   .side { padding: 20px; border-radius: 24px; }
-  .row-actions { grid-template-columns: 1fr; }
   .split { grid-template-columns: 1fr; }
   th, td { padding: 12px 14px; }
 }
