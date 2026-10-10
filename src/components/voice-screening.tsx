@@ -3,7 +3,7 @@
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useState } from "react";
 import { Intro } from "@/components/participant/intro";
-import { Session, type Message } from "@/components/participant/session";
+import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 
 const HAPPY_FOR_MS = 1_600;
 
@@ -12,24 +12,37 @@ export function VoiceScreening({ slug, studyName }: { slug: string; studyName: s
   const [lastActivity, setLastActivity] = useState(0);
   const onMessage = useCallback(({ message, role, event_id }: { message: string; role: "user" | "agent"; event_id: number }) => {
     setLastActivity(Date.now());
-    setMessages((current) => [...current.filter((item) => item.id !== event_id || item.role !== role), { id: event_id, role, text: message }]);
+    setMessages((current) => {
+      const rest = current.filter((item) => item.id !== event_id || item.role !== role);
+      // Replace our own echo of a typed or tapped answer if the agent transcribes it back.
+      const last = rest.at(-1);
+      if (role === "user" && last && last.id < 0 && last.text.toLowerCase() === message.trim().toLowerCase()) rest.pop();
+      return [...rest, { id: event_id, role, text: message }];
+    });
+  }, []);
+  // Typed and tapped answers are shown right away; negative ids mark them as local.
+  const addOwnAnswer = useCallback((text: string) => {
+    setLastActivity(Date.now());
+    setMessages((current) => [...current, { id: -Date.now(), role: "user", text }]);
   }, []);
 
   return <ConversationProvider onMessage={onMessage}>
-    <VoiceScreeningControls slug={slug} studyName={studyName} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); }} lastActivity={lastActivity} />
+    <VoiceScreeningControls slug={slug} studyName={studyName} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); }}
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, messages, resetMessages, lastActivity }: {
-  slug: string; studyName: string; messages: Message[]; resetMessages: () => void; lastActivity: number;
+function VoiceScreeningControls({ slug, studyName, messages, resetMessages, addOwnAnswer, lastActivity }: {
+  slug: string; studyName: string; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number;
 }) {
-  const { startSession, endSession, getInputVolume, getOutputVolume } = useConversationControls();
+  const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
   const { isSpeaking } = useConversationMode();
   const { isMuted, setMuted } = useConversationInput();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [started, setStarted] = useState(false);
+  const [mode, setMode] = useState<InterviewMode>("voice");
   const [wasConnected, setWasConnected] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
   const [happyUntil, setHappyUntil] = useState(0);
@@ -47,9 +60,9 @@ function VoiceScreeningControls({ slug, studyName, messages, resetMessages, last
     return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
   });
 
-  async function start() {
+  async function start(nextMode: InterviewMode) {
     try {
-      setError(""); setStarted(true); setWasConnected(false); setSavedCount(0); resetMessages();
+      setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedCount(0); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
@@ -61,12 +74,12 @@ function VoiceScreeningControls({ slug, studyName, messages, resetMessages, last
       const tokenBody = await tokenResponse.json() as { token?: string; error?: string };
       if (!tokenResponse.ok || !tokenBody.token) throw new Error(tokenBody.error ?? "Could not connect to Ollie.");
 
-      const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId });
+      const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId, textOnly: nextMode === "text" });
       await fetch(`/api/sessions/${sessionBody.sessionId}/conversation`, {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId }),
       });
     } catch (startError) {
-      setError(startError instanceof Error ? startError.message : "Could not start voice interview.");
+      setError(startError instanceof Error ? startError.message : "Could not start the interview.");
     }
   }
 
@@ -74,10 +87,15 @@ function VoiceScreeningControls({ slug, studyName, messages, resetMessages, last
   if (connected && !wasConnected) setWasConnected(true);
   const ended = wasConnected && status === "disconnected" && !error;
 
-  if (!started) return <Intro studyName={studyName} onStart={start} />;
+  function send(text: string) {
+    sendUserMessage(text);
+    addOwnAnswer(text);
+  }
 
-  return <Session connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
+  if (!started) return <Intro studyName={studyName} onStart={() => start("voice")} onType={() => start("text")} />;
+
+  return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
     messages={messages} savedCount={savedCount} lastActivity={lastActivity} happyUntil={happyUntil}
-    getInputVolume={getInputVolume} getOutputVolume={getOutputVolume}
-    onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={start} />;
+    getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send}
+    onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={() => start(mode)} />;
 }
