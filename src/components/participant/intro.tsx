@@ -1,7 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import { Ollie } from "@/components/ollie";
+import { cleanName } from "@/lib/questions";
 import "./intro.css";
 
-export function Intro({ studyName, onStart, onType }: { studyName: string; onStart: () => void; onType?: () => void }) {
+export function Intro({ studyName, onStart, onType }: { studyName: string; onStart: (name: string) => void; onType?: (name: string) => void }) {
+  const [name, setName] = useState("");
+  const typed = cleanName(name);
   return <section className="hero intro">
     <div className="hero-inner">
       <div className="hero-guide">
@@ -17,9 +23,13 @@ export function Intro({ studyName, onStart, onType }: { studyName: string; onSta
           <p><strong>Ollie is an AI assistant</strong>, not a clinician. Demo only: please don&apos;t share real health details. Answers are reviewed by the research team. This isn&apos;t medical advice and doesn&apos;t decide eligibility.</p>
           <p className="intro-tip"><strong>Using your voice?</strong> Allow the microphone when your browser asks.</p>
         </div>
+        <label className="intro-name">
+          <span>What should Ollie call you? <span className="muted">(optional)</span></span>
+          <input value={name} onChange={(event) => setName(event.target.value)} maxLength={40} autoComplete="given-name" placeholder="First name or nickname" />
+        </label>
         <div className="actions">
-          <button className="btn btn-primary" onClick={onStart}>Start voice interview</button>
-          {onType && <button className="btn btn-secondary" onClick={onType}>I&apos;d rather type</button>}
+          <button className="btn btn-primary" onClick={() => onStart(typed)}>Start voice interview</button>
+          {onType && <button className="btn btn-secondary" onClick={() => onType(typed)}>I&apos;d rather type</button>}
         </div>
         <p className="intro-meta">About 5 minutes · In an emergency, call 911.</p>
       </div>

@@ -2,7 +2,7 @@
 
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useState } from "react";
-import { agentQuestionList, applicableCount, type Question } from "@/lib/questions";
+import { agentQuestionList, applicableCount, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
 import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
@@ -70,13 +70,19 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
     return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
   });
 
-  async function start(nextMode: InterviewMode) {
+  const [name, setName] = useState("");
+
+  async function start(nextMode: InterviewMode, typedName = name) {
     try {
-      setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setAnsweredFields([]); setSavedAnswers({}); resetMessages();
+      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setAnsweredFields([]); setSavedAnswers({}); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
       setSessionId(sessionBody.sessionId);
+      // The name is typed, not spoken, so save it straight away rather than through Ollie.
+      if (typedName) await fetch(`/api/sessions/${sessionBody.sessionId}/answers`, {
+        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field: NAME_FIELD, value: typedName }),
+      });
 
       const tokenResponse = await fetch("/api/elevenlabs/conversation-token", {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sessionId: sessionBody.sessionId }),
@@ -86,7 +92,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
 
       const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId, textOnly: nextMode === "text",
         // Ollie's prompt reads these with {{study_name}} / {{study_questions}} (see README).
-        dynamicVariables: { study_name: studyName, study_questions: questions ? agentQuestionList(questions) : "" } });
+        dynamicVariables: { study_name: studyName, participant_name: typedName, study_questions: questions ? agentQuestionList(questions, typedName) : "" } });
       await fetch(`/api/sessions/${sessionBody.sessionId}/conversation`, {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId }),
       });
@@ -104,7 +110,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
     addOwnAnswer(text);
   }
 
-  if (!started) return <Intro studyName={studyName} onStart={() => start("voice")} onType={() => start("text")} />;
+  if (!started) return <Intro studyName={studyName} onStart={(typed) => start("voice", typed)} onType={(typed) => start("text", typed)} />;
 
   return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
     messages={messages} progress={interviewProgress(answeredFields, questions ? applicableCount(questions, savedAnswers) : null)} lastActivity={lastActivity} happyUntil={happyUntil}

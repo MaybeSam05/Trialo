@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { makeKey, MAX_QUESTIONS, parseQuestionText, PROFILE_QUESTIONS, QUESTION_TEMPLATE_CSV, SEX_OPTIONS, type Question, type QuestionKind } from "@/lib/questions";
+import { makeKey, MAX_QUESTIONS, parseQuestionText, isProfileKey, QUESTION_TEMPLATE_CSV, GENDER_OPTIONS, type Question, type QuestionKind } from "@/lib/questions";
 import "./questions.css";
 
 const KINDS: { value: QuestionKind; label: string; hint: string }[] = [
@@ -62,14 +62,14 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
       onDrop={(event) => { event.preventDefault(); setDragging(false); addFile(event.dataTransfer.files[0]); }}>
       <span className="qe-drop-icon" aria-hidden>↑</span>
       <h3>Upload your screening questions</h3>
-      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>sex=female</code> or <code>diabetes=yes</code>, plus <code>min_age</code> and <code>max_age</code>. Name, age, sex at birth and gender are always asked first.</p>
+      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>gender=female</code> or <code>allergies=yes</code>, plus <code>min_age</code> and <code>max_age</code>. Age and gender are always asked first.</p>
       <div className="qe-drop-actions">
         <button type="button" className="btn btn-primary" onClick={() => fileInput.current?.click()}>Choose file</button>
         <a className="btn btn-secondary" href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download template</a>
         <button type="button" className="qe-link" aria-expanded={pasting} onClick={() => setPasting(!pasting)}>{pasting ? "Cancel pasting" : "Paste text instead"}</button>
       </div>
       {pasting && <div className="qe-paste">
-        <textarea rows={5} value={paste} aria-label="Paste questions, one per line" placeholder={"id,question,type,study,ask_if,min_age,max_age\ndiabetes,Have you been diagnosed with type 2 diabetes?,fit,Trial A,,18,75"} onChange={(event) => setPaste(event.target.value)} />
+        <textarea rows={5} value={paste} aria-label="Paste questions, one per line" placeholder={"id,question,type,study,ask_if,min_age,max_age\nallergies,Do you have seasonal allergies?,fit,Trial A,,12,"} onChange={(event) => setPaste(event.target.value)} />
         <button type="button" className="btn btn-secondary" disabled={!paste.trim()} onClick={() => addParsed(paste, "your pasted text")}>Add pasted questions</button>
       </div>}
       {fileField}
@@ -92,7 +92,7 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
       {questions.map((question, index) => {
         const earlier = questions.slice(0, index).filter((other) => other.text.trim());
         const condition = question.when ? `${question.when.key}=${question.when.equals}` : "";
-        const dependsOnLater = question.when && !PROFILE_QUESTIONS.some((profile) => profile.key === question.when!.key) && !earlier.some((other) => other.key === question.when!.key);
+        const dependsOnLater = question.when && !isProfileKey(question.when.key) && !earlier.some((other) => other.key === question.when!.key);
         const parent = questions.findIndex((other) => other.key === question.when?.key);
         return <li key={question.key || index} className="qe-item">
           <span className="qe-num" aria-hidden>{index + 1}</span>
@@ -117,8 +117,8 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
                   update(index, { when: key ? { key, equals } : undefined });
                 }}>
                   <option value="">everyone</option>
-                  <optgroup label="By sex at birth">
-                    {SEX_OPTIONS.map((sex) => <option key={sex} value={`sex_at_birth=${sex}`}>only if sex at birth is {sex}</option>)}
+                  <optgroup label="By gender">
+                    {GENDER_OPTIONS.map((gender) => <option key={gender} value={`gender=${gender}`}>only if gender is {gender}</option>)}
                   </optgroup>
                   {earlier.length > 0 && <optgroup label="Follow-up to an earlier question">
                     {earlier.flatMap((other) => ["yes", "no"].map((answer) => <option key={`${other.key}=${answer}`} value={`${other.key}=${answer}`}>

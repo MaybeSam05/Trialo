@@ -2,7 +2,7 @@ import type { MatchResult } from "@/lib/types";
 
 // "include": a yes means the person fits. "exclude": a yes may rule them out. "info": collected, never scored.
 export type QuestionKind = "include" | "exclude" | "info";
-/** Ask only when an earlier answer matches, e.g. { key: "sex_at_birth", equals: "female" } or { key: "diabetes", equals: "yes" }. */
+/** Ask only when an earlier answer matches, e.g. { key: "gender", equals: "female" } or { key: "allergies", equals: "yes" }. */
 export type Condition = { key: string; equals: string };
 export type Question = { key: string; text: string; kind: QuestionKind; trial: string; when?: Condition; minAge?: number; maxAge?: number };
 export type ProfileQuestion = { key: string; text: string; answers: string };
@@ -16,22 +16,27 @@ const BANNED = /\b(eligible|ineligible|accepted|rejected|ssn|social security|med
 
 /** Asked first in every interview, before the campaign's own questions. Later questions can depend on them. */
 export const PROFILE_QUESTIONS: ProfileQuestion[] = [
-  { key: "preferred_name", text: "What should I call you? A first name or nickname is fine.", answers: "any name; skip if they'd rather not say" },
   { key: "age", text: "How old are you?", answers: "a whole number of years" },
-  { key: "sex_at_birth", text: "What sex were you assigned at birth: female, male or intersex?", answers: "female, male, intersex or prefer not to say" },
-  { key: "gender", text: "How do you describe your gender?", answers: "their own words; optional" },
+  { key: "gender", text: "What is your gender: female, male, or another gender?", answers: "female, male, another gender in their own words, or prefer not to say" },
 ];
-export const SEX_OPTIONS = ["female", "male", "intersex"];
+export const GENDER_OPTIONS = ["female", "male"];
 const PROFILE_KEYS = new Set(PROFILE_QUESTIONS.map((question) => question.key));
+// Campaigns saved before gender replaced "sex at birth" still use the old key.
+const LEGACY_KEYS: Record<string, string> = { sex_at_birth: "gender" };
+export const isProfileKey = (key: string) => PROFILE_KEYS.has(LEGACY_KEYS[key] ?? key);
+/** Typed by the participant on the welcome screen (names are easy to mishear), never asked aloud. */
+export const NAME_FIELD = "preferred_name";
+/** Keeps a typed name to letters, spaces and simple punctuation, since it's passed into Ollie's instructions. */
+export const cleanName = (raw: string) => raw.replace(/[^\p{L}\p{M} '.-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 40);
 
-export const DEMO_CAMPAIGN_NAME = "Trialo demo: kidney and diabetes pre-screen";
-// Synthetic demo preset: 5 questions after the profile, showing a follow-up, sex-specific and age-limited questions.
+export const DEMO_CAMPAIGN_NAME = "Trialo demo: allergy and sleep studies";
+// Synthetic demo preset: 5 everyday questions after the profile, showing a follow-up and age limits.
 export const DEMO_QUESTIONS: Question[] = [
-  { key: "diabetes", text: "Have you been diagnosed with type 2 diabetes?", kind: "include", trial: "Trial A", minAge: 18, maxAge: 75 },
-  { key: "metformin", text: "Do you currently take metformin?", kind: "include", trial: "Trial A", when: { key: "diabetes", equals: "yes" } },
-  { key: "pregnant", text: "Are you currently pregnant or planning a pregnancy in the next year?", kind: "exclude", trial: "Trial A", when: { key: "sex_at_birth", equals: "female" }, minAge: 18, maxAge: 50 },
-  { key: "enlarged_prostate", text: "Have you been told you have an enlarged prostate?", kind: "exclude", trial: "Trial B", when: { key: "sex_at_birth", equals: "male" }, minAge: 40 },
-  { key: "other_trial", text: "Are you currently taking part in another clinical trial?", kind: "exclude", trial: "Trial B" },
+  { key: "allergies", text: "Do you have seasonal allergies, like hay fever?", kind: "include", trial: "Allergy study", minAge: 12 },
+  { key: "allergy_medicine", text: "Do you take allergy medicine during allergy season?", kind: "include", trial: "Allergy study", when: { key: "allergies", equals: "yes" } },
+  { key: "recent_cold", text: "Have you had a cold or the flu in the last two weeks?", kind: "exclude", trial: "Allergy study" },
+  { key: "short_sleep", text: "Do you usually sleep less than seven hours a night?", kind: "include", trial: "Sleep study", minAge: 18 },
+  { key: "night_shifts", text: "Do you work night shifts?", kind: "exclude", trial: "Sleep study", minAge: 18 },
 ];
 
 /** Readable, unique field name for Ollie, e.g. "Are you on dialysis?" -> "are_you_on_dialysis". */
@@ -49,7 +54,7 @@ export function describeRules(question: Question, questions: Question[] = []): s
   if (question.when) {
     const { key, equals } = question.when;
     const earlier = questions.findIndex((other) => other.key === key);
-    parts.push(key === "sex_at_birth" ? `sex at birth is ${equals}`
+    parts.push(key === "gender" ? `gender is ${equals}`
       : earlier >= 0 ? `the answer to question ${earlier + 1} is ${equals}`
       : `${key.replaceAll("_", " ")} is ${equals}`);
   }
@@ -85,7 +90,7 @@ export function validateQuestions(input: unknown): { questions: Question[] } | {
     const question: Question = { key, text, kind, trial };
 
     if (item.when?.key) {
-      const target = String(item.when.key);
+      const target = LEGACY_KEYS[String(item.when.key)] ?? String(item.when.key);
       const equals = String(item.when.equals ?? "").trim().toLowerCase();
       if (!equals) return { error: `${label} has a condition with no answer to match.` };
       if (!PROFILE_KEYS.has(target) && !used.includes(target)) return { error: `${label} depends on a question that is missing or comes after it. Move it below the question it depends on.` };
@@ -107,14 +112,14 @@ const KIND_ALIASES: Record<string, QuestionKind> = {
   exclude: "exclude", exclusion: "exclude", flag: "exclude",
   info: "info", collect: "info",
 };
-const CONDITION_ALIASES: Record<string, string> = { sex: "sex_at_birth", gender: "sex_at_birth", sex_at_birth: "sex_at_birth" };
+const CONDITION_ALIASES: Record<string, string> = { sex: "gender", sex_at_birth: "gender", gender: "gender" };
 
 export const QUESTION_TEMPLATE_CSV = [
   "id,question,type,study,ask_if,min_age,max_age",
-  "diabetes,Have you been diagnosed with type 2 diabetes?,fit,Trial A,,18,75",
-  "metformin,Do you currently take metformin?,fit,Trial A,diabetes=yes,,",
-  "pregnant,Are you currently pregnant?,flag,Trial A,sex=female,18,50",
-  "prostate,Have you been told you have an enlarged prostate?,flag,Trial B,sex=male,40,",
+  "allergies,Do you have seasonal allergies?,fit,Trial A,,12,",
+  "allergy_medicine,Do you take allergy medicine during allergy season?,fit,Trial A,allergies=yes,,",
+  "recent_cold,Have you had a cold or the flu in the last two weeks?,flag,Trial A,,,",
+  "womens_group,Would you join a women-only group session?,info,Trial B,gender=female,18,",
   "heard_about,How did you hear about this study?,info,,,,",
   "",
 ].join("\n");
@@ -192,9 +197,10 @@ export function applies(question: Question, answers: Record<string, unknown>, qu
     if (question.maxAge !== undefined && age > question.maxAge) return false;
   }
   if (!question.when) return true;
-  const parent = questions.find((other) => other.key === question.when!.key);
+  const whenKey = LEGACY_KEYS[question.when.key] ?? question.when.key;
+  const parent = questions.find((other) => other.key === whenKey);
   if (parent && !applies(parent, answers, questions)) return false;
-  const value = answers[question.when.key];
+  const value = answers[whenKey];
   if (value === undefined || value === null || value === "") return true;
   return answerMatches(String(value), question.when.equals);
 }
@@ -210,7 +216,7 @@ export function matchQuestions(answers: Record<string, unknown>, questions: Ques
   const trials = [...new Set(scored.map((question) => question.trial))];
   return trials.map((trial) => {
     const all = scored.filter((question) => question.trial === trial);
-    // A "fits if yes" question that was ruled out by age, sex or an earlier answer is a requirement the person doesn't meet.
+    // A "fits if yes" question that was ruled out by age, gender or an earlier answer is a requirement the person doesn't meet.
     const ruledOut = all.find((question) => question.kind === "include" && !applies(question, answers, questions));
     if (ruledOut) return { trialId: trial, trialName: trial, status: "possible_exclusion", reason: `Profile or earlier answers are outside who this criterion is for: ${ruledOut.text}` } satisfies MatchResult;
     const group = all.filter((question) => applies(question, answers, questions));
@@ -229,13 +235,16 @@ export function matchQuestions(answers: Record<string, unknown>, questions: Ques
 }
 
 /** Text handed to Ollie as the {{study_questions}} variable: profile first, then the campaign's questions with their rules. */
-export function agentQuestionList(questions: Question[]): string {
+export function agentQuestionList(questions: Question[], rawName = ""): string {
+  const name = cleanName(rawName);
   const profile = PROFILE_QUESTIONS.map((question, index) => `P${index + 1}. [field: ${question.key}] ${question.text} (expected answer: ${question.answers})`);
   const study = questions.map((question, index) => {
     const rules = describeRules(question, questions);
     return `${index + 1}. [field: ${question.key}] ${question.text}${rules ? ` (${rules})` : ""}`;
   });
   return [
+    name ? `NAME: the participant typed their name as "${name}". Use it naturally; don't ask for their name.` : "NAME: the participant didn't give a name. Don't ask for one.",
+    "",
     "PROFILE: always ask these first, in order. The participant may skip any of them.",
     ...profile,
     "",
