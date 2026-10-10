@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Ollie, type OllieFace } from "@/components/ollie";
+import type { OllieFace } from "@/components/ollie";
+import { Mascot } from "@/components/participant/mascot";
 import "./session.css";
 
 export type Message = { id: number; role: "user" | "agent"; text: string };
@@ -23,8 +24,10 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   const [mouthOpen, setMouthOpen] = useState(false);
   const [levels, setLevels] = useState<number[]>(IDLE_LEVELS);
   const [draft, setDraft] = useState("");
+  const [tapped, setTapped] = useState<{ answer: string; question: string } | null>(null);
   const reducedMotion = usePrefersReducedMotion();
-  const transcriptEnd = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const bubbleRef = useRef<HTMLParagraphElement>(null);
   const voice = mode === "voice";
 
   // Clock for timed expressions (happy flash, resting after silence).
@@ -34,12 +37,19 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     return () => clearInterval(timer);
   }, [connected]);
 
-  // Beak flaps between talking and hello while Ollie speaks.
+  // Lip sync: the beak opens with Ollie's voice, measured against a decaying peak so it adapts to any volume.
   useEffect(() => {
     if (!connected || !isSpeaking || reducedMotion) return;
-    const timer = setInterval(() => setMouthOpen((open) => !open), 170);
-    return () => clearInterval(timer);
-  }, [connected, isSpeaking, reducedMotion]);
+    let peak = 0;
+    let open = false;
+    const timer = setInterval(() => {
+      const volume = getOutputVolume();
+      peak = Math.max(volume, peak * 0.96);
+      const next = open ? volume > peak * 0.25 : volume > peak * 0.45 && volume > 0.004;
+      if (next !== open) { open = next; setMouthOpen(next); }
+    }, 55);
+    return () => { clearInterval(timer); setMouthOpen(false); };
+  }, [connected, isSpeaking, reducedMotion, getOutputVolume]);
 
   // Sound-level bars follow Ollie's voice while speaking and the microphone while listening.
   useEffect(() => {
@@ -53,8 +63,20 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
 
   // Keep the newest caption in view.
   useEffect(() => {
-    transcriptEnd.current?.scrollIntoView({ block: "nearest", behavior: reducedMotion ? "auto" : "smooth" });
+    const log = logRef.current;
+    if (!log) return;
+    // Jump on first paint, glide for each new line after that.
+    log.scrollTo({ top: log.scrollHeight, behavior: reducedMotion || log.scrollTop === 0 ? "auto" : "smooth" });
   }, [messages.length, reducedMotion]);
+
+  // Stay pinned to the newest line when the captions box changes size (layout, rotation, keyboard).
+  useEffect(() => {
+    const log = logRef.current;
+    if (!log) return;
+    const observer = new ResizeObserver(() => { log.scrollTop = log.scrollHeight; });
+    observer.observe(log);
+    return () => observer.disconnect();
+  }, []);
 
   const lastAgent = [...messages].reverse().find((message) => message.role === "agent")?.text ?? "";
   const waitingForOllie = !voice && messages.at(-1)?.role === "user";
@@ -77,8 +99,19 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     : !connected ? "Connecting you to Ollie…"
     : lastAgent || "Hi! I'm getting ready to ask my first question.";
 
+  // Each new line from Ollie pops into the speech bubble.
+  useEffect(() => {
+    if (reducedMotion) return;
+    const animation = bubbleRef.current?.animate(
+      [{ opacity: 0, transform: "translateY(8px) scale(.96)" }, { opacity: 1, transform: "none" }],
+      { duration: 320, easing: "cubic-bezier(.34, 1.56, .64, 1)" },
+    );
+    return () => animation?.cancel();
+  }, [bubble, reducedMotion]);
+
   const answered = Math.min(savedCount, TOTAL_QUESTIONS);
   const canAnswer = connected && !ended;
+  const selected = tapped?.question === lastAgent ? tapped.answer : null;
 
   function send(text: string) {
     const value = text.trim();
@@ -88,65 +121,59 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   }
 
   return <section className="iv" aria-label="Pre-screening interview">
+    <div className="iv-topbar">
+      <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={TOTAL_QUESTIONS} aria-valuenow={answered}>
+        <span style={{ width: `${(answered / TOTAL_QUESTIONS) * 100}%` }} />
+      </span>
+      <span className="iv-count">{answered} of {TOTAL_QUESTIONS}<span className="iv-wide"> answers saved</span></span>
+    </div>
+
     <div className="iv-stage">
-      <div className="iv-topline">
-        <span className="iv-status" aria-live="polite">{status}</span>
-        <Progress answered={answered} />
+      <span className="iv-status" aria-live="polite">{status}</span>
+      <div className="iv-scene">
+        <p className="iv-question" ref={bubbleRef} aria-live="polite">{bubble}</p>
+        <Mascot face={face} speaking={isSpeaking} reducedMotion={reducedMotion} />
       </div>
-      <p className="iv-question" aria-live="polite">{bubble}</p>
-      <Ollie face={face} size={240} />
-      {voice && !ended && <div className="iv-levels" aria-hidden>{(connected && !reducedMotion ? levels : IDLE_LEVELS).map((level, index) => <span key={index} style={{ height: `${Math.round(8 + level * 40)}px` }} />)}</div>}
+      {voice && !ended && <div className="iv-levels" aria-hidden>{(connected && !reducedMotion ? levels : IDLE_LEVELS).map((level, index) => <span key={index} style={{ height: `${Math.round(6 + level * 34)}px` }} />)}</div>}
     </div>
 
     <div className="iv-sheet">
-      <span className="iv-grabber" aria-hidden />
       {ended ? <div className="iv-done">
         <h2>You&apos;re all done</h2>
         <p>This does not determine eligibility or enrollment. A member of the research team will follow up if a study may be relevant to you.</p>
-      </div> : <>
-        <div className="iv-answer">
-          <p className="iv-label" id="quick-label">{voice ? "Say your answer, or tap one" : "Tap an answer or type your own"}</p>
-          <div className="iv-quick" role="group" aria-labelledby="quick-label">
-            {QUICK_ANSWERS.map((answer) => <button key={answer} className="btn btn-secondary" disabled={!canAnswer} onClick={() => send(answer)}>{answer}</button>)}
-          </div>
-          {!voice && <form className="iv-compose" onSubmit={(event) => { event.preventDefault(); send(draft); }}>
-            <label className="iv-sr-only" htmlFor="typed-answer">Your answer</label>
-            <input id="typed-answer" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your answer" autoComplete="off" disabled={!canAnswer} autoFocus />
-            <button className="btn btn-primary" disabled={!canAnswer || !draft.trim()}>Send</button>
-          </form>}
+      </div> : <div className="iv-answer">
+        <p className="iv-label" id="quick-label">{voice ? "Say your answer, or tap one" : "Tap an answer or type your own"}</p>
+        <div className="iv-quick" role="group" aria-labelledby="quick-label">
+          {QUICK_ANSWERS.map((answer) => <button key={answer} className="btn btn-secondary" aria-pressed={selected === answer} disabled={!canAnswer}
+            onClick={() => { setTapped({ answer, question: lastAgent }); send(answer); }}>{answer}</button>)}
         </div>
-      </>}
+        {!voice && <form className="iv-compose" onSubmit={(event) => { event.preventDefault(); send(draft); }}>
+          <label className="iv-sr-only" htmlFor="typed-answer">Your answer</label>
+          <input id="typed-answer" value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your answer" autoComplete="off" disabled={!canAnswer} />
+          <button className="btn btn-primary" disabled={!canAnswer || !draft.trim()}>Send</button>
+        </form>}
+      </div>}
 
       <div className="iv-captions">
         <p className="iv-label">{voice ? "Captions" : "Conversation"}</p>
-        <div className="iv-log" aria-live="polite">
+        <div className="iv-log" ref={logRef} aria-live="polite">
           {messages.length === 0 ? <p className="muted">{voice ? "What you and Ollie say will appear here." : "Your conversation will appear here."}</p>
             : messages.slice(-12).map((message) => <p key={`${message.role}-${message.id}`} className={`iv-line iv-${message.role}`}>
               <strong>{message.role === "agent" ? "Ollie" : "You"}</strong>{message.text}
             </p>)}
-          <div ref={transcriptEnd} />
         </div>
       </div>
 
       {error && <p className="error" role="alert">{error}</p>}
 
       {connected ? <div className="iv-actions">
-        {voice && <button className="btn btn-secondary" onClick={onToggleMute} aria-pressed={isMuted}>{isMuted ? "Unmute microphone" : "Mute microphone"}</button>}
-        <button className="btn btn-secondary iv-end" onClick={onEnd}>End interview</button>
+        {voice && <button className="btn btn-secondary" onClick={onToggleMute} aria-pressed={isMuted}><span>{isMuted ? "Unmute" : "Mute"}<span className="iv-wide"> microphone</span></span></button>}
+        <button className="btn btn-secondary" onClick={onEnd}>End interview</button>
       </div> : error ? <button className="btn btn-primary" onClick={onRetry}>Try again</button> : null}
 
-      <p className="iv-disclosure">Ollie is an AI assistant, not a clinician. Demo only: please don&apos;t share real health details.</p>
+      <p className="iv-disclosure">Ollie is an AI assistant, not a clinician. Demo only: please don&apos;t share real health details. In an emergency, call 911.</p>
     </div>
   </section>;
-}
-
-function Progress({ answered }: { answered: number }) {
-  return <div className="iv-progress">
-    <span>{answered} of {TOTAL_QUESTIONS} answers saved</span>
-    <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={TOTAL_QUESTIONS} aria-valuenow={answered}>
-      <span style={{ width: `${(answered / TOTAL_QUESTIONS) * 100}%` }} />
-    </span>
-  </div>;
 }
 
 function usePrefersReducedMotion() {
