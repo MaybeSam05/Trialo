@@ -15,7 +15,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const answers = { ...(session.answers ?? {}), [field]: value };
     const { data: study, error: studyError } = await supabase.from("studies").select("*").eq("id", session.study_id).single();
     if (studyError || !study) throw studyError ?? new Error("Study not found.");
-    const { error } = await supabase.from("screening_sessions").update({ answers, match_results: study.questions ? matchQuestions(answers, study.questions as Question[]) : matchTrials(answers, study.trials as Trial[]), status: "needs_review" }).eq("id", id);
+    const { error } = await supabase.from("screening_sessions").update({ answers, updated_at: new Date().toISOString(), match_results: study.questions ? matchQuestions(answers, study.questions as Question[]) : matchTrials(answers, study.trials as Trial[]), status: "needs_review" }).eq("id", id);
     if (error) throw error;
     return NextResponse.json({ ok: true });
   } catch (error) {
