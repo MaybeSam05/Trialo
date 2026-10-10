@@ -1,6 +1,7 @@
 node_modules/
 .next/
 .netlify/
+.agents/
 .env
 .env.local
 *.tsbuildinfo
