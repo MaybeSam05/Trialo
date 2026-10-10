@@ -62,12 +62,27 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
       onDrop={(event) => { event.preventDefault(); setDragging(false); addFile(event.dataTransfer.files[0]); }}>
       <span className="qe-drop-icon" aria-hidden>↑</span>
       <h3>Upload your screening questions</h3>
-      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>gender=female</code> or <code>allergies=yes</code>, plus <code>min_age</code> and <code>max_age</code>. Age and gender are always asked first.</p>
+      <p className="muted">Drop a CSV or text file here, one question per line. Age and gender are always asked first.</p>
       <div className="qe-drop-actions">
         <button type="button" className="btn btn-primary" onClick={() => fileInput.current?.click()}>Choose file</button>
-        <a className="btn btn-secondary" href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download template</a>
+        <a className="btn btn-secondary" href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download questions template</a>
         <button type="button" className="qe-link" aria-expanded={pasting} onClick={() => setPasting(!pasting)}>{pasting ? "Cancel pasting" : "Paste text instead"}</button>
       </div>
+      <details className="qe-guide">
+        <summary>See CSV guidelines</summary>
+        <table>
+          <thead><tr><th scope="col">Column</th><th scope="col">What to put</th><th scope="col">Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>question</code></td><td>The yes or no question. Required.</td><td>Have you been diagnosed with asthma?</td></tr>
+            <tr><td><code>type</code></td><td><b>fit</b> (yes is good), <b>flag</b> (yes may rule out) or <b>info</b> (just collect). Defaults to fit.</td><td>fit</td></tr>
+            <tr><td><code>study</code></td><td>Which study the question counts toward. Optional.</td><td>Asthma study</td></tr>
+            <tr><td><code>id</code></td><td>A short name, so follow-up questions can point to it. Optional.</td><td>asthma</td></tr>
+            <tr><td><code>ask_if</code></td><td>Only ask when an earlier answer matches: <code>gender=female</code> or <code>id=yes</code>. Optional.</td><td>asthma=yes</td></tr>
+            <tr><td><code>min_age</code>, <code>max_age</code></td><td>Only ask people in this age range. Optional.</td><td>12, 65</td></tr>
+          </tbody>
+        </table>
+        <p className="muted">Include a header row with these column names. Without one, each line is read as <code>question, type, study</code>.</p>
+      </details>
       {pasting && <div className="qe-paste">
         <textarea rows={5} value={paste} aria-label="Paste questions, one per line" placeholder={"id,question,type,study,ask_if,min_age,max_age\nallergies,Do you have seasonal allergies?,fit,Trial A,,12,"} onChange={(event) => setPaste(event.target.value)} />
         <button type="button" className="btn btn-secondary" disabled={!paste.trim()} onClick={() => addParsed(paste, "your pasted text")}>Add pasted questions</button>

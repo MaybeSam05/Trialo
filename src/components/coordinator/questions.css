@@ -23,6 +23,15 @@
 .qe-drop > p { max-width: 520px; }
 .qe-drop-icon { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--blue); color: var(--on-blue); font-size: 1.4rem; font-weight: 800; }
 .qe-drop-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 16px; margin-top: 4px; }
+.qe-guide { width: 100%; max-width: 720px; text-align: left; }
+.qe-guide summary { width: fit-content; margin: 0 auto; cursor: pointer; color: var(--blue); font-weight: 700; }
+.qe-guide[open] { padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1.5px solid var(--line); }
+.qe-guide[open] summary { margin: 0 0 10px; }
+.qe-guide table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.qe-guide th, .qe-guide td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.qe-guide th { background: var(--panel); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.qe-guide td:last-child { color: var(--muted); }
+.qe-guide p { margin-top: 10px; font-size: 0.8125rem; }
 .qe-paste { width: 100%; max-width: 640px; display: grid; gap: 10px; justify-items: start; text-align: left; }
 
 .qe-or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 0.875rem; font-weight: 700; }

@@ -37,21 +37,30 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
   const onAudioAlignment = useCallback((alignment: Alignment) => timeline.add(alignment, performance.now()), [timeline]);
   const onInterruption = useCallback(() => timeline.interrupt(performance.now()), [timeline]);
 
-  return <ConversationProvider onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption}>
-    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); }}
-      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} />
+  // Why the call ended. A connection error is shown to the participant instead of the "all done" screen.
+  const [dropped, setDropped] = useState("");
+  const onDisconnect = useCallback((details: { reason: string; message?: string; closeCode?: number; closeReason?: string; context?: unknown }) => {
+    console.info("[Trialo] conversation ended", details);
+    if (details.reason === "error") setDropped(details.message || details.closeReason || "The connection to Ollie dropped.");
+  }, []);
+  const onError = useCallback((message: string, context?: unknown) => console.warn("[Trialo] conversation error", message, context), []);
+
+  return <ConversationProvider onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
+    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); setDropped(""); }}
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity, timeline }: {
-  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline;
+function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
   const { isSpeaking } = useConversationMode();
   const { isMuted, setMuted } = useConversationInput();
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [error, setError] = useState("");
+  const [startError, setError] = useState("");
+  const error = startError || dropped;
   const [started, setStarted] = useState(false);
   const [mode, setMode] = useState<InterviewMode>("voice");
   const [wasConnected, setWasConnected] = useState(false);
