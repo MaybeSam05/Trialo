@@ -128,7 +128,7 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     : !connected ? "Connecting you to Ollie…"
     : lastAgent || "Hi! I'm getting ready to ask my first question.";
 
-  const { answered, total, percent } = progress;
+  const { done, current, total, finished, percent } = progress;
   const canAnswer = connected && !ended;
   const selected = tapped?.question === lastAgent ? tapped.answer : null;
 
@@ -141,10 +141,10 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
 
   return <section className="iv" ref={sectionRef} aria-label="Pre-screening interview">
     <div className="iv-topbar">
-      <span className="iv-track" role="progressbar" aria-label="Answers saved" aria-valuemin={0} aria-valuemax={total} aria-valuenow={answered} aria-valuetext={`${answered} of ${total} answers saved`}>
+      <span className="iv-track" role="progressbar" aria-label="Interview progress" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done} aria-valuetext={finished ? "All questions answered" : `Question ${current} of ${total}`}>
         <span style={{ width: `${percent}%` }} />
       </span>
-      <span className="iv-count">{answered} of {total}<span className="iv-wide"> answers saved</span></span>
+      <span className="iv-count">{finished ? <>All {total}<span className="iv-wide"> questions</span> done</> : `Question ${current} of ${total}`}</span>
     </div>
 
     <div className="iv-stage">

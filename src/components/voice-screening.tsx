@@ -2,9 +2,9 @@
 
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useState } from "react";
-import { agentQuestionList, applicableCount, NAME_FIELD, type Question } from "@/lib/questions";
+import { agentQuestionList, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
-import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
+import { interviewKeys, interviewProgress, matchQuestionKey, normalizeField } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 import { SpeechTimeline, stripExpressions, type Alignment } from "@/components/participant/speech-timeline";
 
@@ -64,21 +64,23 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   const [started, setStarted] = useState(false);
   const [mode, setMode] = useState<InterviewMode>("voice");
   const [wasConnected, setWasConnected] = useState(false);
-  const [answeredFields, setAnsweredFields] = useState<readonly string[]>([]);
-  // Saved values, so the question total can shrink or grow as profile answers rule questions in or out.
+  // Saved values by question key: they drive the question counter, and the total shrinks or grows as answers rule questions in or out.
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string>>({});
   const [happyUntil, setHappyUntil] = useState(0);
 
   // Configure an ElevenLabs client tool named record_screening_answer with field and value parameters.
   useConversationClientTool("record_screening_answer", async (parameters) => {
-    const field = typeof parameters.field === "string" ? parameters.field : "";
+    const raw = typeof parameters.field === "string" ? parameters.field : "";
     const value = typeof parameters.value === "string" ? parameters.value : "";
-    if (!field || !value) return "A field name and confirmed answer are required.";
+    if (!raw || !value) return "A field name and confirmed answer are required.";
     if (!sessionId) return "Screening session is not ready.";
+    // Save under the question's own key when Ollie words the field differently, so scoring and the counter both see it.
+    const key = questions ? matchQuestionKey(raw, interviewKeys(questions)) : normalizeField(raw);
+    const field = questions && key ? key : raw;
     const response = await fetch(`/api/sessions/${sessionId}/answers`, {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field, value }),
     });
-    if (response.ok) { setAnsweredFields((fields) => addAnsweredField(fields, field)); setSavedAnswers((saved) => ({ ...saved, [field]: value })); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
+    if (response.ok) { if (key) setSavedAnswers((saved) => ({ ...saved, [key]: value })); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
     return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
   });
 
@@ -86,7 +88,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
 
   async function start(nextMode: InterviewMode, typedName = name) {
     try {
-      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setAnsweredFields([]); setSavedAnswers({}); resetMessages();
+      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedAnswers({}); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
@@ -125,7 +127,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   if (!started) return <Intro studyName={studyName} onStart={(typed) => start("voice", typed)} onType={(typed) => start("text", typed)} />;
 
   return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
-    messages={messages} progress={interviewProgress(answeredFields, questions ? applicableCount(questions, savedAnswers) : null)} lastActivity={lastActivity} happyUntil={happyUntil}
+    messages={messages} progress={interviewProgress(savedAnswers, questions)} lastActivity={lastActivity} happyUntil={happyUntil}
     getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send} timeline={mode === "voice" ? timeline : null}
     onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={() => start(mode)} />;
 }
