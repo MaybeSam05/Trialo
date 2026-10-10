@@ -13,6 +13,14 @@ These are preliminary display summaries. Matching logic, saved results, and fina
 
 `status.tsx` uses the shared `SessionChip` for Needs review and the existing chip classes for the two dashboard-specific labels. The shared `MatchChip` currently uses different wording and is owned by Pavan; it is not modified here.
 
+## Live board
+
+- `live-updates.tsx` re-fetches the page every 5 seconds while the tab is visible (Pause/Resume in the heading).
+- `sessions-board.tsx` renders the tiles and table on the client. Tiles double as status filters; the bar above the table adds "Answering now", campaign and sort controls. Filters survive live refreshes.
+- **Answering now**: a session that isn't `completed` and was updated in the last 10 minutes. `updated_at` is bumped by the answers API on every saved answer.
+- Sessions that arrive between refreshes flash with a "New" badge (and are announced to screen readers); in-progress answer counts pulse when they go up.
+- Responses show "N of M answered" when the campaign has a question list, otherwise "N saved".
+
 ## Local checks
 
 Run `npm run build`, `npx tsc --noEmit`, and `npx eslint src`. Check `/dashboard` at 390px and 1440px with synthetic sessions only. Verify mixed trial results, incomplete sessions, no results, no sessions, and a database error. The table must scroll inside its card without making the whole page scroll horizontally. An unavailable database shows unavailable counts rather than zero sessions.
