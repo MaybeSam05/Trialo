@@ -6,14 +6,17 @@ import { agentQuestionList, applicableCount, NAME_FIELD, type Question } from "@
 import { Intro } from "@/components/participant/intro";
 import { addAnsweredField, interviewProgress } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
-import { SpeechTimeline, type Alignment } from "@/components/participant/speech-timeline";
+import { SpeechTimeline, stripExpressions, type Alignment } from "@/components/participant/speech-timeline";
 
 const HAPPY_FOR_MS = 1_600;
 
 export function VoiceScreening({ slug, studyName, questions }: { slug: string; studyName: string; questions: Question[] | null }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [lastActivity, setLastActivity] = useState(0);
-  const onMessage = useCallback(({ message, role, event_id }: { message: string; role: "user" | "agent"; event_id: number }) => {
+  const onMessage = useCallback(({ message: raw, role, event_id }: { message: string; role: "user" | "agent"; event_id: number }) => {
+    // Ollie's replies can carry expression tags ("[warmly]") for the voice; never show them.
+    const message = role === "agent" ? stripExpressions(raw) : raw;
+    if (!message) return;
     setLastActivity(Date.now());
     setMessages((current) => {
       const rest = current.filter((item) => item.id !== event_id || item.role !== role);

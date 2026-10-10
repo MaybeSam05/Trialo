@@ -11,10 +11,25 @@ const NEW_UTTERANCE_GAP_MS = 700;
 
 export const normalizeSpeech = (text: string) => text.replace(/\s+/g, " ").trim();
 
+/**
+ * Removes ElevenLabs expression tags ("[warmly]", "[laughs]") and *stage directions* that Ollie performs
+ * but that shouldn't be shown as text.
+ */
+export function stripExpressions(text: string) {
+  return text
+    .replace(/\[[^\]]*\]/g, " ")
+    .replace(/\*[^*\n]{1,40}\*/g, " ")
+    .replace(/\s+([,.!?;:])/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export class SpeechTimeline {
   private starts: number[] = [];
   private text = "";
   private end = 0;
+  /** Inside an expression tag ("[warmly]") or *stage direction*, which can span audio chunks. */
+  private skipping: "]" | "*" | null = null;
   /** Bumps on every change so pollers know to re-read. */
   version = 0;
 
@@ -22,6 +37,7 @@ export class SpeechTimeline {
     this.starts = [];
     this.text = "";
     this.end = 0;
+    this.skipping = null;
     this.version++;
   }
 
@@ -33,6 +49,12 @@ export class SpeechTimeline {
     const chunkStart = Math.max(now + PLAYBACK_LATENCY_MS, this.end);
     for (let index = 0; index < chars.length; index++) {
       const char = chars[index];
+      // Expression tags are performed, not shown: skip them so positions match stripExpressions(message).
+      if (this.skipping) { if (char === this.skipping) this.skipping = null; continue; }
+      if (char === "[") { this.skipping = "]"; continue; }
+      if (char === "*") { this.skipping = "*"; continue; }
+      // No space before punctuation once a tag has been removed ("Hi [laughs]!" -> "Hi!").
+      if (/[,.!?;:]/.test(char) && this.text.endsWith(" ")) { this.text = this.text.slice(0, -1); this.starts.pop(); }
       // Keep whitespace collapsed so positions match normalizeSpeech(message).
       if (/\s/.test(char) && (this.text === "" || this.text.endsWith(" "))) continue;
       this.text += /\s/.test(char) ? " " : char;

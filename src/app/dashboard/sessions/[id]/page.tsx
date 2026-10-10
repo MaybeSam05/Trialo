@@ -5,6 +5,7 @@ import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { DashboardStatusChip } from "@/components/dashboard/status";
 import { getSessionOutcome } from "@/components/dashboard/session-outcome";
+import { stripExpressions } from "@/components/participant/speech-timeline";
 import { MatchChip, SessionChip } from "@/components/status-chip";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
@@ -25,7 +26,9 @@ function toTurns(transcript: unknown): Turn[] | string | null {
   if (!Array.isArray(transcript)) return null;
   const turns = transcript.flatMap((item): Turn[] => {
     const turn = item as { role?: string; message?: string | null };
-    return turn?.message ? [{ who: turn.role === "agent" ? "Ollie" : "Participant", text: turn.message }] : [];
+    // Ollie's lines can carry voice expression tags ("[warmly]"); show only the words.
+    const text = turn?.message ? (turn.role === "agent" ? stripExpressions(turn.message) : turn.message) : "";
+    return text ? [{ who: turn.role === "agent" ? "Ollie" : "Participant", text }] : [];
   });
   return turns.length ? turns : null;
 }
