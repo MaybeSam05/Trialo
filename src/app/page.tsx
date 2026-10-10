@@ -32,6 +32,7 @@ export default function Home() {
     setLoading(false);
     if (!response.ok) { setError(body.error ?? "Could not create the screening link."); return; }
     setCreated(body);
+    window.scrollTo({ top: 0 });
   }
 
   return <>
@@ -40,12 +41,12 @@ export default function Home() {
       <div className="page-head">
         <Ollie face={error ? "confused" : created ? "celebrate" : loading ? "thinking" : "hello"} size={96} priority />
         <div className="titles">
-          <h1>Set up a screening campaign</h1>
+          <h1>{created ? "Your campaign is live" : "Set up a screening campaign"}</h1>
           <p className="muted">Add the questions you already ask people, and Ollie turns them into a voice or text interview with one shareable link. Synthetic data only.</p>
         </div>
-        <button type="button" className="btn btn-secondary setup-head-actions" onClick={loadDemo}>Load demo preset</button>
+        {!created && <button type="button" className="btn btn-secondary setup-head-actions" onClick={loadDemo}>Load demo preset</button>}
       </div>
-      <form className="setup" onSubmit={createStudy}>
+      {created ? <LinkPanel created={created} onReset={() => { setCreated(null); setName(""); setQuestions([]); }} /> : <form className="setup" onSubmit={createStudy}>
         <section className="card setup-step" aria-labelledby="step-name">
           <header><span className="step-num" aria-hidden>1</span><h2 id="step-name">Name your campaign</h2></header>
           <input className="setup-name" aria-labelledby="step-name" value={name} placeholder="e.g. Kidney health pre-screen, spring 2026" maxLength={120}
@@ -61,8 +62,7 @@ export default function Home() {
           {!ready && <span className="muted">Add a name and at least one question to continue.</span>}
         </div>
         {error && <p className="error" role="alert">{error}</p>}
-      </form>
-      {created && <LinkPanel created={created} />}
+      </form>}
     </main>
   </>;
 }

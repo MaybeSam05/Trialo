@@ -62,9 +62,10 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
       onDrop={(event) => { event.preventDefault(); setDragging(false); addFile(event.dataTransfer.files[0]); }}>
       <span className="qe-drop-icon" aria-hidden>↑</span>
       <h3>Upload your screening questions</h3>
-      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>sex=female</code> or <code>diabetes=yes</code>, plus <code>min_age</code> and <code>max_age</code>. <a href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download the template</a></p>
+      <p className="muted">Drop a CSV or text file here, one question per line. Columns can set the type (fit, flag or info), the study, and who gets asked: <code>ask_if</code> like <code>sex=female</code> or <code>diabetes=yes</code>, plus <code>min_age</code> and <code>max_age</code>. Name, age, sex at birth and gender are always asked first.</p>
       <div className="qe-drop-actions">
         <button type="button" className="btn btn-primary" onClick={() => fileInput.current?.click()}>Choose file</button>
+        <a className="btn btn-secondary" href={TEMPLATE_HREF} download="trialo-questions-template.csv">Download template</a>
         <button type="button" className="qe-link" aria-expanded={pasting} onClick={() => setPasting(!pasting)}>{pasting ? "Cancel pasting" : "Paste text instead"}</button>
       </div>
       {pasting && <div className="qe-paste">
@@ -79,11 +80,9 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
       <button type="button" className="btn btn-secondary" onClick={addBlank}>Create questions here</button>
       {onLoadDemo && <button type="button" className="btn btn-secondary" onClick={onLoadDemo}>Use demo preset</button>}
     </div>
-    <ProfileBlock />
   </div>;
 
   return <div className="qe">
-    <ProfileBlock />
     <div className="qe-toolbar">
       <p><strong>{questions.length} screening question{questions.length === 1 ? "" : "s"}</strong> <span className="muted">· asked in this order, after the profile</span></p>
       <button type="button" className="qe-link" onClick={() => { if (questions.length <= 1 || window.confirm(`Remove all ${questions.length} questions?`)) { onChange([]); setNotice(null); } }}>Remove all</button>
@@ -157,10 +156,3 @@ export function QuestionEditor({ questions, onChange, onLoadDemo }: { questions:
   </div>;
 }
 
-function ProfileBlock() {
-  return <details className="qe-profile">
-    <summary><strong>Always asked first:</strong> {PROFILE_QUESTIONS.map((question) => question.key.replaceAll("_", " ")).join(", ")}</summary>
-    <ol>{PROFILE_QUESTIONS.map((question) => <li key={question.key}>{question.text}</li>)}</ol>
-    <p className="muted">Participants can skip any of these. Use the &ldquo;Ask&rdquo; and &ldquo;Ages&rdquo; settings on each question to tailor the rest. Someone may get fewer or more questions depending on their answers.</p>
-  </details>;
-}

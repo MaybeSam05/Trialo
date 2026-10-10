@@ -25,19 +25,13 @@ export const SEX_OPTIONS = ["female", "male", "intersex"];
 const PROFILE_KEYS = new Set(PROFILE_QUESTIONS.map((question) => question.key));
 
 export const DEMO_CAMPAIGN_NAME = "Trialo demo: kidney and diabetes pre-screen";
-// Synthetic demo preset. Shows every kind of rule: follow-ups, sex-specific and age-limited questions.
+// Synthetic demo preset: 5 questions after the profile, showing a follow-up, sex-specific and age-limited questions.
 export const DEMO_QUESTIONS: Question[] = [
   { key: "diabetes", text: "Have you been diagnosed with type 2 diabetes?", kind: "include", trial: "Trial A", minAge: 18, maxAge: 75 },
   { key: "metformin", text: "Do you currently take metformin?", kind: "include", trial: "Trial A", when: { key: "diabetes", equals: "yes" } },
   { key: "pregnant", text: "Are you currently pregnant or planning a pregnancy in the next year?", kind: "exclude", trial: "Trial A", when: { key: "sex_at_birth", equals: "female" }, minAge: 18, maxAge: 50 },
-  { key: "recent_surgery", text: "Have you had surgery in the last three months?", kind: "exclude", trial: "Trial A" },
-  { key: "ckd", text: "Have you been diagnosed with chronic kidney disease?", kind: "include", trial: "Trial B" },
-  { key: "dialysis", text: "Are you currently on dialysis?", kind: "exclude", trial: "Trial B", when: { key: "ckd", equals: "yes" } },
-  { key: "knows_egfr", text: "Do you know your most recent eGFR kidney function number?", kind: "info", trial: "Trial B", when: { key: "ckd", equals: "yes" } },
-  { key: "transplant", text: "Have you ever had an organ transplant?", kind: "exclude", trial: "Trial B" },
-  { key: "new_jersey", text: "Do you live in New Jersey?", kind: "include", trial: "Trial C" },
-  { key: "enlarged_prostate", text: "Have you been told you have an enlarged prostate?", kind: "exclude", trial: "Trial C", when: { key: "sex_at_birth", equals: "male" }, minAge: 40 },
-  { key: "other_trial", text: "Are you currently taking part in another clinical trial?", kind: "exclude", trial: "Trial C" },
+  { key: "enlarged_prostate", text: "Have you been told you have an enlarged prostate?", kind: "exclude", trial: "Trial B", when: { key: "sex_at_birth", equals: "male" }, minAge: 40 },
+  { key: "other_trial", text: "Are you currently taking part in another clinical trial?", kind: "exclude", trial: "Trial B" },
 ];
 
 /** Readable, unique field name for Ollie, e.g. "Are you on dialysis?" -> "are_you_on_dialysis". */

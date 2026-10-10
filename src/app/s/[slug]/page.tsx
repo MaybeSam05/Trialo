@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { VoiceScreening } from "@/components/voice-screening";
 import type { Question } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
+import "@/components/participant/participant.css";
 
 export const dynamic = "force-dynamic";
 
@@ -15,11 +16,11 @@ export default async function ScreeningPage({ params }: { params: Promise<{ slug
   } catch { notFound(); }
   if (!study) notFound();
 
-  return <>
+  // One screen, no page scroll: header on top, the welcome or interview fills the rest.
+  return <div className="participant-shell">
     <SiteHeader subtitle="Clinical trial pre-screening" />
-    <main id="main">
+    <main id="main" className="participant-main">
       <VoiceScreening slug={slug} studyName={study.name} questions={study.questions ?? null} />
-      <p className="page muted">If you have an emergency or urgent medical concern, call emergency services or seek urgent medical care.</p>
     </main>
-  </>;
+  </div>;
 }

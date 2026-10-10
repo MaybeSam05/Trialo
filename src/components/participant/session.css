@@ -1,5 +1,5 @@
 /* Participant: live interview (Figma 02 Listening + D2 Question) */
-.iv { width: min(100% - 32px, 1344px); margin: 0 auto; padding: 24px 0 48px; display: grid; grid-template-columns: 1fr 440px; grid-template-areas: "top top" "stage sheet"; grid-template-rows: auto 1fr; gap: 20px 32px; min-height: 680px; }
+.iv { width: min(100% - 32px, 1344px); margin: 0 auto; padding: clamp(12px, 2.5dvh, 24px) 0; display: grid; grid-template-columns: 1fr 440px; grid-template-areas: "top top" "stage sheet"; grid-template-rows: auto minmax(0, 1fr); gap: clamp(12px, 2dvh, 20px) 32px; height: 100%; min-height: 0; overflow: hidden; }
 
 /* Progress */
 .iv-topbar { grid-area: top; display: flex; align-items: center; gap: 16px; }
@@ -23,7 +23,7 @@
 
 /* Mascot: ground shadow, springy body, idle breath */
 .iv-mascot { position: relative; display: grid; justify-items: center; flex: none; }
-.iv-mascot .ollie { width: clamp(160px, 22vw, 250px); }
+.iv-mascot .ollie { width: clamp(110px, min(22vw, 30dvh), 250px); }
 .iv-mascot .ollie img { transition: opacity 200ms ease; }
 .iv-mascot[data-fast="true"] .ollie img { transition-duration: 50ms; }
 .iv-shadow { position: absolute; bottom: 3%; width: 52%; height: 8%; border-radius: 50%; background: color-mix(in srgb, var(--ink) 16%, transparent); }
@@ -35,7 +35,7 @@
 @keyframes iv-bob { from { transform: translateY(0) rotate(-.8deg); } to { transform: translateY(-3px) rotate(.8deg); } }
 
 /* Sheet: answering, captions, controls */
-.iv-sheet { grid-area: sheet; background: var(--card); border: 1.5px solid var(--line); border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; min-height: 0; }
+.iv-sheet { grid-area: sheet; background: var(--card); border: 1.5px solid var(--line); border-radius: 28px; padding: clamp(16px, 2.5dvh, 24px); display: flex; flex-direction: column; gap: clamp(10px, 1.8dvh, 18px); min-width: 0; min-height: 0; overflow: hidden; }
 .iv-label { font-size: 0.875rem; font-weight: 700; color: var(--muted); }
 .iv-answer { display: grid; gap: 10px; }
 .iv-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -44,7 +44,7 @@
 .iv-compose input { min-width: 0; min-height: 52px; border: 2px solid var(--line); border-radius: 16px; padding: 12px 14px; background: var(--card); color: var(--ink); }
 .iv-compose input:focus { border-color: var(--blue); }
 .iv-captions { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
-.iv-log { flex: 1; display: grid; align-content: start; gap: 12px; background: var(--panel); border-radius: 16px; padding: 14px 16px; max-height: 320px; min-height: 96px; overflow-y: auto; overscroll-behavior: contain; }
+.iv-log { flex: 1; display: grid; align-content: start; gap: 12px; background: var(--panel); border-radius: 16px; padding: 14px 16px; min-height: 60px; overflow-y: auto; overscroll-behavior: contain; }
 .iv-line strong { display: block; font-size: 0.8125rem; color: var(--muted); }
 .iv-user strong { color: var(--blue); }
 .iv-done { display: grid; gap: 8px; }
@@ -62,7 +62,9 @@
 .iv .btn:disabled { box-shadow: none; }
 
 @media (max-width: 1080px) {
-  .iv { grid-template-columns: 1fr; grid-template-areas: "top" "stage" "sheet"; grid-template-rows: none; min-height: 0; }
+  .iv { grid-template-columns: 1fr; grid-template-areas: "top" "stage" "sheet"; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .iv-sheet { max-height: 55dvh; }
+  .iv-log { max-height: 16dvh; }
 }
 
 /* Phone: one full-height screen, nothing scrolls (Figma 02 Listening, Duolingo-style) */
@@ -98,6 +100,10 @@
   .iv[data-keyboard="true"] .iv-mascot .ollie { width: 72px; }
   .iv[data-keyboard="true"] .iv-question { font-size: 1.0625rem; padding: 10px 14px; }
   .iv[data-keyboard="true"] .iv-sheet { gap: 10px; padding-top: 14px; }
+}
+/* Text mode has an extra row (the answer box), so the log gets less room. */
+@media (max-width: 760px) {
+  .iv-sheet:has(.iv-compose) .iv-log { max-height: clamp(44px, 9dvh, 110px); }
 }
 @media (max-width: 760px) and (max-height: 680px) {
   .iv-levels, .iv-captions .iv-label { display: none; }

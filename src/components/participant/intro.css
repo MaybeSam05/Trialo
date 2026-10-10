@@ -1,15 +1,15 @@
-/* Participant: welcome / consent (Figma 01 Welcome + D1 Landing) */
+/* Participant: welcome / consent (Figma 01 Welcome + D1 Landing). Fills the screen; the page doesn't scroll. */
 .hero { background: var(--sky); }
-.hero-inner { width: min(100% - 32px, 1248px); margin: 0 auto; padding: clamp(32px, 6vw, 64px) 0; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
-.hero-copy { display: grid; gap: 20px; max-width: 640px; }
+.intro { display: flex; align-items: center; overflow: hidden; }
+.hero-inner { width: min(100% - 32px, 1248px); max-height: 100%; margin: 0 auto; padding: clamp(16px, 4dvh, 48px) 0; display: grid; grid-template-columns: 1fr auto; grid-template-areas: "copy guide"; gap: 48px; align-items: center; }
+.hero-copy { display: grid; gap: clamp(10px, 2dvh, 18px); max-width: 640px; }
 .hero-guide { display: grid; justify-items: center; gap: 12px; }
-.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-.hero-inner { grid-template-areas: "copy guide"; }
 .intro .hero-copy { grid-area: copy; }
 .intro .hero-guide { grid-area: guide; }
+.intro .hero-guide .ollie { width: clamp(150px, 34dvh, 300px); }
+.intro h1 { font-size: clamp(1.75rem, 1rem + 3.4dvh, 3.375rem); }
 .sheet-grabber { display: none; }
-.intro-notes { display: grid; gap: 10px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 20px; font-size: 0.9375rem; }
+.intro-notes { display: grid; gap: 8px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 18px; font-size: 0.9375rem; }
 .intro-meta { font-size: 0.875rem; font-weight: 600; }
 
 /* A friendly greeting as the participant arrives from the QR link. */
@@ -18,13 +18,22 @@
 @keyframes ollie-welcome-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px) rotate(2deg); } }
 @media (prefers-reduced-motion: reduce) { .intro .hero-guide .ollie { animation: none; } }
 
+/* Phone: Ollie on the sky, consent in a bottom sheet pinned to the bottom of the screen. */
 @media (max-width: 760px) {
-  .hero-inner { grid-template-columns: 1fr; grid-template-areas: "guide" "copy"; width: 100%; padding: 24px 0 0; gap: 16px; }
-  .hero-guide { padding: 0 16px; }
-  .hero-guide .ollie { width: 170px; }
-  .intro .hero-copy { max-width: none; background: var(--card); border-radius: 28px 28px 0 0; padding: 12px 24px 32px; gap: 16px; }
+  .intro { align-items: stretch; }
+  .hero-inner { width: 100%; height: 100%; padding: 12px 0 0; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "guide" "copy"; gap: 8px; }
+  .hero-guide { padding: 0 16px; align-self: center; min-height: 0; gap: 6px; }
+  .hero-guide .bubble { padding: 10px 14px; font-size: 0.9375rem; }
+  .intro .hero-guide .ollie { width: clamp(72px, 18dvh, 170px); }
+  .intro h1 { font-size: clamp(1.5rem, 0.8rem + 2.6dvh, 2rem); }
+  .intro .hero-copy { max-width: none; max-height: 82dvh; overflow-y: auto; overscroll-behavior: contain; background: var(--card); border-radius: 28px 28px 0 0; padding: 10px 20px calc(16px + env(safe-area-inset-bottom)); gap: 10px; }
   .sheet-grabber { display: block; width: 44px; height: 6px; border-radius: 3px; background: var(--line); justify-self: start; }
-  .intro-notes { background: var(--panel); border: 0; }
-  .intro .actions { display: grid; }
-  .features { grid-template-columns: 1fr; }
+  .intro-notes { background: var(--panel); border: 0; padding: 10px 14px; font-size: 0.875rem; }
+  .intro .actions { display: grid; gap: 8px; }
+  .intro .btn { min-height: 48px; }
+  .intro-lede, .intro-tip { display: none; }
+  .intro-meta { font-size: 0.8125rem; }
+}
+@media (max-width: 760px) and (max-height: 720px) {
+  .hero-guide .bubble { display: none; }
 }

@@ -66,12 +66,6 @@
 .qe-ages input { width: 72px; min-height: 40px; border: 1.5px solid var(--line); border-radius: 10px; padding: 6px 10px; background: var(--card); font-size: 0.875rem; }
 .qe-warn { padding: 8px 12px; border-radius: 10px; background: var(--missing-bg); color: var(--missing-text); font-size: 0.875rem; font-weight: 600; }
 
-/* Fixed profile questions */
-.qe-profile { padding: 12px 16px; border-radius: 14px; background: var(--panel); }
-.qe-profile summary { cursor: pointer; }
-.qe-profile ol { margin: 10px 0 8px; padding-left: 22px; display: grid; gap: 4px; }
-.qe-profile p { font-size: 0.875rem; }
-
 /* Campaign list */
 .study-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .study-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; justify-content: space-between; }

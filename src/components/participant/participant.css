@@ -1,0 +1,6 @@
+/* Participant route: a fixed, full-height app screen. The page itself never scrolls. */
+html:has(.participant-shell), html:has(.participant-shell) body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.participant-shell { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; background: var(--page); }
+.participant-shell .site-header { flex: none; }
+.participant-main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.participant-main > * { flex: 1; min-height: 0; }
