@@ -1,13 +1,8 @@
 /* Dashboard: live update indicator */
-.live-updates { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 4px 4px 4px 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); font-size: 0.875rem; font-weight: 700; color: var(--ink); }
+.live-updates { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); font-size: 0.875rem; font-weight: 700; color: var(--ink); }
 .live-dot { position: relative; width: 9px; height: 9px; border-radius: 50%; background: var(--match-text); }
 .live-dot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: inherit; animation: live-pulse 2s ease-out infinite; }
 .live-updates[data-pending="true"] .live-dot { background: var(--blue); }
-.live-updates[data-paused="true"] .live-dot { background: var(--muted); }
-.live-updates[data-paused="true"] .live-dot::after { animation: none; }
 .live-label { min-width: 0; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.live-toggle { min-height: 32px; padding: 4px 12px; border: 0; border-radius: 999px; background: var(--panel); color: var(--ink); font-weight: 700; cursor: pointer; }
-.live-toggle:hover { background: var(--line); }
-.live-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes live-pulse { from { transform: scale(1); opacity: .6; } to { transform: scale(2.6); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .live-dot::after { animation: none; } }
