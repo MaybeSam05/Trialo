@@ -32,6 +32,9 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
   const reducedMotion = usePrefersReducedMotion();
   const logRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const transcriptRef = useRef<HTMLDialogElement>(null);
+  const fullLogRef = useRef<HTMLDivElement>(null);
+  const followRef = useRef(true);
   const voice = mode === "voice";
 
   // Clock for timed expressions (happy flash, resting after silence).
@@ -93,6 +96,21 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
     viewport.addEventListener("scroll", update);
     return () => { viewport.removeEventListener("resize", update); viewport.removeEventListener("scroll", update); };
   }, []);
+
+  // Full transcript: new lines scroll into view unless the participant has scrolled up to reread.
+  useEffect(() => {
+    const log = fullLogRef.current;
+    if (log && followRef.current) log.scrollTo({ top: log.scrollHeight, behavior: reducedMotion ? "auto" : "smooth" });
+  }, [messages.length, reducedMotion]);
+
+  function openTranscript() {
+    const dialog = transcriptRef.current;
+    const log = fullLogRef.current;
+    if (!dialog || !log) return;
+    dialog.showModal();
+    log.scrollTop = log.scrollHeight;
+    followRef.current = true;
+  }
 
   // Stay pinned to the newest line when the captions box changes size (layout, rotation, keyboard).
   useEffect(() => {
@@ -180,7 +198,13 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
       </div>}
 
       <div className="iv-captions">
-        <p className="iv-label">{voice ? "Captions" : "Conversation"}</p>
+        <div className="iv-captions-head">
+          <p className="iv-label">{voice ? "Captions" : "Conversation"}</p>
+          {messages.length > 0 && <button type="button" className="iv-expand" aria-haspopup="dialog" onClick={openTranscript}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+            <span className="iv-expand-text">See all</span>
+          </button>}
+        </div>
         <div className="iv-log" ref={logRef} aria-live="polite">
           {messages.length === 0 ? <p className="muted">{voice ? "What you and Ollie say will appear here." : "Your conversation will appear here."}</p>
             : messages.slice(-12).map((message) => <p key={`${message.role}-${message.id}`} className={`iv-line iv-${message.role}`}>
@@ -188,6 +212,20 @@ export function Session({ mode, connected, ended, error, isSpeaking, isMuted, me
             </p>)}
         </div>
       </div>
+
+      {/* Phones: the whole conversation, full screen and easy to read. The interview keeps running underneath. */}
+      <dialog className="iv-transcript" ref={transcriptRef} aria-labelledby="iv-transcript-title">
+        <h2 id="iv-transcript-title">{voice ? "Captions" : "Conversation"}</h2>
+        <div className="iv-transcript-log" ref={fullLogRef} onScroll={(event) => {
+          const log = event.currentTarget;
+          followRef.current = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
+        }}>
+          {messages.map((message) => <p key={`${message.role}-${message.id}`} className={`iv-line iv-${message.role}`}>
+            <strong>{message.role === "agent" ? "Ollie" : "You"}</strong>{message.text}
+          </p>)}
+        </div>
+        <button type="button" className="btn btn-primary" onClick={() => transcriptRef.current?.close()}>Back to Ollie</button>
+      </dialog>
 
       {error && <p className="error" role="alert">{error}</p>}
 

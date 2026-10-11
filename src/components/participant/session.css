@@ -126,3 +126,39 @@
   .iv-levels span, .iv-track span, .iv .btn, .iv-mascot .ollie img { transition: none; }
   .iv-breathe, .iv-breathe[data-speaking="true"] { animation: none; }
 }
+
+/* Captions: "See all" opens the full transcript (phones and tablets, where the captions box is small) */
+.iv-captions-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.iv-expand { display: none; margin-left: auto; min-height: 32px; padding: 4px 12px; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--blue) 10%, var(--card)); color: var(--blue); font: inherit; font-size: 0.875rem; font-weight: 800; cursor: pointer; }
+.iv-expand:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+@media (max-width: 1080px) {
+  .iv-expand { display: inline-flex; align-items: center; gap: 6px; }
+}
+.iv-transcript { position: fixed; inset: var(--iv-top, 0px) 0 auto; width: 100%; max-width: none; height: var(--iv-vh, 100dvh); max-height: none; margin: 0; padding: calc(16px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom)); border: 0; background: var(--card); color: var(--ink); }
+.iv-transcript[open] { display: flex; flex-direction: column; gap: 12px; animation: iv-transcript-in 220ms cubic-bezier(.22, 1, .36, 1); }
+.iv-transcript::backdrop { background: color-mix(in srgb, var(--ink) 30%, transparent); }
+.iv-transcript h2 { margin: 0; font-size: 1.25rem; }
+.iv-transcript-log { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 20px; background: var(--panel); }
+.iv-transcript-log .iv-line { max-width: 88%; padding: 10px 14px; border-radius: 18px 18px 18px 6px; background: var(--card); font-size: 1.0625rem; line-height: 1.45; }
+.iv-transcript-log .iv-user { align-self: flex-end; border-radius: 18px 18px 6px 18px; background: color-mix(in srgb, var(--blue) 12%, var(--card)); }
+.iv-transcript > .btn { flex: none; min-height: 52px; }
+@media (min-width: 761px) {
+  .iv-transcript { inset: 0; width: min(100% - 48px, 640px); height: min(100% - 48px, 760px); margin: auto; border-radius: 28px; }
+}
+@keyframes iv-transcript-in { from { opacity: 0; transform: translateY(24px); } }
+@media (prefers-reduced-motion: reduce) {
+  .iv-transcript[open] { animation: none; }
+}
+/* Phones: speaker names sit inline so the small captions box shows more words */
+@media (max-width: 760px) {
+  .iv-log .iv-line { line-height: 1.4; }
+  .iv-log .iv-line strong { display: inline; margin-right: 6px; font-size: 0.875rem; }
+}
+/* Short phones hide the captions label, so float "See all" over the box instead of adding a row */
+@media (max-width: 760px) and (max-height: 680px) {
+  .iv-captions { position: relative; }
+  .iv-captions-head { position: absolute; top: 6px; right: 6px; z-index: 1; }
+  .iv-expand { justify-content: center; width: 32px; min-height: 32px; padding: 0; box-shadow: 0 1px 4px color-mix(in srgb, var(--ink) 18%, transparent); background: var(--card); }
+  .iv-expand-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .iv-log { padding-right: 44px; }
+}
