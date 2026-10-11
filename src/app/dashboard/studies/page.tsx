@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Ollie } from "@/components/ollie";
 import { CampaignShare } from "@/components/coordinator/campaign-share";
+import { DeleteCampaign } from "@/components/coordinator/delete-campaign";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
@@ -81,6 +82,7 @@ export default async function Campaigns() {
             <CampaignShare slug={campaign.slug} name={campaign.name} />
             <Link className="btn btn-secondary" href={`/s/${campaign.slug}`} target="_blank">Preview</Link>
             <Link className="btn btn-primary" href={`/dashboard/studies/${campaign.slug}`}>Edit questions</Link>
+            {!campaign.slug.startsWith("demo-") && <DeleteCampaign slug={campaign.slug} name={campaign.name} sessionCount={campaign.sessionCount} />}
           </div>
         </li>)}</ul>}
     </main>
