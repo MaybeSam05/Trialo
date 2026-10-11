@@ -1,6 +1,6 @@
 "use client";
 
-import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
+import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationMode, useConversationStatus } from "@elevenlabs/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { agentQuestionList, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
@@ -47,19 +47,21 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
   }, []);
   const onError = useCallback((message: string, context?: unknown) => console.warn("[Trialo] conversation error", message, context), []);
 
-  return <ConversationProvider onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
+  // Hold to talk: the microphone stays muted (Ollie hears silence, not background noise) except while the talk button is held.
+  const [talking, setTalking] = useState(false);
+
+  return <ConversationProvider isMuted={!talking} onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
     <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); setDropped(""); setDisconnectReason(null); }}
-      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} disconnectReason={disconnectReason} />
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} disconnectReason={disconnectReason} talking={talking} onTalk={setTalking} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped, disconnectReason }: {
-  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string; disconnectReason: string | null;
+function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped, disconnectReason, talking, onTalk }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string; disconnectReason: string | null; talking: boolean; onTalk: (talking: boolean) => void;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
   const { isSpeaking } = useConversationMode();
-  const { isMuted, setMuted } = useConversationInput();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startError, setError] = useState("");
   const error = startError || dropped;
@@ -146,8 +148,8 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
 
   if (!started) return <Intro studyName={studyName} onStart={(typed) => start("voice", typed)} onType={(typed) => start("text", typed)} />;
 
-  return <Session mode={mode} connected={connected} ended={ended} ending={ending} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
+  return <Session mode={mode} connected={connected} ended={ended} ending={ending} error={error} isSpeaking={isSpeaking} talking={talking}
     messages={messages} progress={interviewProgress(savedAnswers, questions)} lastActivity={lastActivity} happyUntil={happyUntil}
     getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send} timeline={mode === "voice" ? timeline : null}
-    onToggleMute={() => setMuted(!isMuted)} onEnd={() => { setParticipantEnded(true); endSession(); }} onRetry={() => start(mode)} />;
+    onTalk={onTalk} onEnd={() => { setParticipantEnded(true); endSession(); }} onRetry={() => start(mode)} />;
 }

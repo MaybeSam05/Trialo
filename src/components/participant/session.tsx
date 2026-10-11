@@ -3,6 +3,7 @@ import type { OllieFace } from "@/components/ollie";
 import { Mascot } from "@/components/participant/mascot";
 import type { InterviewEnding, interviewProgress } from "@/components/participant/progress";
 import { SpeechBubble } from "@/components/participant/speech-bubble";
+import { TalkButton } from "@/components/participant/talk-button";
 import type { SpeechTimeline } from "@/components/participant/speech-timeline";
 import "./session.css";
 
@@ -26,11 +27,11 @@ const SENSITIVE = /pregnan|mental|depress|anxiet|suicid|self-harm|drug|alcohol|s
 const RESTING_AFTER_MS = 45_000;
 const IDLE_LEVELS: number[] = Array(11).fill(0);
 
-export function Session({ mode, connected, ended, ending = "complete", error, isSpeaking, isMuted, messages, progress, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onToggleMute, onEnd, onRetry, timeline }: {
-  mode: InterviewMode; connected: boolean; ended: boolean; ending?: InterviewEnding; error: string; isSpeaking: boolean; isMuted: boolean;
+export function Session({ mode, connected, ended, ending = "complete", error, isSpeaking, talking, messages, progress, lastActivity, happyUntil, getInputVolume, getOutputVolume, onSend, onTalk, onEnd, onRetry, timeline }: {
+  mode: InterviewMode; connected: boolean; ended: boolean; ending?: InterviewEnding; error: string; isSpeaking: boolean; talking: boolean;
   messages: Message[]; progress: ReturnType<typeof interviewProgress>; lastActivity: number; happyUntil: number;
   getInputVolume: () => number; getOutputVolume: () => number;
-  onSend: (text: string) => void; onToggleMute: () => void; onEnd: () => void; onRetry: () => void;
+  onSend: (text: string) => void; onTalk: (talking: boolean) => void; onEnd: () => void; onRetry: () => void;
   timeline?: SpeechTimeline | null;
 }) {
   const [now, setNow] = useState(0);
@@ -40,11 +41,7 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
   const [draft, setDraft] = useState("");
   const [tapped, setTapped] = useState<{ answer: string; question: string } | null>(null);
   const reducedMotion = usePrefersReducedMotion();
-  const logRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const transcriptRef = useRef<HTMLDialogElement>(null);
-  const fullLogRef = useRef<HTMLDivElement>(null);
-  const followRef = useRef(true);
   const voice = mode === "voice";
 
   // Clock for timed expressions (happy flash, resting after silence).
@@ -68,28 +65,20 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
     return () => { clearInterval(timer); setMouthOpen(false); };
   }, [connected, isSpeaking, reducedMotion, getOutputVolume]);
 
-  // Sound-level bars follow Ollie's voice while speaking and the microphone while listening.
+  // Sound-level bars follow Ollie's voice while speaking and the microphone while the talk button is held.
   useEffect(() => {
     if (!connected || !voice) return;
     let lastVoiceAt = 0;
     const timer = setInterval(() => {
-      const input = isMuted || isSpeaking ? 0 : getInputVolume();
+      const input = !talking || isSpeaking ? 0 : getInputVolume();
       if (input > 0.025) lastVoiceAt = Date.now();
-      setUserSpeaking(!isMuted && !isSpeaking && Date.now() - lastVoiceAt < 350);
+      setUserSpeaking(talking && !isSpeaking && Date.now() - lastVoiceAt < 350);
       if (reducedMotion) return;
       const volume = Math.min(1, (isSpeaking ? getOutputVolume() : input) * 2.5);
       setLevels((current) => current.map((_, index) => Math.max(0.12, volume * (0.55 + 0.45 * Math.abs(Math.sin(Date.now() / 140 + index * 1.7))))));
     }, 90);
     return () => clearInterval(timer);
-  }, [connected, voice, isSpeaking, isMuted, reducedMotion, getInputVolume, getOutputVolume]);
-
-  // Keep the newest caption in view.
-  useEffect(() => {
-    const log = logRef.current;
-    if (!log) return;
-    // Jump on first paint, glide for each new line after that.
-    log.scrollTo({ top: log.scrollHeight, behavior: reducedMotion || log.scrollTop === 0 ? "auto" : "smooth" });
-  }, [messages.length, reducedMotion]);
+  }, [connected, voice, isSpeaking, talking, reducedMotion, getInputVolume, getOutputVolume]);
 
   // iPhone keyboard: size the screen to the visible area (iOS keeps 100dvh under the keyboard) and go compact while it's open.
   useEffect(() => {
@@ -107,32 +96,8 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
     return () => { viewport.removeEventListener("resize", update); viewport.removeEventListener("scroll", update); };
   }, []);
 
-  // Full transcript: new lines scroll into view unless the participant has scrolled up to reread.
-  useEffect(() => {
-    const log = fullLogRef.current;
-    if (log && followRef.current) log.scrollTo({ top: log.scrollHeight, behavior: reducedMotion ? "auto" : "smooth" });
-  }, [messages.length, reducedMotion]);
-
-  function openTranscript() {
-    const dialog = transcriptRef.current;
-    const log = fullLogRef.current;
-    if (!dialog || !log) return;
-    dialog.showModal();
-    log.scrollTop = log.scrollHeight;
-    followRef.current = true;
-  }
-
-  // Stay pinned to the newest line when the captions box changes size (layout, rotation, keyboard).
-  useEffect(() => {
-    const log = logRef.current;
-    if (!log) return;
-    const observer = new ResizeObserver(() => { log.scrollTop = log.scrollHeight; });
-    observer.observe(log);
-    return () => observer.disconnect();
-  }, []);
-
   const lastAgent = [...messages].reverse().find((message) => message.role === "agent")?.text ?? "";
-  const activelyListening = voice && connected && !ended && !error && !isMuted && !isSpeaking && userSpeaking;
+  const activelyListening = voice && connected && !ended && !error && talking && !isSpeaking && userSpeaking;
   const waitingForOllie = !isSpeaking && !activelyListening && messages.at(-1)?.role === "user";
   const sensitive = SENSITIVE.test(lastAgent);
   const face: OllieFace = error ? "confused"
@@ -146,11 +111,11 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
     : sensitive ? "gentle"
     : "listening";
 
-  const yourTurn = voice && connected && !ended && !error && !isMuted && !isSpeaking && !waitingForOllie && Boolean(lastAgent);
+  const yourTurn = voice && connected && !ended && !error && !talking && !isSpeaking && !waitingForOllie && Boolean(lastAgent);
 
   const status = error ? "Connection problem" : ended ? ENDINGS[ending].status : !connected ? "Connecting…"
     : !voice ? (waitingForOllie ? "Ollie is replying…" : "Type or tap your answer")
-    : isSpeaking ? "Ollie is speaking" : waitingForOllie ? "Ollie is thinking…" : isMuted ? "Microphone muted" : yourTurn ? "Your turn to speak" : "Listening…";
+    : talking ? "Listening…" : isSpeaking ? "Ollie is speaking" : waitingForOllie ? "Ollie is thinking…" : yourTurn ? "Your turn: hold to talk" : "Hold to talk when you're ready";
   const bubble = error ? "Hmm, I couldn't connect. Let's try that again."
     : ended ? ENDINGS[ending].bubble
     : !connected ? "Connecting you to Ollie…"
@@ -195,7 +160,7 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
         <h2>{ENDINGS[ending].title}</h2>
         <p>{ENDINGS[ending].text}</p>
       </div> : <div className="iv-answer">
-        <p className="iv-label" id="quick-label">{voice ? "Say your answer, or tap one" : "Tap an answer or type your own"}</p>
+        <p className="iv-label" id="quick-label">{voice ? "Hold to talk, or tap an answer" : "Tap an answer or type your own"}</p>
         <div className="iv-quick" role="group" aria-labelledby="quick-label">
           {QUICK_ANSWERS.map((answer) => <button key={answer} className="btn btn-secondary" aria-pressed={selected === answer} disabled={!canAnswer}
             onClick={() => { setTapped({ answer, question: lastAgent }); send(answer); }}>{answer}</button>)}
@@ -207,40 +172,11 @@ export function Session({ mode, connected, ended, ending = "complete", error, is
         </form>}
       </div>}
 
-      <div className="iv-captions">
-        <div className="iv-captions-head">
-          <p className="iv-label">{voice ? "Captions" : "Conversation"}</p>
-          {messages.length > 0 && <button type="button" className="iv-expand" aria-haspopup="dialog" onClick={openTranscript}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
-            <span className="iv-expand-text">See all</span>
-          </button>}
-        </div>
-        <div className="iv-log" ref={logRef} aria-live="polite">
-          {messages.length === 0 ? <p className="muted">{voice ? "What you and Ollie say will appear here." : "Your conversation will appear here."}</p>
-            : messages.slice(-12).map((message) => <p key={`${message.role}-${message.id}`} className={`iv-line iv-${message.role}`}>
-              <strong>{message.role === "agent" ? "Ollie" : "You"}</strong>{message.text}
-            </p>)}
-        </div>
-      </div>
-
-      {/* Phones: the whole conversation, full screen and easy to read. The interview keeps running underneath. */}
-      <dialog className="iv-transcript" ref={transcriptRef} aria-labelledby="iv-transcript-title">
-        <h2 id="iv-transcript-title">{voice ? "Captions" : "Conversation"}</h2>
-        <div className="iv-transcript-log" ref={fullLogRef} onScroll={(event) => {
-          const log = event.currentTarget;
-          followRef.current = log.scrollHeight - log.scrollTop - log.clientHeight < 80;
-        }}>
-          {messages.map((message) => <p key={`${message.role}-${message.id}`} className={`iv-line iv-${message.role}`}>
-            <strong>{message.role === "agent" ? "Ollie" : "You"}</strong>{message.text}
-          </p>)}
-        </div>
-        <button type="button" className="btn btn-primary" onClick={() => transcriptRef.current?.close()}>Back to Ollie</button>
-      </dialog>
-
       {error && <p className="error" role="alert">{error}</p>}
 
+      {voice && !ended && !error && <TalkButton talking={talking} disabled={!canAnswer} onTalk={onTalk} />}
+
       {connected ? <div className="iv-actions">
-        {voice && <button className="btn btn-secondary" onClick={onToggleMute} aria-pressed={isMuted}><span>{isMuted ? "Unmute" : "Mute"}<span className="iv-wide"> microphone</span></span></button>}
         <button className="btn btn-secondary" onClick={onEnd}>End interview</button>
       </div> : error ? <button className="btn btn-primary" onClick={onRetry}>Try again</button> : null}
 
