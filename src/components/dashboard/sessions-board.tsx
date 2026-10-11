@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Ollie } from "@/components/ollie";
 import { DashboardStatusChip } from "./status";
+import type { StudyFit } from "@/lib/cross-match";
 import { interviewState, type SessionOutcome } from "./session-outcome";
 import "./sessions-board.css";
 
@@ -19,6 +20,10 @@ export type BoardSession = {
   outcome: SessionOutcome;
   answered: number;
   total: number | null;
+  /** Other studies on this account where the participant may fit, best first (potential match or needs review only). */
+  others: { label: string; fit: StudyFit; summary: string }[];
+  othersUnlikely: number;
+  othersTotal: number;
 };
 
 type Status = "all" | "live" | SessionOutcome;
@@ -190,7 +195,7 @@ export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession
         <div className="dashboard-table-scroll board-scroll" role="region" aria-label="Screening sessions" tabIndex={0}>
           <table className="dashboard-table board-table">
             <caption className="dashboard-sr-only">Screening sessions. Open a session to review its individual trial results.</caption>
-            <thead><tr><th scope="col">Session / campaign</th><th scope="col">Started (UTC)</th><th scope="col">Interview</th><th scope="col">Review status</th><th scope="col"><span className="dashboard-sr-only">Report</span></th></tr></thead>
+            <thead><tr><th scope="col">Session / campaign</th><th scope="col">Started (UTC)</th><th scope="col">Interview</th><th scope="col">Review status</th><th scope="col">Other studies</th><th scope="col"><span className="dashboard-sr-only">Report</span></th></tr></thead>
             <tbody>{visible.map((session) => {
               const date = new Date(session.createdAt);
               const interview = stateOf(session, now);
@@ -213,6 +218,7 @@ export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession
                   <span className="dashboard-secondary">{interview.detail}</span>
                 </td>
                 <td data-label="Review status">{live ? <span className="chip">Not ready</span> : <DashboardStatusChip status={session.outcome} />}</td>
+                <td data-label="Other studies" className="board-others"><OtherStudies session={session} /></td>
                 <td className="dashboard-open" aria-hidden="true">↗</td>
               </tr>;
             })}</tbody>
@@ -240,4 +246,18 @@ function ago(ms: number) {
   const seconds = Math.max(0, Math.round(ms / 1_000));
   if (seconds < 60) return "just now";
   return `${Math.round(seconds / 60)} min ago`;
+}
+
+/** The participant's best fits among the account's other studies, from answers they already gave. Details are in the report. */
+function OtherStudies({ session }: { session: BoardSession }) {
+  if (session.othersTotal === 0) return <span className="dashboard-secondary">No other studies</span>;
+  if (!session.others.length) return <span className="dashboard-secondary">{session.othersUnlikely === session.othersTotal ? "Unlikely for other studies" : "Not enough information yet"}</span>;
+  const more = session.others.length - 2;
+  return <>
+    <ul className="board-fits">{session.others.slice(0, 2).map((study) => <li key={study.label} title={study.summary}>
+      <span className={`board-fit is-${study.fit}`}>{study.fit === "match" ? "Potential match" : "Needs review"}</span>
+      <span className="board-fit-name">{study.label}</span>
+    </li>)}</ul>
+    {more > 0 && <span className="dashboard-secondary">+{more} more in the report</span>}
+  </>;
 }

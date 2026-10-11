@@ -5,18 +5,21 @@ import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { SessionsBoard, type BoardSession } from "@/components/dashboard/sessions-board";
 import { getSessionOutcome, sessionProgress, type DashboardSession } from "@/components/dashboard/session-outcome";
 import { requireOwner } from "@/lib/auth";
+import { fitSummary, otherStudyFits, type Campaign } from "@/lib/cross-match";
 import { sessionQuestions } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
 import "@/components/dashboard/dashboard.css";
 
 export const dynamic = "force-dynamic";
 
-type Row = DashboardSession & { updated_at: string | null; questions?: unknown; end_reason?: string | null; first_turn?: unknown; studies: { name: string; questions?: unknown[] | null } | null };
+type Row = DashboardSession & { updated_at: string | null; questions?: unknown; end_reason?: string | null; first_turn?: unknown; studies: { slug?: string; name: string; questions?: unknown[] | null } | null };
 
-function toBoardSession(row: Row): BoardSession {
+function toBoardSession(row: Row, campaigns: Campaign[]): BoardSession {
   const { questions } = sessionQuestions(row.questions, row.studies?.questions);
   // Same count and completion rule as the participant's counter and the session report.
   const { answered, total, complete } = sessionProgress(row, questions);
+  // Where else this participant may fit, from the answers they already gave (see src/lib/cross-match.ts).
+  const others = otherStudyFits(row.answers ?? {}, questions, campaigns, row.studies?.slug ?? "");
   return {
     id: row.id,
     campaign: row.studies?.name ?? "Unknown study",
@@ -28,6 +31,9 @@ function toBoardSession(row: Row): BoardSession {
     outcome: getSessionOutcome({ status: complete ? "completed" : "needs_review", match_results: row.match_results }),
     answered,
     total,
+    others: others.filter((study) => study.fit === "match" || study.fit === "possible").map((study) => ({ label: study.label, fit: study.fit, summary: fitSummary(study) })),
+    othersUnlikely: others.filter((study) => study.fit === "unlikely").length,
+    othersTotal: others.length,
   };
 }
 
@@ -49,7 +55,9 @@ async function loadSessions(owner: string) {
       result = await query(fallback);
     }
     if (result.error) throw result.error;
-    return { sessions: ((result.data ?? []) as unknown as Row[]).map(toBoardSession), error: false, loadedAt: Date.now() };
+    // Every campaign on this account, to compare each participant with the other studies.
+    const { data: campaigns } = await getSupabase().from("studies").select("slug,name,questions").eq("owner_id", owner);
+    return { sessions: ((result.data ?? []) as unknown as Row[]).map((row) => toBoardSession(row, (campaigns ?? []) as Campaign[])), error: false, loadedAt: Date.now() };
   } catch {
     return { sessions: [], error: true, loadedAt: Date.now() };
   }

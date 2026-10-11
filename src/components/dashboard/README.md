@@ -20,6 +20,7 @@ These are preliminary display summaries. Matching logic, saved results, and fina
 - **Answering now**: a session that isn't complete, has no recorded end (`end_reason`) or transcript, and was updated in the last 10 minutes. `updated_at` is bumped by the answers API on every saved answer (not by the post-call webhook).
 - **Complete** means every question that applies to the participant (age, gender and the campaign's questions, after conditions and age limits) has an answer. Ending the call or receiving a transcript doesn't make a session complete. Otherwise it's **Stopped early**, with how it ended when known: the participant pressed End, Ollie's call ended, or the connection dropped (`end_reason`, reported by the interview page).
 - Sessions that arrive between refreshes flash with a "New" badge (and are announced to screen readers); in-progress answer counts pulse when they go up.
+- **Other studies**: the participant's best fits among this account's other campaigns (Potential match / Needs review), from answers they already gave; hover for "Fits N of M criteria". Matching rules are in `src/lib/cross-match.ts`; the session report lists every criterion and which answer it came from.
 - Responses show "N of M answered", counting the questions that apply to that participant (never the typed name), the same rule as the participant's counter and the session report (`answerProgress` in `src/lib/questions.ts`). Legacy campaigns without a question list show "N saved".
 
 ## Local checks

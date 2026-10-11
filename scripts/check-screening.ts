@@ -5,6 +5,7 @@ import { endReasonFor, interviewEnding, interviewProgress } from "@/components/p
 import { postCallUpdate } from "@/lib/post-call";
 import { answerEvidence, answerProgress, applies, DEMO_QUESTIONS, matchQuestions, NAME_FIELD, sessionQuestions, type Question } from "@/lib/questions";
 import { requestJson } from "@/lib/request";
+import { answerFromAge, otherStudyFits, questionTopic, type Campaign } from "@/lib/cross-match";
 
 // Checks run in order (some are async); failures are counted and reported at the end.
 const checks: [string, () => void | Promise<void>][] = [];
@@ -194,6 +195,57 @@ check("request: success with a non-JSON body is an error, not a crash", () => wi
 check("request: success", () => withFetch(async () => Response.json({ slug: "abc" }), async () => {
   assert.deepEqual(await requestJson("/api/studies", { method: "POST" }, "create the campaign"), { ok: true, body: { slug: "abc" } });
 }));
+
+// 7. One interview, many studies: comparing answers with other campaigns' criteria.
+const GLP1: Campaign = { slug: "glp1", name: "GLP-1 study", questions: [
+  { key: "adult", text: "Are you between 18 and 75 years old?", kind: "include", trial: "GLP-1" },
+  { key: "t2d", text: "Has a doctor told you that you have type 2 diabetes?", kind: "include", trial: "GLP-1" },
+  { key: "metformin", text: "Do you take metformin for your blood sugar?", kind: "include", trial: "GLP-1" },
+] };
+const HEART: Campaign = { slug: "heart", name: "Heart study", questions: [
+  { key: "diabetes_any", text: "Have you been diagnosed with type 2 diabetes?", kind: "include", trial: "Heart" },
+  { key: "other_trial", text: "Are you in another clinical trial right now?", kind: "exclude", trial: "Heart" },
+] };
+const KIDNEY: Campaign = { slug: "kidney", name: "Kidney study", questions: [
+  { key: "age_40_plus", text: "Are you 40 or older?", kind: "include", trial: "Kidney" },
+  { key: "recent_trial", text: "Have you taken part in another clinical trial in the last 30 days?", kind: "exclude", trial: "Kidney" },
+] };
+const ALL = [GLP1, HEART, KIDNEY];
+const fitOf = (answers: Record<string, string>, own: Campaign, slug: string) => otherStudyFits(answers, own.questions, ALL, own.slug).find((study) => study.slug === slug);
+
+check("cross-study: the same question in different wording is recognised", () => {
+  assert.equal(questionTopic("Has a doctor told you that you have type 2 diabetes?"), questionTopic("Have you been diagnosed with type 2 diabetes?"));
+});
+check("cross-study: different time frames never count as the same question", () => {
+  assert.notEqual(questionTopic("Are you in another clinical trial right now?"), questionTopic("Have you taken part in another clinical trial in the last 30 days?"));
+});
+check("cross-study: age questions are answered from the stated age", () => {
+  assert.equal(answerFromAge("Are you 40 or older?", "52"), "yes");
+  assert.equal(answerFromAge("Are you between 18 and 75 years old?", "80"), "no");
+  assert.equal(answerFromAge("Do you take metformin?", "52"), null);
+  assert.equal(answerFromAge("Are you 40 or older?", "prefer not to say"), null);
+});
+check("cross-study: a shared answer that fits and nothing against is needs review, with its source", () => {
+  const heart = fitOf({ age: "52", gender: "female", adult: "yes", t2d: "Yes", metformin: "yes" }, GLP1, "heart")!;
+  assert.equal(heart.fit, "possible");
+  assert.equal(heart.criteria.find((criterion) => criterion.evidence === "supports")?.from, "Has a doctor told you that you have type 2 diabetes?");
+  assert.equal(heart.criteria.find((criterion) => criterion.text.includes("right now"))?.evidence, "not_asked");
+});
+check("cross-study: every criterion fitting is a potential match", () => {
+  const glp1 = fitOf({ age: "52", gender: "male", diabetes_any: "yes", other_trial: "no" }, HEART, "glp1");
+  assert.equal(glp1?.fit, "possible"); // metformin never asked
+  const both: Campaign = { slug: "both", name: "Both", questions: [{ ...HEART.questions![0], trial: "B" }, { key: "older", text: "Are you 50 or older?", kind: "include", trial: "B" }] };
+  assert.equal(otherStudyFits({ age: "52", diabetes_any: "yes" }, HEART.questions, [both], "heart")[0].fit, "match");
+});
+check("cross-study: a confirmed answer against a criterion is unlikely; unclear answers aren't", () => {
+  assert.equal(fitOf({ age: "30", gender: "male", adult: "yes", t2d: "yes" }, GLP1, "kidney")?.fit, "unlikely");
+  assert.equal(fitOf({ age: "52", t2d: "not sure" }, GLP1, "heart")?.fit, "unknown");
+});
+check("cross-study: the participant's own campaign is left out and no overlap is unknown", () => {
+  const studies = otherStudyFits({}, GLP1.questions, ALL, "glp1");
+  assert.equal(studies.some((study) => study.slug === "glp1"), false);
+  assert.ok(studies.every((study) => study.fit === "unknown"));
+});
 
 async function main() {
   let failures = 0;

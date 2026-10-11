@@ -37,6 +37,7 @@
 - **Smart questions:** each question is *fits if yes*, *flag if yes*, or *info only*. Questions can depend on gender, an age range, or an earlier answer ("ask about inhaler use only if they have asthma").
 - **Live dashboard:** sessions update every few seconds and show how far each person got. Each one reads *in progress*, *complete*, or *stopped early* (participant ended it, the call ended, or the connection dropped), with a review status: **Potential match for follow-up**, **Needs review**, or **Unlikely match**.
 - **Session report:** every answer in interview order, which answers support or rule out each study, and the full call transcript.
+- **One interview, many studies:** each participant's answers are also compared with your other campaigns' criteria, so the dashboard shows where else they may fit (*Potential match for follow-up*, *Needs review* or *Unlikely match*) without asking them to repeat a screening. The report shows which answer each match came from, and what still needs asking.
 - **Private workspaces:** coordinators sign in (Clerk) and only see their own campaigns. A one-click demo account shows sample data.
 
 **For participants**
@@ -76,6 +77,7 @@ sequenceDiagram
 
 - **Questions are versioned per session.** Each session keeps a copy of the questions it started with, so editing a campaign never changes interviews in progress or past reports.
 - **Scoring is conservative.** A yes to a *fits* question supports a match; a no, or a yes to a *flag* question, may rule one out. "Not sure", "prefer not to say" and skipped questions are missing information that needs review, never an exclusion.
+- **Cross-study matching is transparent.** An answer carries over to another study only when the participant answered the same question (same topic in any wording, with the same time frame) or it follows from their age. Everything else is shown as "not asked", never guessed.
 - **Completion means every question that applies was answered.** Hanging up or receiving a transcript doesn't count as finishing.
 - **Secrets stay on the server.** The browser gets a short-lived ElevenLabs conversation token; the ElevenLabs and Supabase keys never leave the server.
 
@@ -212,6 +214,7 @@ src/
     dashboard/                Live sessions board, outcome and interview-state rules
   lib/
     questions.ts              Question model, conditions, scoring, progress, CSV parsing
+    cross-match.ts            Compare one participant's answers with other studies' criteria
 supabase/schema.sql           Tables and additive migrations
 scripts/                      Demo seeding, demo account, regression checks
 ```

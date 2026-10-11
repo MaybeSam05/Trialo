@@ -9,6 +9,8 @@ import { stripExpressions } from "@/components/participant/speech-timeline";
 import { MatchChip } from "@/components/status-chip";
 import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, sessionQuestions, type Evidence, type Question } from "@/lib/questions";
 import { requireOwner } from "@/lib/auth";
+import { OtherStudies } from "@/components/coordinator/other-studies";
+import { otherStudyFits, type Campaign } from "@/lib/cross-match";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
 import "@/components/coordinator/report.css";
@@ -21,7 +23,7 @@ const isRecent = (time: string) => Date.now() - Date.parse(time) < LIVE_WINDOW_M
 
 type Session = {
   id: string; status: string; answers: Record<string, unknown> | null; match_results: MatchResult[] | null;
-  transcript: unknown; created_at: string; updated_at: string; questions?: unknown; end_reason?: string | null; studies: { name: string; questions?: Question[] | null } | null;
+  transcript: unknown; created_at: string; updated_at: string; questions?: unknown; end_reason?: string | null; studies: { slug?: string; name: string; questions?: Question[] | null } | null;
 };
 type Turn = { who: string; text: string };
 
@@ -58,6 +60,14 @@ function answerRows(answers: Record<string, unknown>, questions: Question[] | nu
   return rows;
 }
 
+/** Every campaign on this account, to compare the participant with the other studies. */
+async function loadCampaigns(owner: string): Promise<Campaign[]> {
+  try {
+    const { data } = await getSupabase().from("studies").select("slug,name,questions").eq("owner_id", owner);
+    return (data ?? []) as Campaign[];
+  } catch { return []; }
+}
+
 const EVIDENCE: Record<Evidence, { title: string; icon: string }> = {
   supports: { title: "Supports this result", icon: "✓" },
   against: { title: "Doesn't fit", icon: "✕" },
@@ -86,6 +96,7 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
     endReason: session.end_reason ?? null, recent: isRecent(session.updated_at) });
   const name = typeof answers[NAME_FIELD] === "string" ? answers[NAME_FIELD] as string : "";
   const results = session.match_results ?? [];
+  const others = otherStudyFits(answers, questions, await loadCampaigns(owner), session.studies?.slug ?? "");
   const transcript = toTurns(session.transcript);
 
   return <>
@@ -131,6 +142,7 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
                 </div>;
               })}</div>}
           </section>
+          <OtherStudies studies={others} />
           <section className="card stack" aria-labelledby="answers-h">
             <h2 id="answers-h">Answers <span className="muted answer-count">{progress.total === null ? `${progress.answered} answered` : `${progress.answered} of ${progress.total} answered`}, in interview order</span></h2>
             {answeredCount === 0 ? <p className="muted">No answers were saved in this session.</p>
