@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint .",
+    "test": "tsx scripts/check-screening.ts",
     "seed:demo": "tsx --env-file=.env.local scripts/seed-demo.ts",
     "demo:user": "tsx --env-file=.env.local scripts/create-demo-user.ts"
   },

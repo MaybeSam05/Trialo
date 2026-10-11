@@ -176,17 +176,24 @@ export function parseQuestionText(raw: string, existing: Question[] = []): Quest
 
 const yes = /^\s*(yes|yeah|yep|y|true)\b/i;
 const no = /^\s*(no|nope|n|false)\b/i;
-const yesNo = (value: string) => yes.test(value) ? "yes" : no.test(value) ? "no" : null;
+// "Not sure", "I don't know", "no idea", "prefer not to say": the answer is unknown, never a yes, a no or a mismatch.
+const unclear = /^\s*(i'?m\s+|i\s+am\s+|i'?d\s+|i\s+)?(not\s+sure|unsure|no\s+idea|no\s+clue|(don'?t|do\s+not)\s+(know|remember)|(would\s+)?(prefer|rather)\s+not|maybe|perhaps|possibly|unknown|n\/a|skip)/i;
+const yesNo = (value: string) => unclear.test(value) ? null : yes.test(value) ? "yes" : no.test(value) ? "no" : null;
 
-function answerMatches(value: string, expected: string) {
-  if (expected === "yes" || expected === "no") return yesNo(value) === expected;
+/** True or false for a confirmed match or mismatch; null when the answer doesn't say. */
+function answerMatches(value: string, expected: string): boolean | null {
+  if (unclear.test(value)) return null;
+  if (expected === "yes" || expected === "no") {
+    const answered = yesNo(value);
+    return answered === null ? null : answered === expected;
+  }
   // "male" must not match "female", so compare from the start of the answer.
   return value.trim().toLowerCase().startsWith(expected);
 }
 
 /**
  * Whether a question applies to this participant given what they've answered so far.
- * Unknown answers keep the question in (it may still be asked); known answers that don't match drop it.
+ * Missing, skipped or unclear answers keep the question in (it may still be asked); only a confirmed mismatch drops it.
  */
 export function applies(question: Question, answers: Record<string, unknown>, questions: Question[]): boolean {
   const age = toAge(String(answers.age ?? "").match(/\d+/)?.[0]);
@@ -200,7 +207,7 @@ export function applies(question: Question, answers: Record<string, unknown>, qu
   if (parent && !applies(parent, answers, questions)) return false;
   const value = answers[whenKey];
   if (value === undefined || value === null || value === "") return true;
-  return answerMatches(String(value), question.when.equals);
+  return answerMatches(String(value), question.when.equals) !== false;
 }
 
 /** Questions this participant should get, including profile questions. Used for the progress bar. */
@@ -257,7 +264,7 @@ export function agentQuestionList(questions: Question[], rawName = ""): string {
     "PROFILE: always ask these first, in order. The participant may skip any of them.",
     ...profile,
     "",
-    "SCREENING: then ask these in order. Skip a question if its \"only if\" rule doesn't match the participant's earlier answers; don't mention skipped questions. If an answer the rule needs was skipped, ask the question anyway.",
+    "SCREENING: then ask these in order. Skip a question if its \"only if\" rule doesn't match the participant's earlier answers; don't mention skipped questions. If an answer the rule needs was skipped or unclear (like \"not sure\"), ask the question anyway.",
     ...study,
   ].join("\n");
 }
