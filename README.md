@@ -11,7 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://trialo-regen.netlify.app">Live demo</a> ·
+  <a href="https://youtu.be/p8G9bIwuqiw"><strong>Watch the demo video</strong></a> ·
+  <a href="https://trialo-regen.netlify.app">Live app</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#configure-ollie-elevenlabs">Configure Ollie</a> ·
   <a href="#limitations-and-responsible-use">Limitations</a>
@@ -27,7 +28,16 @@
 </p>
 
 > [!IMPORTANT]
-> Trialo is a hackathon prototype built for HackRU (Regeneron track). It uses **synthetic demo data only**. It is not a medical device and never decides eligibility: every result is a preliminary summary for clinical research staff to review.
+> Trialo is a working prototype built at HackRU for the Regeneron and ElevenLabs tracks. It uses **synthetic demo data only**. It is not a medical device and never decides eligibility: every result is a preliminary summary for clinical research staff to review.
+
+## Demo
+
+<p align="center">
+  <a href="https://youtu.be/p8G9bIwuqiw"><img src="https://img.youtube.com/vi/p8G9bIwuqiw/maxresdefault.jpg" alt="Trialo demo video on YouTube" width="720"></a>
+</p>
+
+- **Video (2:43):** [youtu.be/p8G9bIwuqiw](https://youtu.be/p8G9bIwuqiw). The same file is in this repo as [`trialo-demo.mp4`](trialo-demo.mp4).
+- **Try it:** open the [live app](https://trialo-regen.netlify.app), press **Demo** on the portal to explore the sample campaigns and sessions, and scan any campaign's QR code with your phone to talk to Ollie.
 
 ## What it does
 
@@ -35,7 +45,7 @@
 
 - **Create a campaign:** name it, add screening questions (write them, paste them, or upload a CSV), review, and get a participant link and QR code.
 - **Smart questions:** each question is *fits if yes*, *flag if yes*, or *info only*. Questions can depend on gender, an age range, or an earlier answer ("ask about inhaler use only if they have asthma").
-- **Live dashboard:** sessions update every few seconds and show how far each person got. Each one reads *in progress*, *complete*, or *stopped early* (participant ended it, the call ended, or the connection dropped), with a review status: **Potential match for follow-up**, **Needs review**, or **Unlikely match**.
+- **Live dashboard:** sessions refresh every 5 seconds and show how far each person got. Each one reads *in progress*, *complete*, or *stopped early* (participant ended it, the call ended, or the connection dropped), with a review status: **Potential match for follow-up**, **Needs review**, or **Unlikely match**.
 - **Session report:** every answer in interview order, which answers support or rule out each study, and the full call transcript.
 - **One interview, many studies:** each participant's answers are also compared with your other campaigns' criteria, so the dashboard shows where else they may fit (*Potential match for follow-up*, *Needs review* or *Unlikely match*) without asking them to repeat a screening. The report shows which answer each match came from, and what still needs asking.
 - **Private workspaces:** coordinators sign in (Clerk) and only see their own campaigns. A one-click demo account shows sample data.
@@ -46,7 +56,8 @@
 - **Hold to talk:** the mic is live only while you hold the button (or the Space bar on a computer), so background noise never gets in.
 - A clear counter ("Question 3 of 5"), large text, and a phone layout that fits one screen without scrolling.
 - Skip any question or stop at any time. Answers so far are saved, and the closing screen says honestly whether the interview finished.
-- No account, nothing to install. A text-only mode is also available.
+- No account, nothing to install: it runs in the phone's browser.
+- A text-interview option is on the welcome screen but is still experimental (see [Limitations](#limitations-and-responsible-use)).
 
 ## How it works
 
@@ -150,6 +161,22 @@ Open http://localhost:3000, sign up at `/portal/sign-up`, and create a campaign.
 3. **System prompt.** Include something like:
    > Ask the questions in {{study_questions}} one at a time, in order, in plain language. Skip a question only when its "only if" rule clearly doesn't match an earlier answer. After the participant confirms an answer, call `record_screening_answer` with `field` set to the exact field name in brackets and `value` set to their answer. Never tell the participant whether they are eligible.
 4. **Post-call webhook.** Point it at `https://YOUR_DOMAIN/api/elevenlabs/post-call`. It stores the transcript for the session report.
+5. **Agent settings.** Hold-to-talk sends silence between answers, and every screening question is about health, so:
+   - **Guardrails:** don't enable guardrails that block medical or health topics. With one on, the ElevenLabs server ends the call ("Server error") as soon as Ollie asks the first health question, right after age and gender.
+   - **Silence end-call timeout:** off, or several minutes. A short value hangs up while the participant is reading or about to press the button.
+   - **Turn timeout:** about 30 seconds. **Max conversation duration:** 10 minutes or more.
+   - **End call:** only when the interview is finished or the participant asks to stop.
+
+### Troubleshooting voice interviews
+
+| Symptom | Likely cause |
+| --- | --- |
+| Call ends right after the gender question; the browser console shows `Server error: Unknown error` | An agent guardrail is blocking health topics (step 5) |
+| Call ends after 10–15 seconds without anyone speaking | Silence end-call timeout is too short |
+| "Ollie's call ended" on the dashboard, but no transcript in the report | Check the post-call webhook URL (step 4) |
+| Participant can't be heard | The browser blocked the microphone; allow it in the browser's site settings and reload |
+
+Each session records how it ended (participant, Ollie's call ended, or connection dropped), and the interview page logs `[Trialo] conversation ended` with the reason in the browser console.
 
 ## Screening questions
 
@@ -179,7 +206,7 @@ npm run seed:demo        # three synthetic campaigns and about 55 sessions over 
 npm run demo:user        # create (or reset) the shared "trialo-demo" coordinator account
 ```
 
-- Demo participants are synthetic patients from [Synthea](https://github.com/synthetichealth/synthea): their age, gender, first name and answers about diagnoses, medicines and procedures come from each patient's simulated record in [`scripts/data/synthea-participants.json`](scripts/data/synthea-participants.json). To regenerate it, run Synthea with its CSV exporter and then `npx tsx scripts/synthea-extract.ts path/to/output/csv` (see the script for the exact command).
+- Demo participants are synthetic patients generated with [Synthea](https://github.com/synthetichealth/synthea)™ (© The MITRE Corporation, Apache-2.0); no real people. Their age, gender, first name and answers about diagnoses, medicines and procedures come from each patient's simulated record in [`scripts/data/synthea-participants.json`](scripts/data/synthea-participants.json). To regenerate it, run Synthea with its CSV exporter and then `npx tsx scripts/synthea-extract.ts path/to/output/csv` (see the script for the exact command).
 - `seed:demo` only replaces campaigns whose slug starts with `demo-`, so it's safe to re-run. It stops without changing anything if those campaigns belong to more than one account. Add `-- --clear-all` to wipe every campaign first, or run `npx tsx scripts/seed-demo.ts --dry-run` to preview without touching the database.
 - `demo:user` prints a fresh password and gives the account every campaign without an owner. The portal's **Demo** button signs visitors into it with a one-time token.
 
@@ -217,7 +244,8 @@ src/
     questions.ts              Question model, conditions, scoring, progress, CSV parsing
     cross-match.ts            Compare one participant's answers with other studies' criteria
 supabase/schema.sql           Tables and additive migrations
-scripts/                      Demo seeding, demo account, regression checks
+scripts/                      Demo seeding, demo account, Synthea import, regression checks
+trialo-demo.mp4               The demo video (also on YouTube)
 ```
 
 ## Deployment
@@ -229,7 +257,8 @@ Trialo runs on Netlify (Next.js is detected automatically). Set the environment 
 - **Synthetic data only.** Don't enter real health information. The participant screen says so too.
 - **Not an eligibility decision.** Results are limited to *potential match*, *needs information* and *possible exclusion*, summarised as **Potential match for follow-up**, **Needs review** or **Unlikely match**, and always need review by qualified research staff.
 - **Before any real use**, add webhook signature verification, role-based access and audit logs, data retention and deletion controls, protocol-reviewed criteria, and a formal privacy/HIPAA review.
-- Voice-agent behaviour (which questions get asked, how answers are worded) depends on the ElevenLabs agent's prompt and settings.
+- Voice-agent behaviour (which questions get asked, how answers are worded) depends on the ElevenLabs agent's prompt and settings; see [Configure Ollie](#configure-ollie-elevenlabs).
+- **Text interviews are experimental.** The option exists, but with the current agent settings Ollie doesn't reply in text-only sessions and the call ends after a few seconds. Use voice for demos.
 
 ## License
 
