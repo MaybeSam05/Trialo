@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QuestionEditor } from "./question-editor";
 import { DEMO_QUESTIONS, validateQuestions, type Question } from "@/lib/questions";
+import { requestJson } from "@/lib/request";
 
 const same = (a: Question[], b: Question[]) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -11,6 +12,8 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
   const [questions, setQuestions] = useState(initial);
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
   const [saving, setSaving] = useState(false);
+  // Blocks a second save before the disabled button re-renders.
+  const pending = useRef(false);
   const dirty = !same(questions, saved);
 
   // Warn before leaving the page with unsaved edits.
@@ -25,13 +28,16 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
     const kept = questions.filter((question) => question.text.trim());
     const checked = validateQuestions(kept);
     if ("error" in checked) { setMessage({ text: checked.error, error: true }); return; }
+    if (pending.current) return;
+    pending.current = true;
     setSaving(true); setMessage(null);
-    const response = await fetch(`/api/studies/${slug}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ questions: kept }) });
-    const body = await response.json() as { questions?: Question[]; error?: string };
+    // Never throws, so "Saving…" always clears; unsaved edits stay on screen for a retry.
+    const result = await requestJson<{ questions?: Question[] }>(`/api/studies/${slug}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ questions: kept }) }, "save your changes");
+    pending.current = false;
     setSaving(false);
-    if (!response.ok || !body.questions) { setMessage({ text: body.error ?? "Could not save.", error: true }); return; }
-    setSaved(body.questions);
-    setQuestions(body.questions);
+    if (!result.ok || !result.body.questions) { setMessage({ text: result.ok ? "Couldn't save your changes: the server sent an unexpected reply. Please try again." : result.error, error: true }); return; }
+    setSaved(result.body.questions);
+    setQuestions(result.body.questions);
     setMessage({ text: "Saved. New interviews will use these questions.", error: false });
   }
 

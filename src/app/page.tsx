@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Ollie } from "@/components/ollie";
 import { CampaignPreview } from "@/components/coordinator/campaign-preview";
 import { QuestionEditor } from "@/components/coordinator/question-editor";
 import { DEMO_CAMPAIGN_NAME, DEMO_QUESTIONS, validateQuestions, type Question } from "@/lib/questions";
 import { LinkPanel, type CreatedStudy } from "@/components/coordinator/link-panel";
+import { requestJson } from "@/lib/request";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import "@/components/coordinator/questions.css";
 
@@ -18,6 +19,8 @@ export default function CreateCampaign() {
   const [created, setCreated] = useState<CreatedStudy | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // Blocks a second submit before the disabled button re-renders (double-clicks, Enter).
+  const pending = useRef(false);
   const kept = questions.filter((question) => question.text.trim());
   const ready = name.trim() !== "" && kept.length > 0;
 
@@ -38,12 +41,15 @@ export default function CreateCampaign() {
   }
 
   async function create() {
+    if (pending.current) return;
+    pending.current = true;
     setLoading(true); setError("");
-    const response = await fetch("/api/studies", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, questions: kept }) });
-    const body = await response.json();
+    // Never throws, so the button always comes back; the name and questions stay as typed for a retry.
+    const result = await requestJson<CreatedStudy>("/api/studies", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, questions: kept }) }, "create the campaign");
+    pending.current = false;
     setLoading(false);
-    if (!response.ok) { setError(body.error ?? "Could not create the campaign."); return; }
-    setCreated(body);
+    if (!result.ok) { setError(result.error); return; }
+    setCreated(result.body);
     window.scrollTo({ top: 0 });
   }
 
