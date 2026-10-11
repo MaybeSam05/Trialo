@@ -1,0 +1,7612 @@
+{
+ "source": "Synthea (https://github.com/synthetichealth/synthea), synthetic patients",
+ "asOf": "2026-10-11",
+ "participants": [
+  {
+   "id": "002b4690-c97e-857d-f3c8-44aa95f128e4",
+   "firstName": "Zack",
+   "age": 67,
+   "gender": "Male",
+   "city": "Teaneck",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2010
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "00ce16d1-7581-3468-7702-e76ffcd09da4",
+   "firstName": "Ricky",
+   "age": 68,
+   "gender": "Male",
+   "city": "Clayton",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "012009cd-852e-71c8-d90f-6f6fa800796f",
+   "firstName": "Arnold",
+   "age": 56,
+   "gender": "Male",
+   "city": "Wall",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "01433bc1-a6f9-5388-c2b6-9e6e20120bec",
+   "firstName": "Dexter",
+   "age": 68,
+   "gender": "Male",
+   "city": "Gibbstown",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    },
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "0283dbd3-bd32-5949-dc21-e39caa7752b2",
+   "firstName": "Leon",
+   "age": 50,
+   "gender": "Male",
+   "city": "Chatham",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2018
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "02a7c210-1eef-65d9-c1fb-235a424054f1",
+   "firstName": "Kristofer",
+   "age": 68,
+   "gender": "Male",
+   "city": "Old Bridge",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2012
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "02fa599b-fdfa-9297-bda0-438fc16ec6ea",
+   "firstName": "Reed",
+   "age": 74,
+   "gender": "Male",
+   "city": "Franklin",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2007
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "03d7e89d-3ae3-051d-4ebf-20a178da5a38",
+   "firstName": "Douglas",
+   "age": 65,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "04397583-1c7f-86a1-8c03-d35e876c535e",
+   "firstName": "Bart",
+   "age": 71,
+   "gender": "Male",
+   "city": "Pittsgrove",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 1998
+    }
+   }
+  },
+  {
+   "id": "04663ff8-6316-829b-1f9b-ddfc1f803ea8",
+   "firstName": "Lashon",
+   "age": 61,
+   "gender": "Female",
+   "city": "Cliffside Park",
+   "facts": {
+    "ckd": {
+     "stage": "4"
+    },
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "053ac061-b108-aa41-6cb7-c249645cbc19",
+   "firstName": "Raúl",
+   "age": 55,
+   "gender": "Male",
+   "city": "North Bergen",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "05e35c2f-0971-b721-3dec-dbaed2b509ad",
+   "firstName": "Harrison",
+   "age": 71,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "06491347-a0fb-cb35-6d7e-5ef66b99ac69",
+   "firstName": "Candie",
+   "age": 70,
+   "gender": "Female",
+   "city": "Clayton",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "06996bf6-28a6-10a6-7cd6-e59f33b4fb28",
+   "firstName": "Melinda",
+   "age": 61,
+   "gender": "Female",
+   "city": "Clearbrook Park",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2015
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "0827be6f-f8ec-6dfd-8a67-de92106748e2",
+   "firstName": "Autumn",
+   "age": 64,
+   "gender": "Female",
+   "city": "Highland Park",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "08706d62-55f7-0645-5d57-8951ee299919",
+   "firstName": "Ollie",
+   "age": 44,
+   "gender": "Male",
+   "city": "Pleasantville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a stroke",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "08fba9ec-0d3b-ec6f-cc3c-3c8603226e9d",
+   "firstName": "Lucas",
+   "age": 56,
+   "gender": "Male",
+   "city": "Bridgewater",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "0aa5459f-67de-b71f-4cae-659526309fa1",
+   "firstName": "Marinda",
+   "age": 70,
+   "gender": "Female",
+   "city": "Middle",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2023
+    }
+   }
+  },
+  {
+   "id": "0b2cbfd8-c07a-2c1d-fd11-ee163081b1ba",
+   "firstName": "Lorena",
+   "age": 75,
+   "gender": "Female",
+   "city": "Tenafly",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2015
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2021
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "0b3abcdb-6cf8-6ee1-6027-0fff3fcccd62",
+   "firstName": "Sandee",
+   "age": 54,
+   "gender": "Female",
+   "city": "Glen Ridge",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "0c4ddf28-335f-9f88-6af3-9167c4349e5f",
+   "firstName": "Regine",
+   "age": 71,
+   "gender": "Female",
+   "city": "Roxbury",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2016
+    }
+   }
+  },
+  {
+   "id": "0ca2f4a9-f946-16d6-cbf2-ba4b90ff961a",
+   "firstName": "Collette",
+   "age": 67,
+   "gender": "Female",
+   "city": "Colonia",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "0d76d777-a78d-42ae-e0a3-c8f46f92ce19",
+   "firstName": "Cameron",
+   "age": 54,
+   "gender": "Male",
+   "city": "Rutherford",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart failure",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "0d8e819a-0cd7-8b0d-0f44-964482a3fd20",
+   "firstName": "Hung",
+   "age": 78,
+   "gender": "Male",
+   "city": "Lumberton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2003
+    },
+    "type2Diabetes": {
+     "since": 2017
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "10146f76-b9e5-84cb-495e-beabd867c725",
+   "firstName": "Phyllis",
+   "age": 56,
+   "gender": "Female",
+   "city": "Leonia",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "116e98f2-6ba0-1135-8b4c-7e0e301921d5",
+   "firstName": "Cari",
+   "age": 79,
+   "gender": "Female",
+   "city": "Millburn",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1995
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "120b228d-5f81-e0ce-672c-bb6f79ba00cd",
+   "firstName": "Euna",
+   "age": 76,
+   "gender": "Female",
+   "city": "Closter",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "120e6766-7dfe-0019-bc9f-a7d6249ce51f",
+   "firstName": "Tracey",
+   "age": 49,
+   "gender": "Male",
+   "city": "Vineland",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "133cc49d-2f09-61f1-f278-a929b9901f20",
+   "firstName": "Esperanza",
+   "age": 61,
+   "gender": "Female",
+   "city": "Old Bridge",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "138221cc-6e25-3b9c-cabd-65d8c89fa992",
+   "firstName": "Dexter",
+   "age": 58,
+   "gender": "Male",
+   "city": "Jersey City",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "144403e7-b3c5-ed1e-d696-92159c677133",
+   "firstName": "An",
+   "age": 75,
+   "gender": "Female",
+   "city": "Hasbrouck Heights",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2002
+    }
+   }
+  },
+  {
+   "id": "15068d5e-a88a-e3d4-3ffc-d936f8d1d088",
+   "firstName": "Hang",
+   "age": 58,
+   "gender": "Female",
+   "city": "Roseland",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    },
+    "type2Diabetes": {
+     "since": 2023
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "16adfacb-5554-7a4d-4b67-d8fddde76e12",
+   "firstName": "Sol",
+   "age": 60,
+   "gender": "Male",
+   "city": "Howell",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "16b34de2-af34-edb3-929d-546addbf0671",
+   "firstName": "Ashton",
+   "age": 75,
+   "gender": "Female",
+   "city": "Egg Harbor",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1984
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2008
+    }
+   }
+  },
+  {
+   "id": "172aa6e8-768c-bfca-6a9f-234eba8f31b3",
+   "firstName": "Kenna",
+   "age": 69,
+   "gender": "Female",
+   "city": "Twin Rivers",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "transplant": {
+     "organ": "lung",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "17c48837-6c4d-5ae7-3368-05a7ea5e9238",
+   "firstName": "Diego",
+   "age": 67,
+   "gender": "Male",
+   "city": "Bedminster",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart failure",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "198ed996-062b-a4ea-0fd6-4e9755a6039c",
+   "firstName": "Melonie",
+   "age": 46,
+   "gender": "Female",
+   "city": "Roselle",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "19bc9766-2363-0ed5-7f8f-5ff7c77b27c3",
+   "firstName": "Trey",
+   "age": 49,
+   "gender": "Male",
+   "city": "Hazlet",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "insulinRecent": true,
+    "metformin": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "19ff374c-4a9e-7a93-4282-8cfc36b3faf1",
+   "firstName": "Adelaide",
+   "age": 71,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2023
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "1a7f5cc6-a1ec-412f-56b2-06f5b85e6758",
+   "firstName": "Eduardo",
+   "age": 48,
+   "gender": "Male",
+   "city": "East Amwell",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "1acdb140-4677-080a-c8ac-262423271ff7",
+   "firstName": "Erick",
+   "age": 63,
+   "gender": "Male",
+   "city": "Belleville",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2009
+    }
+   }
+  },
+  {
+   "id": "1afe463e-1924-4d0b-65dc-5a73da1fa0de",
+   "firstName": "Dawn",
+   "age": 60,
+   "gender": "Female",
+   "city": "Bedminster",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "1b65c5b8-29e9-3f08-095d-839eae4238bb",
+   "firstName": "Lonna",
+   "age": 62,
+   "gender": "Female",
+   "city": "Edison",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "1bf1da4f-693a-86cd-e976-40dbf0030b6d",
+   "firstName": "Minerva",
+   "age": 34,
+   "gender": "Female",
+   "city": "Holmdel",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "1d5ba603-0287-e289-2c38-ca230ea1a037",
+   "firstName": "Kerry",
+   "age": 62,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "1d8c1bc7-c875-8e71-c461-d48684b767f6",
+   "firstName": "Sergio",
+   "age": 71,
+   "gender": "Male",
+   "city": "Sayreville",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "1e25b70a-f0a3-d475-124c-df3b873ff4fe",
+   "firstName": "Eddie",
+   "age": 65,
+   "gender": "Male",
+   "city": "Berkeley Heights",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2008
+    }
+   }
+  },
+  {
+   "id": "1e6e08b2-b625-fa0c-0f06-d863335d6ca8",
+   "firstName": "Timmy",
+   "age": 67,
+   "gender": "Male",
+   "city": "Collingswood",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2013
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2015
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "1e832544-1f01-30c7-3902-9d22408b0c03",
+   "firstName": "Shakita",
+   "age": 71,
+   "gender": "Female",
+   "city": "Spotswood",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1980
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 1995
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "1f3a22bf-1f23-10bb-d1f7-4bb86bec6a0e",
+   "firstName": "Myles",
+   "age": 58,
+   "gender": "Male",
+   "city": "Hillside",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "1f43706b-4add-ddb9-b316-29f08b6d5e4b",
+   "firstName": "Clifton",
+   "age": 63,
+   "gender": "Male",
+   "city": "Plainfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "1f656acc-a6d0-4778-beef-1fc1bd5ca4f6",
+   "firstName": "Robbie",
+   "age": 72,
+   "gender": "Male",
+   "city": "Laurel Lake",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "20a15f1a-8176-fab7-b9f2-f81e065c0d83",
+   "firstName": "Regan",
+   "age": 41,
+   "gender": "Female",
+   "city": "Woodlynne",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "246bcede-3bc2-1527-bd95-a0e3f9b1f5bb",
+   "firstName": "Adelina",
+   "age": 71,
+   "gender": "Female",
+   "city": "Secaucus",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2006
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "248870db-20c7-d6a8-860a-31989f2b0adf",
+   "firstName": "Lynwood",
+   "age": 76,
+   "gender": "Male",
+   "city": "Twin Rivers",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1992
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2013
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "24d559e9-b992-4e19-ed75-a7a972647b5f",
+   "firstName": "Homer",
+   "age": 55,
+   "gender": "Male",
+   "city": "Waterford",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "261464d1-4d56-4654-da1b-91cd3122f741",
+   "firstName": "Marianna",
+   "age": 72,
+   "gender": "Female",
+   "city": "Northvale",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2019
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2025
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "26ae3e6f-6623-f412-f0da-fe48e320fc54",
+   "firstName": "Chas",
+   "age": 43,
+   "gender": "Male",
+   "city": "Vineland",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "273213f5-0bc0-06b1-4c41-34e3482e1e4c",
+   "firstName": "Lewis",
+   "age": 61,
+   "gender": "Male",
+   "city": "Plainfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "2790679a-05d7-e624-f79b-1538b6fc7861",
+   "firstName": "Ahmad",
+   "age": 51,
+   "gender": "Male",
+   "city": "North Beach Haven",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "27cb60fc-1340-fa79-df70-372f0fb64304",
+   "firstName": "Mose",
+   "age": 59,
+   "gender": "Male",
+   "city": "Dayton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "28308ef7-2f6e-a57b-1f77-96e4f01d1723",
+   "firstName": "Stevie",
+   "age": 67,
+   "gender": "Female",
+   "city": "Montague",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2011
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "28edda76-4325-8722-62ae-f3da299eedc6",
+   "firstName": "Kassandra",
+   "age": 76,
+   "gender": "Female",
+   "city": "Lakewood",
+   "facts": {
+    "transplant": {
+     "organ": "kidney",
+     "year": 2016
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "296f02b3-d071-d090-b7db-d885131f71ff",
+   "firstName": "Coy",
+   "age": 61,
+   "gender": "Male",
+   "city": "Hillsborough",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2007
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "2a2b7235-e16b-723d-51e0-532ba283ccd7",
+   "firstName": "Beatriz",
+   "age": 63,
+   "gender": "Female",
+   "city": "Longport",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "2bcba17a-9b3a-c128-effe-e403f16596e0",
+   "firstName": "Barrie",
+   "age": 72,
+   "gender": "Female",
+   "city": "Lakewood",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "2c27ceae-5771-cc1e-b6ce-1c9e5833049d",
+   "firstName": "Jene",
+   "age": 69,
+   "gender": "Female",
+   "city": "Gloucester",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2009
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "2c4a1244-5c7f-54e9-fb9d-96ee193d7613",
+   "firstName": "Lance",
+   "age": 70,
+   "gender": "Male",
+   "city": "Ewing",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2015
+    }
+   }
+  },
+  {
+   "id": "2cf2109a-8e3c-71e3-9e0e-cf7bfc47b403",
+   "firstName": "Delbert",
+   "age": 71,
+   "gender": "Male",
+   "city": "Pennsauken",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "2de7a6cd-ffcc-5645-0996-91cb0217b905",
+   "firstName": "Alphonse",
+   "age": 46,
+   "gender": "Male",
+   "city": "Caldwell",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "2e25c38c-1057-c32c-a234-659d6fda8831",
+   "firstName": "Brendon",
+   "age": 45,
+   "gender": "Male",
+   "city": "Evesham",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "2ebef3ec-4ba2-d8b8-0016-089d2b7d0781",
+   "firstName": "Darrin",
+   "age": 57,
+   "gender": "Male",
+   "city": "Montgomery",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "2ee20f61-17e7-45df-3972-9c5b5346390d",
+   "firstName": "Magdalena",
+   "age": 46,
+   "gender": "Female",
+   "city": "Wayne",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "2f2433dc-46b9-f78e-babf-a52d8d14625b",
+   "firstName": "Isiah",
+   "age": 62,
+   "gender": "Male",
+   "city": "East Franklin",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2005
+    }
+   }
+  },
+  {
+   "id": "2f7c9583-2bb6-1b74-b068-e4e15a7f4369",
+   "firstName": "Rick",
+   "age": 52,
+   "gender": "Male",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    },
+    "type2Diabetes": {
+     "since": 2020
+    }
+   }
+  },
+  {
+   "id": "2fb4968a-35c0-8c8f-69b5-c5cbf24075aa",
+   "firstName": "Flora",
+   "age": 73,
+   "gender": "Female",
+   "city": "Cherry Hill",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1999
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2010
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "303ccb2b-f5de-551c-9dc7-13c927f2f91a",
+   "firstName": "Bethann",
+   "age": 78,
+   "gender": "Female",
+   "city": "Cherry Hill Mall",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "3072d621-b433-191e-5266-b08cae930778",
+   "firstName": "Daren",
+   "age": 78,
+   "gender": "Male",
+   "city": "Sayreville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "31635cac-af80-2d28-64f7-bfe174b633f5",
+   "firstName": "Shery",
+   "age": 53,
+   "gender": "Female",
+   "city": "Freehold",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2013
+    }
+   }
+  },
+  {
+   "id": "3178bdde-6bf3-5d42-b7f5-3608e68e3753",
+   "firstName": "Soo",
+   "age": 76,
+   "gender": "Female",
+   "city": "Avenel",
+   "facts": {
+    "ckd": {
+     "stage": "4"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2022
+    },
+    "recentSurgery": {
+     "name": "lumpectomy of breast"
+    },
+    "dialysis": true
+   }
+  },
+  {
+   "id": "3390ecba-73ab-3317-c836-3297810b74c5",
+   "firstName": "Kaila",
+   "age": 64,
+   "gender": "Female",
+   "city": "Franklin Lakes",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "3409e055-cf5d-d79f-631b-c55885aac251",
+   "firstName": "Kellie",
+   "age": 72,
+   "gender": "Female",
+   "city": "Egg Harbor",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2005
+    }
+   }
+  },
+  {
+   "id": "34e0079a-1b0b-91c1-1879-88fbc0d04a0c",
+   "firstName": "Zane",
+   "age": 75,
+   "gender": "Male",
+   "city": "Highland Park",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2001
+    },
+    "type2Diabetes": {
+     "since": 2012
+    }
+   }
+  },
+  {
+   "id": "35680b9c-c557-ca2d-9370-1c50ad459aaa",
+   "firstName": "Carlton",
+   "age": 74,
+   "gender": "Male",
+   "city": "River Edge",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2006
+    },
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "35bff564-5c82-a3e9-38df-4032ee372e59",
+   "firstName": "Jamie",
+   "age": 45,
+   "gender": "Female",
+   "city": "Franklin Park",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2012
+    }
+   }
+  },
+  {
+   "id": "36914ef0-761f-d0ec-32a8-5d9283d6a0f1",
+   "firstName": "Chu",
+   "age": 78,
+   "gender": "Female",
+   "city": "Ho-Ho-Kus",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "3779a2df-4126-d167-6038-9ed856daa67f",
+   "firstName": "Soon",
+   "age": 70,
+   "gender": "Female",
+   "city": "East Windsor",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2024
+    }
+   }
+  },
+  {
+   "id": "378e843b-a92e-23cd-4ae1-6876c168f1bc",
+   "firstName": "Leopoldo",
+   "age": 61,
+   "gender": "Male",
+   "city": "Perth Amboy",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2020
+    }
+   }
+  },
+  {
+   "id": "38b2a302-922a-04fe-b4d9-64e0b13c8c33",
+   "firstName": "Jefferson",
+   "age": 74,
+   "gender": "Male",
+   "city": "Monroe",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2011
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "39dc4ccf-bcf7-f222-bc92-fb6d70c40ad9",
+   "firstName": "Keneth",
+   "age": 67,
+   "gender": "Male",
+   "city": "Lacey",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "3a88bbca-d4c2-0a5c-b926-3b6c3480ff7d",
+   "firstName": "Garrett",
+   "age": 78,
+   "gender": "Male",
+   "city": "Evesham",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2004
+    }
+   }
+  },
+  {
+   "id": "3b0eebe3-1bfa-8d90-441b-45c103d07243",
+   "firstName": "Cyndi",
+   "age": 67,
+   "gender": "Female",
+   "city": "Helmetta",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1996
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "3cbf8240-b3ee-fff6-7c7f-aada382e9dff",
+   "firstName": "Livia",
+   "age": 49,
+   "gender": "Female",
+   "city": "Hackensack",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "3d4ef483-d945-31a4-7c84-f4b47c882cb0",
+   "firstName": "Harold",
+   "age": 44,
+   "gender": "Female",
+   "city": "Woodcliff Lake",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "3dd01600-4a94-a7d2-4b67-7e011496d41a",
+   "firstName": "Juliette",
+   "age": 54,
+   "gender": "Female",
+   "city": "Cherry Hill",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart failure",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "3e15357d-5f73-59ac-e68b-2703f9b24f7b",
+   "firstName": "Jaimee",
+   "age": 45,
+   "gender": "Female",
+   "city": "Old Bridge",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "3ed6ce6b-8edc-658d-fab5-a40d5d0a2752",
+   "firstName": "Shelby",
+   "age": 73,
+   "gender": "Male",
+   "city": "Ewing",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "3f8b4ae0-256d-d474-3900-948f46a213c9",
+   "firstName": "Tony",
+   "age": 70,
+   "gender": "Male",
+   "city": "Sparta",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2001
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2025
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "40bf9654-ec07-0d97-c722-277a894c4776",
+   "firstName": "Marty",
+   "age": 55,
+   "gender": "Male",
+   "city": "Watchung",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "411b10d3-ee8e-ecaf-86e0-43409d233fd4",
+   "firstName": "Vernell",
+   "age": 37,
+   "gender": "Female",
+   "city": "Medford",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "4152ebe6-afeb-6eef-e6b1-5b7707e897ad",
+   "firstName": "Quinn",
+   "age": 74,
+   "gender": "Male",
+   "city": "Pine Lake Park",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "4166cae0-2b14-724f-5d97-a97d482d6e42",
+   "firstName": "Margorie",
+   "age": 78,
+   "gender": "Female",
+   "city": "Manville",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "4194f4c7-ed61-0936-1cdf-a09a89bafe6f",
+   "firstName": "Columbus",
+   "age": 71,
+   "gender": "Male",
+   "city": "Berkeley",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1994
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2018
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "419f67dd-d735-757c-b99d-2d27444a17bd",
+   "firstName": "Edgar",
+   "age": 79,
+   "gender": "Male",
+   "city": "Vernon",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "41c15584-b028-0812-5e5b-b1136839b323",
+   "firstName": "Emely",
+   "age": 70,
+   "gender": "Female",
+   "city": "Robertsville",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "heart": {
+     "event": "a stroke",
+     "year": 2023
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true,
+    "metformin": true,
+    "recentSurgery": {
+     "name": "rectal polypectomy"
+    }
+   }
+  },
+  {
+   "id": "428383cc-b7e0-ae63-cef1-61d0a4b172d7",
+   "firstName": "Damon",
+   "age": 72,
+   "gender": "Male",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 1995
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2024
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "4299d301-361f-e4c3-305b-d0c3f3cc38a3",
+   "firstName": "Yael",
+   "age": 60,
+   "gender": "Female",
+   "city": "Carneys Point",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    }
+   }
+  },
+  {
+   "id": "42c2f5f0-9302-1743-4791-1ee0ff246aa4",
+   "firstName": "Elena",
+   "age": 78,
+   "gender": "Female",
+   "city": "Warren",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "42daf993-6e75-c8df-cf44-dfdc0454f415",
+   "firstName": "Israel",
+   "age": 66,
+   "gender": "Male",
+   "city": "Budd Lake",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "432d663e-3487-8b5c-049f-33492efd4be2",
+   "firstName": "Zula",
+   "age": 69,
+   "gender": "Female",
+   "city": "Union",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2018
+    }
+   }
+  },
+  {
+   "id": "4484ccee-7bbb-6dd4-f4ad-8d0c0bb459a2",
+   "firstName": "Willis",
+   "age": 70,
+   "gender": "Male",
+   "city": "Netcong",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2017
+    },
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "4487608d-4170-27eb-b034-d3fb88ed1970",
+   "firstName": "Waldo",
+   "age": 57,
+   "gender": "Male",
+   "city": "Perth Amboy",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2018
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "4517a299-3627-f68e-23bc-e7963f6e7021",
+   "firstName": "Laureen",
+   "age": 69,
+   "gender": "Female",
+   "city": "Trenton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2005
+    },
+    "ckd": {
+     "stage": "4"
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "4538fd09-0109-37a8-6f47-35170b661a68",
+   "firstName": "Junie",
+   "age": 54,
+   "gender": "Female",
+   "city": "Rockaway",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2012
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "45814da6-2eb0-6535-08aa-c07f5713b18f",
+   "firstName": "Kai",
+   "age": 74,
+   "gender": "Female",
+   "city": "Cherry Hill Mall",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2015
+    }
+   }
+  },
+  {
+   "id": "4692fc4c-38db-b501-d3a4-3976022b6de1",
+   "firstName": "Keli",
+   "age": 57,
+   "gender": "Female",
+   "city": "Hackensack",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "47065483-4b07-e874-b45b-d9dc9b1dc4cc",
+   "firstName": "Gwenn",
+   "age": 77,
+   "gender": "Female",
+   "city": "Pompton Lakes",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1994
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2001
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "4706e2d5-49a0-33a7-7274-2dfea255e17b",
+   "firstName": "Dawn",
+   "age": 75,
+   "gender": "Female",
+   "city": "Hamilton Square",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2005
+    }
+   }
+  },
+  {
+   "id": "47c3bf17-c497-6c42-e72f-a79eb9af7e16",
+   "firstName": "Lon",
+   "age": 58,
+   "gender": "Male",
+   "city": "Clifton",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    },
+    "prediabetes": true,
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "483f2184-1424-2729-9f40-73f5630b9e37",
+   "firstName": "Ida",
+   "age": 47,
+   "gender": "Female",
+   "city": "Bloomfield",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "4903f357-e960-7f24-a4ef-d0a6a673e84f",
+   "firstName": "Jules",
+   "age": 36,
+   "gender": "Male",
+   "city": "Atlantic City",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2018
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "490c0b9e-b4ef-9dc6-e3f6-a9a856b61e70",
+   "firstName": "Kraig",
+   "age": 76,
+   "gender": "Male",
+   "city": "Jackson",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2002
+    }
+   }
+  },
+  {
+   "id": "49c7a9e3-ba0e-401b-5efc-7fc227c73a54",
+   "firstName": "Madelaine",
+   "age": 53,
+   "gender": "Female",
+   "city": "Butler",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "49cec50a-5853-b2b3-7832-9face3f6ea06",
+   "firstName": "Kylee",
+   "age": 73,
+   "gender": "Female",
+   "city": "Hackensack",
+   "facts": {
+    "transplant": {
+     "organ": "kidney",
+     "year": 2026
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "recentSurgery": {
+     "name": "coronary artery bypass grafting"
+    }
+   }
+  },
+  {
+   "id": "4a064362-7281-a8f2-a6c0-5b5408c05578",
+   "firstName": "Zane",
+   "age": 42,
+   "gender": "Male",
+   "city": "Palmyra",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "4a7de18d-eb3e-8a67-9b9e-e08f495ea121",
+   "firstName": "Martín",
+   "age": 69,
+   "gender": "Male",
+   "city": "Rahway",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "4a932875-ebf8-ca0d-830b-53f72e08cbcd",
+   "firstName": "Lecia",
+   "age": 76,
+   "gender": "Female",
+   "city": "Harrison",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "4c3e5848-fe52-96a4-93e3-2ee093fe2df1",
+   "firstName": "Blythe",
+   "age": 79,
+   "gender": "Female",
+   "city": "Vernon",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "4cbc500f-18dc-b4b1-5f9e-d532cea8fc95",
+   "firstName": "Damian",
+   "age": 76,
+   "gender": "Male",
+   "city": "River Vale",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1996
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2005
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "4e5d3dce-a55a-bf52-8ecc-afcc7a13ae15",
+   "firstName": "Darrell",
+   "age": 58,
+   "gender": "Male",
+   "city": "Lambertville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "4e61e43d-5e8d-bce1-b73c-e9eca659a4b6",
+   "firstName": "Fern",
+   "age": 65,
+   "gender": "Female",
+   "city": "Mahwah",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "4f02d337-f4af-c3a4-0a01-13ee9a306b68",
+   "firstName": "Florine",
+   "age": 78,
+   "gender": "Female",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "4f19ce60-7176-ae5f-1207-38f1fef63c03",
+   "firstName": "Tommy",
+   "age": 74,
+   "gender": "Male",
+   "city": "Plainfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "4f2fef84-263a-3997-9072-f7359d366fae",
+   "firstName": "Norah",
+   "age": 34,
+   "gender": "Female",
+   "city": "Clifton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2018
+    }
+   }
+  },
+  {
+   "id": "4f491604-bddf-b94b-7690-ede7cce26456",
+   "firstName": "Gilberto",
+   "age": 74,
+   "gender": "Male",
+   "city": "Randolph",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2004
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2009
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "4f84f3d3-22ed-7205-bb68-fd013de64584",
+   "firstName": "Brady",
+   "age": 72,
+   "gender": "Male",
+   "city": "Fair Lawn",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2001
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "4fb78c82-859d-68fd-285f-2d697ccafdf4",
+   "firstName": "Victor",
+   "age": 74,
+   "gender": "Male",
+   "city": "Lakewood",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "4fbefe02-b5a1-6000-7437-2500793350ca",
+   "firstName": "Remona",
+   "age": 74,
+   "gender": "Female",
+   "city": "Hillsborough",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "501fdc0f-a9b4-c6c0-c658-f5d1a4a0fa25",
+   "firstName": "Winford",
+   "age": 76,
+   "gender": "Male",
+   "city": "Long Hill",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "5028c0de-3b6d-b299-8004-0bf780ef820a",
+   "firstName": "Freeman",
+   "age": 65,
+   "gender": "Male",
+   "city": "Mount Ephraim",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "5067596a-ca15-ac0e-96cd-2768523f07b2",
+   "firstName": "Roselia",
+   "age": 53,
+   "gender": "Female",
+   "city": "Camden",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2023
+    }
+   }
+  },
+  {
+   "id": "50874e9c-8abf-2a2a-2e86-48cba5f4fb6e",
+   "firstName": "Emilio",
+   "age": 76,
+   "gender": "Male",
+   "city": "Denville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2002
+    },
+    "type2Diabetes": {
+     "since": 2003
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "5145c7c4-d16d-fb45-e845-a41d3c5b8a09",
+   "firstName": "Berta",
+   "age": 48,
+   "gender": "Female",
+   "city": "Madison",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "516658e4-529e-e332-c4c5-fc3d511a04db",
+   "firstName": "Antonio",
+   "age": 50,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "52b93210-5b88-0282-099f-1d4b001a687c",
+   "firstName": "Antonina",
+   "age": 77,
+   "gender": "Female",
+   "city": "Evesham",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 1996
+    },
+    "type2Diabetes": {
+     "since": 1997
+    }
+   }
+  },
+  {
+   "id": "534dc16e-3196-f3e3-173b-2536a4ff58d4",
+   "firstName": "Alfred",
+   "age": 68,
+   "gender": "Male",
+   "city": "Glassboro",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2023
+    }
+   }
+  },
+  {
+   "id": "55f17f34-334c-3a78-75b1-07ab13917515",
+   "firstName": "Sol",
+   "age": 43,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "561bd24a-c57d-a5ed-3599-1a61cce49b88",
+   "firstName": "Jamison",
+   "age": 61,
+   "gender": "Male",
+   "city": "Harrison",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "574a58e0-b2f8-a802-c958-b521f8c729c8",
+   "firstName": "Erline",
+   "age": 43,
+   "gender": "Female",
+   "city": "Piscataway",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2025
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "57863eff-5fa6-de1b-83d0-f911de4cc0c7",
+   "firstName": "Lon",
+   "age": 74,
+   "gender": "Male",
+   "city": "Princeton",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "5796a3a6-fadc-25b1-ec32-9abf20040e7b",
+   "firstName": "Suzanna",
+   "age": 73,
+   "gender": "Female",
+   "city": "Deptford",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2015
+    }
+   }
+  },
+  {
+   "id": "57e41cfa-0539-cfed-1454-c4d1c61ae367",
+   "firstName": "Alejandro",
+   "age": 79,
+   "gender": "Male",
+   "city": "Middletown",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "58b9826c-81f9-df63-f63d-352efbe3865e",
+   "firstName": "Krystal",
+   "age": 56,
+   "gender": "Female",
+   "city": "Hopewell",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2015
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2021
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "59023068-f995-a298-9bc6-1ea2e5af4db8",
+   "firstName": "Rosaria",
+   "age": 60,
+   "gender": "Female",
+   "city": "Galloway",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "593cebe6-22b9-4f41-0d16-e9da8b07115b",
+   "firstName": "Melia",
+   "age": 70,
+   "gender": "Female",
+   "city": "Mahwah",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "5abf0bd6-1714-6478-b5a4-4b29091028bc",
+   "firstName": "Reita",
+   "age": 77,
+   "gender": "Female",
+   "city": "Willingboro",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2019
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "5ad8b12b-9e02-0378-1d1c-838a6f96c655",
+   "firstName": "Alfonzo",
+   "age": 74,
+   "gender": "Male",
+   "city": "Neptune",
+   "facts": {
+    "prediabetes": true,
+    "transplant": {
+     "organ": "kidney",
+     "year": 2025
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "5b54acc1-dac3-f38f-0a92-0bf0c888d21d",
+   "firstName": "Pilar",
+   "age": 48,
+   "gender": "Female",
+   "city": "East Orange",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2020
+    }
+   }
+  },
+  {
+   "id": "5cb4dec5-bd24-8b42-fcd7-9db79413a63d",
+   "firstName": "Franklin",
+   "age": 77,
+   "gender": "Male",
+   "city": "Yardville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2009
+    }
+   }
+  },
+  {
+   "id": "5d38f50b-146a-e13b-d05a-5cef3e859e50",
+   "firstName": "Debby",
+   "age": 71,
+   "gender": "Female",
+   "city": "Howell",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "5ea183b8-b732-65e3-0063-85a2d0116f6d",
+   "firstName": "Luis",
+   "age": 71,
+   "gender": "Male",
+   "city": "Little Egg Harbor",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2007
+    },
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "5f1b6e75-9eaf-76ef-2618-5894c41ec8ab",
+   "firstName": "Zofia",
+   "age": 56,
+   "gender": "Female",
+   "city": "Rahway",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2024
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "5f67d992-b64d-8fed-6a1a-7e237c30ca80",
+   "firstName": "Amber",
+   "age": 59,
+   "gender": "Female",
+   "city": "Mansfield",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1992
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2024
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "5f712d10-8191-bea8-8882-ccd1775f2c18",
+   "firstName": "Donnie",
+   "age": 69,
+   "gender": "Male",
+   "city": "Teaneck",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1988
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2023
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "5fbcc5c8-e78e-1f96-2741-598f7c0187d8",
+   "firstName": "Lester",
+   "age": 69,
+   "gender": "Male",
+   "city": "Franklin Lakes",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "61615f69-4d55-ed60-5f84-6c471c6f6c20",
+   "firstName": "Justin",
+   "age": 65,
+   "gender": "Male",
+   "city": "Turnersville",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "62407570-2b66-1e30-e510-0605b24b1f9f",
+   "firstName": "Verónica",
+   "age": 58,
+   "gender": "Female",
+   "city": "Hoboken",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "625748da-b8a3-0808-b1bc-db764ae14ef9",
+   "firstName": "Lyndsey",
+   "age": 70,
+   "gender": "Female",
+   "city": "Rossmoor",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "626c9efc-969d-16ac-155d-f4b42195dd86",
+   "firstName": "Minta",
+   "age": 67,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2009
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "6662e0c2-fc84-4c7b-1949-0f0ede642eed",
+   "firstName": "Georgine",
+   "age": 70,
+   "gender": "Female",
+   "city": "Lower",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "66b7def1-b87d-ebb4-6c48-96c8e0eb865e",
+   "firstName": "Roberta",
+   "age": 59,
+   "gender": "Female",
+   "city": "Twin Rivers",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "68cf20bb-5b27-7dfb-3e53-a9b229f76d15",
+   "firstName": "Janette",
+   "age": 61,
+   "gender": "Female",
+   "city": "Glendora",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a stroke",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "69017547-4d5a-4c4c-4b15-f6e588daa94c",
+   "firstName": "Angel",
+   "age": 49,
+   "gender": "Male",
+   "city": "Egg Harbor",
+   "facts": {
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2026
+    },
+    "dialysis": true
+   }
+  },
+  {
+   "id": "69739a71-85a1-cc93-b0bb-ad61ca54ae26",
+   "firstName": "Rowena",
+   "age": 53,
+   "gender": "Female",
+   "city": "Ocean City",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1998
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "69fe23da-8029-5b32-52ed-d258d9238c61",
+   "firstName": "Amalia",
+   "age": 79,
+   "gender": "Female",
+   "city": "Lyndhurst",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2021
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "6a88f7ad-59ae-406e-0e2c-11a0c9b08d2f",
+   "firstName": "Rolland",
+   "age": 75,
+   "gender": "Male",
+   "city": "Branchburg",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "6ca3a9b0-f2b9-0291-f18f-b5b226f40780",
+   "firstName": "Gustavo",
+   "age": 64,
+   "gender": "Male",
+   "city": "Barnegat",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "6d997d03-a5f7-bc91-71e2-6685fe865b2b",
+   "firstName": "Tenesha",
+   "age": 75,
+   "gender": "Female",
+   "city": "Fort Lee",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    },
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "6dc7e247-a29f-b6f5-c041-2cd09021eeb0",
+   "firstName": "Sancho",
+   "age": 63,
+   "gender": "Male",
+   "city": "Middle",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "6dd899ce-054a-064a-ae1c-e1bfdb99bb7b",
+   "firstName": "Brice",
+   "age": 58,
+   "gender": "Male",
+   "city": "Pine Beach",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2018
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "6ffd71fb-3989-f2c4-b9b3-eff3953971fd",
+   "firstName": "Paulene",
+   "age": 74,
+   "gender": "Female",
+   "city": "Woodstown",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "700f5a96-1ee5-aca4-150c-a75774ff2c65",
+   "firstName": "Waylon",
+   "age": 54,
+   "gender": "Male",
+   "city": "Clifton",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2006
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2026
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "70b28a42-01b2-2ad8-d718-86d7b6deb0f3",
+   "firstName": "Dusty",
+   "age": 56,
+   "gender": "Male",
+   "city": "Fort Lee",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2009
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "71792dcf-0de0-e2cd-1d94-a682a13fb5f1",
+   "firstName": "Rubén",
+   "age": 67,
+   "gender": "Male",
+   "city": "Greenwich",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "recentSurgery": {
+     "name": "coronary artery bypass grafting"
+    }
+   }
+  },
+  {
+   "id": "729fd885-a0f3-5311-3e85-50f6e6144489",
+   "firstName": "Josh",
+   "age": 54,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "7389bee4-cdc9-5896-2505-e397936f8e30",
+   "firstName": "Deangelo",
+   "age": 48,
+   "gender": "Male",
+   "city": "Hillsborough",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "73efb034-9ebc-251b-bade-5dbff0d309f8",
+   "firstName": "Quincy",
+   "age": 75,
+   "gender": "Male",
+   "city": "Bloomfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "7404cd60-9adc-af13-289c-1661fe047667",
+   "firstName": "Tennie",
+   "age": 79,
+   "gender": "Female",
+   "city": "Port Reading",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "74954c09-2e7a-6c76-6db7-8627415c04d1",
+   "firstName": "Kurtis",
+   "age": 66,
+   "gender": "Male",
+   "city": "Laurel Lake",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "74f2f3e0-8f7f-7b28-469c-232f8bb99603",
+   "firstName": "Marlon",
+   "age": 60,
+   "gender": "Male",
+   "city": "Runnemede",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2008
+    }
+   }
+  },
+  {
+   "id": "754a73fb-6fcb-6a3e-b646-be43fd6c6ea0",
+   "firstName": "Troy",
+   "age": 61,
+   "gender": "Male",
+   "city": "Pennsauken",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2016
+    }
+   }
+  },
+  {
+   "id": "75927e5b-8ac8-e4db-1e13-8bcf5e9b4ecb",
+   "firstName": "Pat",
+   "age": 54,
+   "gender": "Male",
+   "city": "Pleasantville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "75ade544-1d15-0403-81ce-ed1b66daacc0",
+   "firstName": "Annis",
+   "age": 59,
+   "gender": "Female",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2007
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "75bbaf25-f5de-474c-05cd-ac196c7f68b6",
+   "firstName": "Antoine",
+   "age": 69,
+   "gender": "Male",
+   "city": "Holmdel",
+   "facts": {
+    "ckd": {
+     "stage": "4"
+    },
+    "dialysis": true
+   }
+  },
+  {
+   "id": "75d5a6be-0af4-6622-4281-761903a8641b",
+   "firstName": "Maryjane",
+   "age": 63,
+   "gender": "Female",
+   "city": "Pennington",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "76b08938-7141-9211-0ae4-aec0af57b3da",
+   "firstName": "Denver",
+   "age": 78,
+   "gender": "Male",
+   "city": "Morristown",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1985
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2001
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2020
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "771238c1-29f0-eea0-41da-9e674d44623f",
+   "firstName": "Stormy",
+   "age": 56,
+   "gender": "Female",
+   "city": "Barnegat",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2020
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "77e34f70-e514-29a2-a15e-1510b000eaa2",
+   "firstName": "Emilio",
+   "age": 77,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 1996
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2009
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "781b2cfb-4be3-6af1-1520-edfc37df963b",
+   "firstName": "Danial",
+   "age": 73,
+   "gender": "Male",
+   "city": "Edison",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2000
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2002
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "7933e4ad-b973-6991-4e6d-476a5933a38a",
+   "firstName": "Sylvia",
+   "age": 71,
+   "gender": "Female",
+   "city": "Hopewell",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2014
+    },
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "7a24c7dd-6433-34f5-6eb7-436430c87b15",
+   "firstName": "Brandi",
+   "age": 75,
+   "gender": "Female",
+   "city": "West Milford",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1988
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2024
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "7a6ecd8c-b7aa-1745-81b6-d4c53a4bd527",
+   "firstName": "Chas",
+   "age": 37,
+   "gender": "Male",
+   "city": "Edgewater",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "7b346f74-aeaa-4ab8-6d5e-f22e78cfda6e",
+   "firstName": "José María",
+   "age": 61,
+   "gender": "Male",
+   "city": "Westfield",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2020
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "7b8c2849-f255-376e-cff0-157486ed73ee",
+   "firstName": "Keva",
+   "age": 73,
+   "gender": "Female",
+   "city": "Merchantville",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "7b95605b-a910-e09c-2f40-cd362ce3837b",
+   "firstName": "Rosendo",
+   "age": 48,
+   "gender": "Male",
+   "city": "Manville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "7b9c016f-f4a5-94a1-edd7-04be8dfb0bd7",
+   "firstName": "Trevor",
+   "age": 48,
+   "gender": "Male",
+   "city": "Woodbridge",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "7c313d8c-a7bd-5c04-e03a-cdb99255e8f4",
+   "firstName": "Federico",
+   "age": 75,
+   "gender": "Male",
+   "city": "Linden",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 1994
+    }
+   }
+  },
+  {
+   "id": "7c82ee0b-a1ed-a1a0-1efe-543f02af7050",
+   "firstName": "Pearl",
+   "age": 67,
+   "gender": "Female",
+   "city": "South Brunswick",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "7c86a5e9-0e5d-bf3c-5e48-5420c964d61e",
+   "firstName": "Noriko",
+   "age": 67,
+   "gender": "Female",
+   "city": "Ewing",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "7cb34247-bb24-4e5b-d820-337b65d0a9c6",
+   "firstName": "Devona",
+   "age": 79,
+   "gender": "Female",
+   "city": "New Milford",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "7cd73474-1afc-5a89-4d06-207939cedc70",
+   "firstName": "Desmond",
+   "age": 64,
+   "gender": "Male",
+   "city": "Ocean",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1993
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2009
+    }
+   }
+  },
+  {
+   "id": "7e54ce58-38f5-f94d-a97a-a85b8b8accfb",
+   "firstName": "Gerald",
+   "age": 63,
+   "gender": "Male",
+   "city": "Wantage",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2005
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "7efbf9d1-6bc9-eea9-4ce3-87e4af2917f8",
+   "firstName": "Nathanial",
+   "age": 63,
+   "gender": "Male",
+   "city": "Scotch Plains",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "7f65fcba-aaab-440a-1ade-435de4e50e14",
+   "firstName": "Jeannie",
+   "age": 79,
+   "gender": "Female",
+   "city": "North Caldwell",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "81c260f2-1eeb-45e7-cde1-51287fcb7669",
+   "firstName": "Charlesetta",
+   "age": 61,
+   "gender": "Female",
+   "city": "Parsippany-Troy Hills",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2024
+    }
+   }
+  },
+  {
+   "id": "82398e5f-b13e-bcee-9246-aaf2fb9e4f58",
+   "firstName": "Carolyn",
+   "age": 77,
+   "gender": "Female",
+   "city": "Fairfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "82f7eb65-b475-f44f-0981-143b650bb75a",
+   "firstName": "Nick",
+   "age": 63,
+   "gender": "Male",
+   "city": "Millstone",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "83c64dd6-dc28-a6f0-b48d-65ed6a2f004a",
+   "firstName": "Lesa",
+   "age": 42,
+   "gender": "Female",
+   "city": "Hoboken",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    },
+    "pregnant": true
+   }
+  },
+  {
+   "id": "83ddc990-c657-8137-7060-3bcabae3d56a",
+   "firstName": "Kelsey",
+   "age": 62,
+   "gender": "Female",
+   "city": "Upper Freehold",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2001
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2009
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "83fcb590-344e-09e0-c7c2-eaaa1c1d148d",
+   "firstName": "Trey",
+   "age": 78,
+   "gender": "Male",
+   "city": "West Freehold",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2007
+    }
+   }
+  },
+  {
+   "id": "84094951-d359-0bab-6aed-68912f814e36",
+   "firstName": "Lia",
+   "age": 48,
+   "gender": "Female",
+   "city": "Middletown",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2018
+    }
+   }
+  },
+  {
+   "id": "8429283a-bd2c-5b91-76eb-b8026746eb43",
+   "firstName": "Nathaniel",
+   "age": 67,
+   "gender": "Male",
+   "city": "Cedar Grove",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "8540ae66-8243-e0c9-9599-7c1190cfd0a8",
+   "firstName": "Brad",
+   "age": 69,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2017
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "8558b24d-7d81-d736-5a0e-e2c792a23dcb",
+   "firstName": "Deshawn",
+   "age": 52,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "87f78de7-e431-3931-b0eb-497e4e660ff5",
+   "firstName": "Elissa",
+   "age": 67,
+   "gender": "Female",
+   "city": "Howell",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "880b3b83-c0b9-2b39-fa52-649ded005983",
+   "firstName": "Elidia",
+   "age": 79,
+   "gender": "Female",
+   "city": "Green Knoll",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "884638a0-ba4f-c128-b9d1-ac156d900c1d",
+   "firstName": "Rodrigo",
+   "age": 59,
+   "gender": "Male",
+   "city": "Jackson",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "88eec3cd-2fd6-2db2-1cf9-e86e369edc91",
+   "firstName": "Ana",
+   "age": 73,
+   "gender": "Female",
+   "city": "Glen Rock",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "89f87ae2-d61e-a8d0-e854-192478b3b195",
+   "firstName": "Aron",
+   "age": 79,
+   "gender": "Male",
+   "city": "Old Bridge",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1987
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2012
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "8a3e0fec-84e0-1d55-14f6-9dce918f86bc",
+   "firstName": "Charline",
+   "age": 65,
+   "gender": "Female",
+   "city": "Manalapan",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "8ac7b482-298e-ec08-fd31-28209e19ea30",
+   "firstName": "Andy",
+   "age": 65,
+   "gender": "Male",
+   "city": "Tinton Falls",
+   "facts": {
+    "ckd": {
+     "stage": "4"
+    },
+    "dialysis": true
+   }
+  },
+  {
+   "id": "8adae3d0-1f13-d7cb-32d6-d863d8303062",
+   "firstName": "Eduardo",
+   "age": 58,
+   "gender": "Male",
+   "city": "North Haledon",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2019
+    }
+   }
+  },
+  {
+   "id": "8c12cf52-3cc0-2f24-833b-dcf6fbb637f8",
+   "firstName": "Lahoma",
+   "age": 53,
+   "gender": "Female",
+   "city": "Lacey",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2023
+    }
+   }
+  },
+  {
+   "id": "8c5ade52-259d-e555-53a3-5235077f7161",
+   "firstName": "Mirian",
+   "age": 76,
+   "gender": "Female",
+   "city": "Fort Lee",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "8c6ca612-b0e8-27a2-4fe1-e0341543238c",
+   "firstName": "Nathan",
+   "age": 70,
+   "gender": "Male",
+   "city": "Ramtown",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2007
+    }
+   }
+  },
+  {
+   "id": "8cec9e71-ab33-6b0c-a303-c43d18cfe1c3",
+   "firstName": "Beatriz",
+   "age": 67,
+   "gender": "Female",
+   "city": "Glassboro",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "8d335c6c-886b-7909-6f56-012098c00939",
+   "firstName": "Pilar",
+   "age": 79,
+   "gender": "Female",
+   "city": "Bridgeton",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "8d7b4476-c5d9-cfed-7d9d-0fb1d3a804c7",
+   "firstName": "Rodrigo",
+   "age": 78,
+   "gender": "Male",
+   "city": "Garfield",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2001
+    },
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "8df6b0a8-c3cd-f132-8c57-5e4a6edae4fd",
+   "firstName": "Lyndon",
+   "age": 79,
+   "gender": "Male",
+   "city": "Vineland",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "8e7f5a18-2cc3-3970-d5fb-8d3ea744f0ac",
+   "firstName": "Cleotilde",
+   "age": 75,
+   "gender": "Female",
+   "city": "Hillside",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "8f6a0432-902a-5132-ce0a-f4084bdff7b1",
+   "firstName": "Tonisha",
+   "age": 74,
+   "gender": "Female",
+   "city": "Laurel Springs",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "8f710346-b749-94aa-7d69-afaee81dd357",
+   "firstName": "Leroy",
+   "age": 71,
+   "gender": "Male",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "8f9cbf98-b27c-1bdb-cdbc-5a2142466f97",
+   "firstName": "Chad",
+   "age": 66,
+   "gender": "Male",
+   "city": "Franklin",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    },
+    "prediabetes": true,
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "8fcdd590-d0f1-eacc-439c-1713ae08d2ed",
+   "firstName": "Alexis",
+   "age": 70,
+   "gender": "Male",
+   "city": "Phillipsburg",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "9017169f-37b5-ddaf-9323-153af2de36f4",
+   "firstName": "Freddie",
+   "age": 55,
+   "gender": "Female",
+   "city": "Ridgewood",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "9108da8f-2993-3519-6820-474edb686688",
+   "firstName": "Esteban",
+   "age": 65,
+   "gender": "Male",
+   "city": "Leisure Village East",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "922e64fe-65d7-81f1-4dd6-edee03d76e90",
+   "firstName": "Karon",
+   "age": 51,
+   "gender": "Female",
+   "city": "Phillipsburg",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "928cd677-6d57-9771-9d23-cbca0d9b1aca",
+   "firstName": "Lilliam",
+   "age": 52,
+   "gender": "Female",
+   "city": "Old Bridge",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "92f39469-b4ed-d40d-c17e-894dd978d20b",
+   "firstName": "Cornelius",
+   "age": 72,
+   "gender": "Male",
+   "city": "Passaic",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2013
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "939daa2a-485e-c385-aaab-fe29c2ff2b88",
+   "firstName": "Brent",
+   "age": 69,
+   "gender": "Male",
+   "city": "Morristown",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "947f8c26-b0c1-91ff-8777-03749c2ea9ad",
+   "firstName": "Felix",
+   "age": 72,
+   "gender": "Male",
+   "city": "Cherry Hill",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2016
+    }
+   }
+  },
+  {
+   "id": "94948682-1092-cddb-5047-5f751aa5f35d",
+   "firstName": "Lesley",
+   "age": 69,
+   "gender": "Female",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "94b4f260-fa3d-d7ef-ad40-7e2215e4d296",
+   "firstName": "Britt",
+   "age": 70,
+   "gender": "Female",
+   "city": "Moorestown",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "96807afe-2081-f93a-86bf-7cf23c81c944",
+   "firstName": "Clifton",
+   "age": 75,
+   "gender": "Male",
+   "city": "Lawrence",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "9900366e-aedb-e749-3228-aff754c4d537",
+   "firstName": "Arletha",
+   "age": 43,
+   "gender": "Female",
+   "city": "Clifton",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "99b997a4-a2a5-cca8-1c4a-f0e88e1c39bc",
+   "firstName": "Pilar",
+   "age": 67,
+   "gender": "Female",
+   "city": "Millville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "9a7e6ca9-5223-daa4-c94d-ae3ba25c22e8",
+   "firstName": "Demarcus",
+   "age": 44,
+   "gender": "Male",
+   "city": "Pemberton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2023
+    }
+   }
+  },
+  {
+   "id": "9a83dd45-8c12-6c5b-c990-132ac66048b7",
+   "firstName": "Tony",
+   "age": 67,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "9ba3a6b0-3219-d2bb-0d71-fd0a1fc37e8f",
+   "firstName": "Juli",
+   "age": 71,
+   "gender": "Female",
+   "city": "Long Branch",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "9c72cd98-ae22-4bd4-6862-afe6ec8c8710",
+   "firstName": "Karima",
+   "age": 66,
+   "gender": "Female",
+   "city": "Pennsauken",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "9c7385bd-a411-b2ca-9e2d-e38f87bff5af",
+   "firstName": "Windy",
+   "age": 49,
+   "gender": "Female",
+   "city": "Palisades Park",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "9cc0d4c8-65b6-e7ed-7cf3-fafcce6ddb55",
+   "firstName": "Victor",
+   "age": 63,
+   "gender": "Male",
+   "city": "Upper Montclair",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "9d47cb5b-7b2b-8b56-6991-9e0cdf181ab6",
+   "firstName": "Berna",
+   "age": 79,
+   "gender": "Female",
+   "city": "Waldwick",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2002
+    },
+    "heart": {
+     "event": "a stroke",
+     "year": 2020
+    },
+    "ckd": {
+     "stage": "4"
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "9db00856-6997-48d4-85d1-ae1e2cecd6fd",
+   "firstName": "Lula",
+   "age": 66,
+   "gender": "Female",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "9e3e6c0d-ed3f-65a0-d001-18751d82fd4d",
+   "firstName": "Jerald",
+   "age": 73,
+   "gender": "Male",
+   "city": "Smithville",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1998
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "9fcdbc79-c70f-6181-0d6b-ce3e0ceab87f",
+   "firstName": "Mee",
+   "age": 67,
+   "gender": "Female",
+   "city": "Monroe",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "9fd47327-8524-b5a2-6db7-050ff8417c9b",
+   "firstName": "Pedro",
+   "age": 78,
+   "gender": "Male",
+   "city": "Westfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 1988
+    }
+   }
+  },
+  {
+   "id": "9fe4f537-e2f4-2f59-ad69-3e2ad560917b",
+   "firstName": "Odell",
+   "age": 65,
+   "gender": "Male",
+   "city": "Dumont",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "9ff85a59-86c8-159f-f6ee-21d3cf04bc1a",
+   "firstName": "Julio César",
+   "age": 52,
+   "gender": "Male",
+   "city": "Millville",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2016
+    }
+   }
+  },
+  {
+   "id": "a1ad9bde-d1f0-07bc-ee1f-d5684a18039b",
+   "firstName": "Duncan",
+   "age": 79,
+   "gender": "Male",
+   "city": "Old Bridge",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 1999
+    }
+   }
+  },
+  {
+   "id": "a2c031d0-2679-5d43-6d4d-f87ee878c8b1",
+   "firstName": "Herbert",
+   "age": 67,
+   "gender": "Male",
+   "city": "Yardville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "a3009b83-e6a3-b6d4-fc84-93ae93fee31f",
+   "firstName": "Lavelle",
+   "age": 76,
+   "gender": "Female",
+   "city": "Highlands",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "a36c9446-3946-576b-763f-2bd8dbc19ab3",
+   "firstName": "Stacee",
+   "age": 55,
+   "gender": "Female",
+   "city": "Pittsgrove",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2017
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2019
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "a43dc1be-7dd5-9caa-8d7b-0c04e60adf2c",
+   "firstName": "Cortez",
+   "age": 68,
+   "gender": "Male",
+   "city": "East Orange",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "a461cb0a-43c0-7d38-9516-9cfd7b097039",
+   "firstName": "Verlie",
+   "age": 54,
+   "gender": "Female",
+   "city": "Eastampton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "a4ce8df4-a708-86d5-7fb1-3cd3ba4ed56e",
+   "firstName": "Kena",
+   "age": 66,
+   "gender": "Female",
+   "city": "Raritan",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2002
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "a516eecb-22bf-42f2-e501-d9520da4966e",
+   "firstName": "Franklin",
+   "age": 69,
+   "gender": "Male",
+   "city": "Mystic Island",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "a58cbbd9-5f9b-476d-644d-d02f8c98bc98",
+   "firstName": "Federico",
+   "age": 79,
+   "gender": "Male",
+   "city": "South River",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2017
+    },
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "a5a26fa2-ea67-246e-f492-468fa4593eed",
+   "firstName": "Edith",
+   "age": 62,
+   "gender": "Female",
+   "city": "Washington",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2019
+    }
+   }
+  },
+  {
+   "id": "a61914f6-5f15-3a8c-9134-c6765a1bf764",
+   "firstName": "Gilberto",
+   "age": 69,
+   "gender": "Male",
+   "city": "West Windsor",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2005
+    }
+   }
+  },
+  {
+   "id": "a6bfce49-adfe-842e-0a29-17340c48a6e6",
+   "firstName": "Alec",
+   "age": 78,
+   "gender": "Male",
+   "city": "Bridgeton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "a86bfa0d-bd27-3351-71a4-c5abb94c0647",
+   "firstName": "Wiley",
+   "age": 67,
+   "gender": "Male",
+   "city": "Elizabeth",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "a88f0b0a-9107-078c-de2f-efb016cc1ec7",
+   "firstName": "Tristan",
+   "age": 56,
+   "gender": "Male",
+   "city": "Washington",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2007
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "a8b8016a-9357-7bf3-efe0-5bb51012e56c",
+   "firstName": "Rigoberto",
+   "age": 75,
+   "gender": "Male",
+   "city": "Leisure Village East",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2007
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2007
+    },
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "a955f2db-0d98-8f3f-2c26-84fe45bd92ad",
+   "firstName": "Marylou",
+   "age": 62,
+   "gender": "Female",
+   "city": "Long Branch",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "4"
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "a9e1a109-8400-0341-f07e-6a7a5ad12d0e",
+   "firstName": "Louis",
+   "age": 73,
+   "gender": "Male",
+   "city": "Pleasantville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 1998
+    }
+   }
+  },
+  {
+   "id": "aa44bc5b-d178-e0a7-c5d6-6587f66e76ec",
+   "firstName": "Scottie",
+   "age": 75,
+   "gender": "Male",
+   "city": "Rahway",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "ac9bb33c-8cc7-b742-142f-20e6386b806b",
+   "firstName": "Beau",
+   "age": 43,
+   "gender": "Male",
+   "city": "Perth Amboy",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "ad45c0d7-54de-0e6e-b7a2-4e72d81cc2cb",
+   "firstName": "María Eugenia",
+   "age": 56,
+   "gender": "Female",
+   "city": "South River",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "ad5d654c-370b-ade5-6b6b-24e957ff8246",
+   "firstName": "Fae",
+   "age": 57,
+   "gender": "Female",
+   "city": "Clayton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a stroke",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "adf35ef5-8a55-bf4f-42a2-cfdcfc694938",
+   "firstName": "Nicky",
+   "age": 51,
+   "gender": "Male",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2020
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "adfd8af3-07b5-928a-fb2f-6717e78fed85",
+   "firstName": "Emmanuel",
+   "age": 54,
+   "gender": "Male",
+   "city": "Villas",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "adfed661-f30e-5871-2b86-18657b8442df",
+   "firstName": "Moshe",
+   "age": 79,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1974
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 1994
+    },
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "insulinRecent": true,
+    "dialysis": true
+   }
+  },
+  {
+   "id": "ae18feef-f030-2cf2-42fd-04407239018e",
+   "firstName": "Louetta",
+   "age": 67,
+   "gender": "Female",
+   "city": "Pennsauken",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "ae52db1f-656f-ff48-30af-b2841f018a80",
+   "firstName": "Cole",
+   "age": 77,
+   "gender": "Male",
+   "city": "Clifton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2002
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2023
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "aeec20b7-2d35-945b-5bb7-8b4a44a5af1d",
+   "firstName": "Fernando",
+   "age": 70,
+   "gender": "Male",
+   "city": "Robbinsville",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "b089f89c-38d5-4297-81bf-c55f605e37a6",
+   "firstName": "Mark",
+   "age": 66,
+   "gender": "Male",
+   "city": "Freehold",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "b0eda753-8bcd-e8ea-0535-ac2fe52d668c",
+   "firstName": "Nakesha",
+   "age": 68,
+   "gender": "Female",
+   "city": "Upper Montclair",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "b12709db-0048-5aa3-00f2-81bbb63c5de2",
+   "firstName": "Erik",
+   "age": 50,
+   "gender": "Male",
+   "city": "Haddonfield",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "b201fc95-de68-54d6-76e3-96a67ddf7568",
+   "firstName": "Lauryn",
+   "age": 64,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2019
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "b21e41a5-df87-b7d6-4921-8a333fe5cabd",
+   "firstName": "Kasey",
+   "age": 60,
+   "gender": "Male",
+   "city": "Evesham",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    },
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "insulinRecent": true,
+    "recentSurgery": {
+     "name": "off-pump coronary artery bypass"
+    }
+   }
+  },
+  {
+   "id": "b3c9e0a1-4670-d191-983d-b53cd84b0c66",
+   "firstName": "Edison",
+   "age": 75,
+   "gender": "Male",
+   "city": "East Orange",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2004
+    },
+    "ckd": {
+     "stage": "4"
+    },
+    "dialysis": true
+   }
+  },
+  {
+   "id": "b4c07d69-5ac0-ce22-de13-e08fdb96d05e",
+   "firstName": "Quinton",
+   "age": 33,
+   "gender": "Male",
+   "city": "Passaic",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2021
+    }
+   }
+  },
+  {
+   "id": "b5f2315a-3417-1a11-b54a-dd04b5029c62",
+   "firstName": "Kirk",
+   "age": 56,
+   "gender": "Male",
+   "city": "Short Hills",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1992
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2017
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "b63e48e0-332f-e892-dced-44975257982f",
+   "firstName": "Shawn",
+   "age": 60,
+   "gender": "Male",
+   "city": "Freehold",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2018
+    }
+   }
+  },
+  {
+   "id": "b7ed09e0-9b01-fbef-e26c-b4eeda0d78af",
+   "firstName": "Emerald",
+   "age": 65,
+   "gender": "Female",
+   "city": "Clifton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "b80d3696-04ef-c6c3-a3eb-e251b01c0519",
+   "firstName": "Lucas",
+   "age": 69,
+   "gender": "Male",
+   "city": "West Deptford",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2007
+    }
+   }
+  },
+  {
+   "id": "b8601d99-f2ea-20d9-e4f4-ae412a1c5001",
+   "firstName": "Jeanelle",
+   "age": 68,
+   "gender": "Female",
+   "city": "New Providence",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "b9eacfff-680e-6d32-38be-6b3e1d53e144",
+   "firstName": "Emmitt",
+   "age": 73,
+   "gender": "Male",
+   "city": "Rockaway",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a stroke",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "ba0d182f-b128-69b0-149e-8a51a1e273bd",
+   "firstName": "Verónica",
+   "age": 59,
+   "gender": "Female",
+   "city": "Hoboken",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "ba506b5d-7254-545e-a9b9-e1c02e94cd2e",
+   "firstName": "Dennis",
+   "age": 46,
+   "gender": "Female",
+   "city": "Glen Rock",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "bac148e7-8754-8391-f9dd-af2d693df82b",
+   "firstName": "Jenine",
+   "age": 63,
+   "gender": "Female",
+   "city": "Dover Beaches South",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "bbc1aecc-3f9d-4ee6-d8f1-e8f1c60f4ffd",
+   "firstName": "Bertram",
+   "age": 78,
+   "gender": "Male",
+   "city": "Stafford",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "bc63fbad-819f-4a87-da70-2c473550ceb5",
+   "firstName": "Josef",
+   "age": 69,
+   "gender": "Male",
+   "city": "Fairfield",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "bc8c20c0-2f9c-3613-81e7-8d37c7ef9571",
+   "firstName": "Christa",
+   "age": 77,
+   "gender": "Female",
+   "city": "Bordentown",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1998
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "bcfc4d3d-8acb-5084-a12f-f411b0a6e512",
+   "firstName": "Jerald",
+   "age": 73,
+   "gender": "Male",
+   "city": "Toms River",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "bd3fed26-e476-67c0-13d3-d9e360c180aa",
+   "firstName": "Charline",
+   "age": 78,
+   "gender": "Female",
+   "city": "Spotswood",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1990
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2004
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "bd4ea3bd-b190-840b-f141-90a88a95c6f4",
+   "firstName": "Marianna",
+   "age": 78,
+   "gender": "Female",
+   "city": "Newark",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "bdb0f2bd-3b76-944c-bbe5-14374c9d2865",
+   "firstName": "Mateo",
+   "age": 71,
+   "gender": "Male",
+   "city": "Weehawken",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 1996
+    },
+    "type2Diabetes": {
+     "since": 2016
+    }
+   }
+  },
+  {
+   "id": "bddcfa63-9297-415d-62cd-17cf3967b7e4",
+   "firstName": "Luanne",
+   "age": 59,
+   "gender": "Female",
+   "city": "Rahway",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "be19f79f-ddcd-63d1-3a15-4fa33afbc116",
+   "firstName": "Elton",
+   "age": 79,
+   "gender": "Male",
+   "city": "Dover",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2009
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "c0eb4740-45bc-4521-b10d-77a49300219f",
+   "firstName": "Kelvin",
+   "age": 68,
+   "gender": "Male",
+   "city": "Freehold",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "c0eed2da-58d6-037f-cffa-969c669e2137",
+   "firstName": "Owen",
+   "age": 62,
+   "gender": "Male",
+   "city": "Woodbridge",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "c1170e5f-9e7a-9a75-ed60-4423eb4090c4",
+   "firstName": "Elenor",
+   "age": 75,
+   "gender": "Female",
+   "city": "Bridgewater",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "c361eee8-7229-7ce4-c851-798c3e31ef3c",
+   "firstName": "Alexander",
+   "age": 61,
+   "gender": "Male",
+   "city": "Elizabeth",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "c3bdf88f-c272-9439-506b-9a5b695b237a",
+   "firstName": "Diedre",
+   "age": 52,
+   "gender": "Female",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2014
+    }
+   }
+  },
+  {
+   "id": "c3c8e482-1243-f601-4e0d-336588cf2c5c",
+   "firstName": "Pierre",
+   "age": 42,
+   "gender": "Male",
+   "city": "Maurice River",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "c3e4bb50-493c-6511-aa1b-a7ff497ae6c0",
+   "firstName": "Lynn",
+   "age": 77,
+   "gender": "Male",
+   "city": "Elmer",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "c413665d-5983-bbf6-842c-d3b984165429",
+   "firstName": "Aja",
+   "age": 64,
+   "gender": "Female",
+   "city": "Middle",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1987
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2007
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "c4186d1c-cada-2656-15cb-0b356403d975",
+   "firstName": "Larisa",
+   "age": 69,
+   "gender": "Female",
+   "city": "Trenton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2005
+    }
+   }
+  },
+  {
+   "id": "c42ad054-2e82-e21d-6e2f-c16795216b0c",
+   "firstName": "Cecila",
+   "age": 68,
+   "gender": "Female",
+   "city": "Somerset",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "c4614451-7ee7-a692-f794-3d3ba61d50a1",
+   "firstName": "Felton",
+   "age": 50,
+   "gender": "Male",
+   "city": "East Brunswick",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2024
+    }
+   }
+  },
+  {
+   "id": "c4637477-59ce-a5ba-0cf8-b75290e11d98",
+   "firstName": "Kennith",
+   "age": 72,
+   "gender": "Male",
+   "city": "Mendham",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "c5395a30-0c7b-c924-fd62-4b2ee91dff36",
+   "firstName": "Lowell",
+   "age": 75,
+   "gender": "Male",
+   "city": "Demarest",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "c5837332-c69b-756e-84b6-8f82096130e0",
+   "firstName": "Guillermo",
+   "age": 71,
+   "gender": "Male",
+   "city": "West Orange",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "c5ab4210-7b2a-0f83-83ef-5dfba35d1f16",
+   "firstName": "Darius",
+   "age": 52,
+   "gender": "Male",
+   "city": "Mahwah",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "c5eb5035-3788-2d17-6018-5e79eeb54e30",
+   "firstName": "Dede",
+   "age": 48,
+   "gender": "Female",
+   "city": "Kearny",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2024
+    }
+   }
+  },
+  {
+   "id": "c62240b8-d857-b978-798e-06cb420b7599",
+   "firstName": "Nathaniel",
+   "age": 79,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "c7250cf6-f4d1-7779-8bf3-8bf7f310c1eb",
+   "firstName": "Antoine",
+   "age": 58,
+   "gender": "Male",
+   "city": "West Long Branch",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2009
+    },
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "c8d07d81-7da0-00a7-3ce7-6f2a8847f34f",
+   "firstName": "Inés",
+   "age": 78,
+   "gender": "Female",
+   "city": "Denville",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "c94f810e-d0c6-5bbc-89ce-5d2a0aab3802",
+   "firstName": "Kortney",
+   "age": 60,
+   "gender": "Female",
+   "city": "Perth Amboy",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "caaf8443-08ec-0e83-cc59-8476e66e4160",
+   "firstName": "Allena",
+   "age": 70,
+   "gender": "Female",
+   "city": "Ridgewood",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    },
+    "prediabetes": true,
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "caf898d9-88d5-5011-abbf-e65ee925fa53",
+   "firstName": "Rosario",
+   "age": 56,
+   "gender": "Female",
+   "city": "Newton",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "cc610db3-c3e8-d9bf-4876-dda7191a717d",
+   "firstName": "Vickie",
+   "age": 69,
+   "gender": "Female",
+   "city": "Madison",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2011
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2012
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "ccc28ae0-7b14-6045-015e-6cf955b45434",
+   "firstName": "Isabell",
+   "age": 66,
+   "gender": "Female",
+   "city": "Mount Laurel",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "cd6be5dc-a28a-1e8c-cff1-7057e797ad07",
+   "firstName": "Ellen",
+   "age": 72,
+   "gender": "Female",
+   "city": "Heathcote",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2003
+    }
+   }
+  },
+  {
+   "id": "ce3fe978-b79c-46b3-4906-a552d497fbb5",
+   "firstName": "Adolfo",
+   "age": 73,
+   "gender": "Male",
+   "city": "Margate City",
+   "facts": {
+    "ckd": {
+     "stage": "4"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "cf2aafd1-1936-0603-d087-cb4378ecc931",
+   "firstName": "Aaron",
+   "age": 63,
+   "gender": "Male",
+   "city": "Bridgeton",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2009
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "cf8887c1-5d32-66cd-316c-484e02e0b2fb",
+   "firstName": "Ana",
+   "age": 71,
+   "gender": "Female",
+   "city": "Millburn",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "d05e2b08-649e-c699-7268-9db2e2c989e1",
+   "firstName": "Noah",
+   "age": 72,
+   "gender": "Male",
+   "city": "Bogota",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "d0d245e7-dd04-4eba-b13a-2f507a1749a1",
+   "firstName": "Judson",
+   "age": 79,
+   "gender": "Male",
+   "city": "Washington",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 1991
+    }
+   }
+  },
+  {
+   "id": "d147eac4-33e9-0ace-80e5-071697e623f1",
+   "firstName": "Adela",
+   "age": 71,
+   "gender": "Female",
+   "city": "Carteret",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2006
+    }
+   }
+  },
+  {
+   "id": "d23e570c-3759-29a1-93bd-3ba7fd231325",
+   "firstName": "Darryl",
+   "age": 62,
+   "gender": "Male",
+   "city": "Fort Dix",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "d377f79d-efce-0aff-0d04-af72af3901b8",
+   "firstName": "Alana",
+   "age": 78,
+   "gender": "Female",
+   "city": "Iselin",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "d3adc389-213f-a9ba-1b30-5963a85cb13b",
+   "firstName": "Meaghan",
+   "age": 67,
+   "gender": "Female",
+   "city": "Galloway",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "d3d53aaa-460f-3b0a-0572-a8e000afe7eb",
+   "firstName": "Ivan",
+   "age": 71,
+   "gender": "Male",
+   "city": "Mount Laurel",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "d439324b-60b2-7573-c5d5-bfb259b59015",
+   "firstName": "Candyce",
+   "age": 72,
+   "gender": "Female",
+   "city": "Willingboro",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1998
+    }
+   }
+  },
+  {
+   "id": "d4587e94-f8f7-95b3-bfad-113c9e300bd8",
+   "firstName": "Kia",
+   "age": 72,
+   "gender": "Female",
+   "city": "Neptune",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "d4ed6e43-b439-d86e-0721-42de402177be",
+   "firstName": "Madaline",
+   "age": 73,
+   "gender": "Female",
+   "city": "Brick",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2015
+    },
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "d55835d2-7b94-d664-799d-2078fcd056e3",
+   "firstName": "Federico",
+   "age": 75,
+   "gender": "Male",
+   "city": "Washington",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2026
+    },
+    "recentSurgery": {
+     "name": "off-pump coronary artery bypass"
+    }
+   }
+  },
+  {
+   "id": "d57a3db6-e2b9-5419-b3ad-d4cc499c20a8",
+   "firstName": "Hal",
+   "age": 73,
+   "gender": "Male",
+   "city": "Parsippany-Troy Hills",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "d6669243-3b35-50a9-0f58-8276da2d47ee",
+   "firstName": "Abby",
+   "age": 62,
+   "gender": "Female",
+   "city": "Upper Montclair",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2014
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2026
+    },
+    "insulinRecent": true,
+    "dialysis": true,
+    "recentSurgery": {
+     "name": "transplant of the kidney"
+    }
+   }
+  },
+  {
+   "id": "d6a3d85b-b3ee-e32b-d8f9-4b024db482de",
+   "firstName": "Sung",
+   "age": 68,
+   "gender": "Male",
+   "city": "Haddon",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "d6c66676-7f58-e71c-07d1-7f0c0de0c73a",
+   "firstName": "Art",
+   "age": 72,
+   "gender": "Male",
+   "city": "Perth Amboy",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2019
+    }
+   }
+  },
+  {
+   "id": "d732fba0-c424-165b-f710-44429c954954",
+   "firstName": "Lester",
+   "age": 77,
+   "gender": "Male",
+   "city": "Laurence Harbor",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "d8c488d0-cbe3-d86a-2ecc-430292e00dbb",
+   "firstName": "Miguelina",
+   "age": 60,
+   "gender": "Female",
+   "city": "Deptford",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "transplant": {
+     "organ": "lung",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "d9000f8f-340d-5936-643c-d24eeeefae7a",
+   "firstName": "Gino",
+   "age": 53,
+   "gender": "Male",
+   "city": "Maplewood",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "d98b5984-106c-4f9a-c5be-b3a77147d0a4",
+   "firstName": "Wallace",
+   "age": 60,
+   "gender": "Male",
+   "city": "Newark",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2019
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "dbcc4a05-a9cc-b253-ecc4-a265e4f89915",
+   "firstName": "Dewayne",
+   "age": 71,
+   "gender": "Male",
+   "city": "Lyndhurst",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1995
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2014
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "dbf530bb-dc8f-6e0d-2eba-00785139b2bd",
+   "firstName": "Cristina",
+   "age": 52,
+   "gender": "Female",
+   "city": "Egg Harbor",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2014
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "dd58542e-f6b8-9de9-4854-336777c6cb49",
+   "firstName": "Angelo",
+   "age": 49,
+   "gender": "Male",
+   "city": "Cliffside Park",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "de3d64f1-77c1-5a40-a17e-fc0404b01660",
+   "firstName": "Charleen",
+   "age": 66,
+   "gender": "Female",
+   "city": "Watchung",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2004
+    }
+   }
+  },
+  {
+   "id": "de558887-146b-8f3b-b64b-df2fbd782e33",
+   "firstName": "Dorotea",
+   "age": 61,
+   "gender": "Female",
+   "city": "Passaic",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2016
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2018
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "de7703e5-8e26-ff0d-3450-94ab8ca5c22f",
+   "firstName": "Len",
+   "age": 48,
+   "gender": "Male",
+   "city": "Raritan",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2024
+    }
+   }
+  },
+  {
+   "id": "e135e889-e97a-4390-b619-27313d403bee",
+   "firstName": "Lorena",
+   "age": 40,
+   "gender": "Female",
+   "city": "Madison Park",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2017
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "e2590e67-5869-80dd-bf3e-0b2901dca35a",
+   "firstName": "Leonard",
+   "age": 75,
+   "gender": "Male",
+   "city": "Winslow",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1988
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "e268eed6-724c-c4e1-9492-e9760b7bdf3b",
+   "firstName": "Andrew",
+   "age": 75,
+   "gender": "Male",
+   "city": "Deptford",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "e3522b03-14c6-c33c-c5c2-3704ad1c5bfd",
+   "firstName": "Guillermo",
+   "age": 62,
+   "gender": "Male",
+   "city": "Wanamassa",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    },
+    "ckd": {
+     "stage": "3"
+    }
+   }
+  },
+  {
+   "id": "e378296b-5395-787d-2f9c-aa1404d98217",
+   "firstName": "Lorena",
+   "age": 56,
+   "gender": "Female",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2004
+    },
+    "ckd": {
+     "stage": "2"
+    },
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2024
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "e39c17f5-4fef-503e-a0de-8ad99df459e4",
+   "firstName": "Jimmy",
+   "age": 72,
+   "gender": "Female",
+   "city": "Middletown",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "e5a8587e-03a6-fb4f-c27f-ff86199eec2e",
+   "firstName": "Regan",
+   "age": 66,
+   "gender": "Female",
+   "city": "Bayonne",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2000
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2025
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2025
+    },
+    "insulinRecent": true,
+    "metformin": true
+   }
+  },
+  {
+   "id": "e6499879-0473-5d5f-61ae-60b42eb30d7e",
+   "firstName": "Dion",
+   "age": 66,
+   "gender": "Female",
+   "city": "Moorestown",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "e6c98815-cfe0-863b-e331-a86077ecbe57",
+   "firstName": "Lou",
+   "age": 70,
+   "gender": "Female",
+   "city": "Plainfield",
+   "facts": {
+    "ckd": {
+     "stage": "3"
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "e70b64b8-d477-aabf-26d2-ecdd525b7df7",
+   "firstName": "Izetta",
+   "age": 70,
+   "gender": "Female",
+   "city": "Bloomfield",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "e77ed9e7-ec5e-a716-c78b-562f51914e1d",
+   "firstName": "Ladonna",
+   "age": 69,
+   "gender": "Female",
+   "city": "Montclair",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2008
+    }
+   }
+  },
+  {
+   "id": "e7c99f04-40fd-5946-3c51-fe99bb747003",
+   "firstName": "Salvador",
+   "age": 74,
+   "gender": "Male",
+   "city": "Newark",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2009
+    }
+   }
+  },
+  {
+   "id": "e8191e90-ba3b-e01c-cea2-f78a1fa4acfe",
+   "firstName": "Víctor",
+   "age": 59,
+   "gender": "Male",
+   "city": "Franklin",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "e887dd80-5a8b-9f33-3159-a0bc736910dd",
+   "firstName": "Royal",
+   "age": 75,
+   "gender": "Male",
+   "city": "Medford",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "e8b64baa-78f0-c407-a29b-e116d8abe86b",
+   "firstName": "Anita",
+   "age": 38,
+   "gender": "Female",
+   "city": "Guttenberg",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2025
+    }
+   }
+  },
+  {
+   "id": "e8c23895-3562-aae7-c2af-63942de72c7f",
+   "firstName": "Luis",
+   "age": 54,
+   "gender": "Male",
+   "city": "South Orange",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2024
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "e9de51b8-1929-93ff-9872-e1617854de24",
+   "firstName": "Robyn",
+   "age": 71,
+   "gender": "Female",
+   "city": "Bayonne",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2012
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2014
+    }
+   }
+  },
+  {
+   "id": "eb3500c2-0480-f7bd-177c-2e1af2d18c8b",
+   "firstName": "Argelia",
+   "age": 76,
+   "gender": "Female",
+   "city": "Hammonton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "ebcedf5e-5d68-42bd-dd9a-fcf5780109af",
+   "firstName": "Jerome",
+   "age": 78,
+   "gender": "Male",
+   "city": "Old Bridge",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2011
+    }
+   }
+  },
+  {
+   "id": "ebe529dd-c405-720e-73bf-296d7fec96d0",
+   "firstName": "Graciela",
+   "age": 49,
+   "gender": "Female",
+   "city": "River Edge",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "end-stage"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "ed30d4a5-64a4-2414-bcc6-ab7c1c1f524a",
+   "firstName": "Xavier",
+   "age": 75,
+   "gender": "Male",
+   "city": "Franklin",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2001
+    }
+   }
+  },
+  {
+   "id": "ef7e416b-ed7b-876f-c1fe-52ac9a60111e",
+   "firstName": "Kathy",
+   "age": 50,
+   "gender": "Female",
+   "city": "Atlantic City",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "efd665f3-4709-80f5-0daf-00b5eb4d1366",
+   "firstName": "Allan",
+   "age": 76,
+   "gender": "Male",
+   "city": "East Orange",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 1998
+    },
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "f0e02c99-8082-ab23-72f7-316bee0934de",
+   "firstName": "Brian",
+   "age": 69,
+   "gender": "Male",
+   "city": "Plainfield",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "f17a603f-1fff-68d8-8848-b5e823b9322c",
+   "firstName": "Jule",
+   "age": 54,
+   "gender": "Female",
+   "city": "East Windsor",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "type2Diabetes": {
+     "since": 2015
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "f1e7e710-6e53-fbc3-6f86-6c6b3be634a4",
+   "firstName": "Misti",
+   "age": 51,
+   "gender": "Female",
+   "city": "Buena Vista",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "f252c0d4-2db9-ccfb-4a67-34f8c80e7099",
+   "firstName": "Dario",
+   "age": 68,
+   "gender": "Male",
+   "city": "Wayne",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2004
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2015
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "f2e20abb-2c47-b3fc-5ba0-033ae615a1ec",
+   "firstName": "Minnie",
+   "age": 79,
+   "gender": "Female",
+   "city": "Newark",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "f31d2a74-2edc-e540-54b7-5aafe7640f7f",
+   "firstName": "Georgianne",
+   "age": 79,
+   "gender": "Female",
+   "city": "Absecon",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2020
+    }
+   }
+  },
+  {
+   "id": "f3485bac-a21f-8766-022e-fbb7ddf1d5b9",
+   "firstName": "Rachal",
+   "age": 73,
+   "gender": "Female",
+   "city": "Piscataway",
+   "facts": {
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "f3b8807b-3d50-6c80-b7e2-bb5763308db1",
+   "firstName": "Gavin",
+   "age": 61,
+   "gender": "Male",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "a heart attack",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "f3d50ab7-073f-73d6-3010-e968a204cdf2",
+   "firstName": "Mabelle",
+   "age": 79,
+   "gender": "Female",
+   "city": "Washington",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2020
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "f3dd0afd-0e9e-46d9-f31d-60ac45b719c5",
+   "firstName": "Alan",
+   "age": 64,
+   "gender": "Male",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "bypass surgery",
+     "year": 2010
+    },
+    "ckd": {
+     "stage": "1"
+    },
+    "type2Diabetes": {
+     "since": 2024
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "f5aaacd4-8351-bfbe-27d0-1cf249b22244",
+   "firstName": "Cristobal",
+   "age": 48,
+   "gender": "Male",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    }
+   }
+  },
+  {
+   "id": "f5ffb24e-5c40-8218-054f-14fa3f6b3019",
+   "firstName": "Anissa",
+   "age": 54,
+   "gender": "Female",
+   "city": "Galloway",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2000
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "f6581a9e-aeed-d292-79e2-e49e2dd054f5",
+   "firstName": "Theodore",
+   "age": 72,
+   "gender": "Male",
+   "city": "Caldwell",
+   "facts": {
+    "transplant": {
+     "organ": "kidney",
+     "year": 2020
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "f6673543-cef3-c00b-135e-aa4ba7b0a55c",
+   "firstName": "Alden",
+   "age": 78,
+   "gender": "Male",
+   "city": "Hasbrouck Heights",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2013
+    }
+   }
+  },
+  {
+   "id": "f6b8a93b-a5fe-7797-394a-50b4581acdbb",
+   "firstName": "Louisa",
+   "age": 77,
+   "gender": "Female",
+   "city": "Marlboro",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 1990
+    },
+    "heart": {
+     "event": "a heart attack",
+     "year": 2014
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "f6ba7801-3983-66d0-a76d-bd61b683f02c",
+   "firstName": "Willy",
+   "age": 75,
+   "gender": "Male",
+   "city": "East Freehold",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2015
+    }
+   }
+  },
+  {
+   "id": "f6e3aa5e-e01d-ab0c-9f2a-41a1c13cca29",
+   "firstName": "Normand",
+   "age": 75,
+   "gender": "Male",
+   "city": "Hopatcong",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 1997
+    }
+   }
+  },
+  {
+   "id": "f890fb0f-2641-a613-5aec-32e9b2bf9302",
+   "firstName": "Dillon",
+   "age": 49,
+   "gender": "Male",
+   "city": "Neptune",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2024
+    }
+   }
+  },
+  {
+   "id": "f905c2a0-2a6b-3883-7485-d98b3ac69115",
+   "firstName": "Sanda",
+   "age": 78,
+   "gender": "Female",
+   "city": "South Brunswick",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2004
+    },
+    "transplant": {
+     "organ": "kidney",
+     "year": 2023
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "f93fad86-ea2d-2c27-a83a-26ef13868786",
+   "firstName": "Arlen",
+   "age": 45,
+   "gender": "Male",
+   "city": "Little Egg Harbor",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2022
+    }
+   }
+  },
+  {
+   "id": "f9960046-7480-ac86-12fc-d2c06e82f0e4",
+   "firstName": "Juli",
+   "age": 73,
+   "gender": "Female",
+   "city": "Glassboro",
+   "facts": {
+    "ckd": {
+     "stage": "2"
+    }
+   }
+  },
+  {
+   "id": "f9da3d6b-d0d9-7d54-cead-c2c3ffd63cbb",
+   "firstName": "Carylon",
+   "age": 67,
+   "gender": "Female",
+   "city": "Hackensack",
+   "facts": {
+    "type2Diabetes": {
+     "since": 2013
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "fac4e166-7922-0b5a-83bd-78a6d6e6b542",
+   "firstName": "Trenton",
+   "age": 75,
+   "gender": "Male",
+   "city": "Belleville",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2026
+    }
+   }
+  },
+  {
+   "id": "fb0ab6c6-4de9-5a34-33c7-847d9964027c",
+   "firstName": "Lyn",
+   "age": 68,
+   "gender": "Female",
+   "city": "Hoboken",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2022
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "fb0cf712-6449-640e-fa3f-9ce6900eeb29",
+   "firstName": "Donnell",
+   "age": 70,
+   "gender": "Male",
+   "city": "Garfield",
+   "facts": {
+    "prediabetes": true,
+    "ckd": {
+     "stage": "2"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "fb103071-ea6c-e6ff-309e-2ad29ccda6c9",
+   "firstName": "Marguerite",
+   "age": 70,
+   "gender": "Female",
+   "city": "Cranford",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2010
+    }
+   }
+  },
+  {
+   "id": "fb226c06-ec72-e797-08d9-9aa05be3ba6c",
+   "firstName": "Rick",
+   "age": 51,
+   "gender": "Male",
+   "city": "Galloway",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2023
+    }
+   }
+  },
+  {
+   "id": "fc4e6984-e04c-a999-b89a-01635aada4e8",
+   "firstName": "Elroy",
+   "age": 78,
+   "gender": "Male",
+   "city": "Tinton Falls",
+   "facts": {
+    "heart": {
+     "event": "a heart attack",
+     "year": 2006
+    },
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "fcc072c2-5b1a-cafe-79aa-24cf96061a60",
+   "firstName": "Marinda",
+   "age": 73,
+   "gender": "Female",
+   "city": "Toms River",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2015
+    },
+    "ckd": {
+     "stage": "end-stage"
+    }
+   }
+  },
+  {
+   "id": "fcfa915d-a832-8816-12e5-7ba7861a1721",
+   "firstName": "Drema",
+   "age": 57,
+   "gender": "Female",
+   "city": "Newark",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2021
+    },
+    "metformin": true
+   }
+  },
+  {
+   "id": "fd02614c-b4eb-7bbd-bab3-cb0870f30b11",
+   "firstName": "Leonel",
+   "age": 65,
+   "gender": "Male",
+   "city": "Union City",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2021
+    }
+   }
+  },
+  {
+   "id": "fdb623cf-d2e4-d7f4-7516-9eff6f22d138",
+   "firstName": "Jamaal",
+   "age": 73,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {
+    "prediabetes": true,
+    "heart": {
+     "event": "heart disease",
+     "year": 2017
+    }
+   }
+  },
+  {
+   "id": "fe0bb964-2aaa-789f-080c-eb4446b8617b",
+   "firstName": "Ervin",
+   "age": 75,
+   "gender": "Male",
+   "city": "Newark",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2007
+    }
+   }
+  },
+  {
+   "id": "fe243785-1aca-8c8a-4ddf-b36a176236a0",
+   "firstName": "Víctor",
+   "age": 75,
+   "gender": "Male",
+   "city": "Willingboro",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2012
+    }
+   }
+  },
+  {
+   "id": "fe55b219-5940-c819-0af5-dc6b1504f0f5",
+   "firstName": "Anya",
+   "age": 47,
+   "gender": "Female",
+   "city": "Vineland",
+   "facts": {
+    "heart": {
+     "event": "heart disease",
+     "year": 2025
+    }
+   }
+  },
+  {
+   "id": "fe60cb08-6206-a6bf-2072-91cc6f532553",
+   "firstName": "Korey",
+   "age": 65,
+   "gender": "Male",
+   "city": "Dover",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "fecd9bee-4395-27cd-5b73-9520cf58f682",
+   "firstName": "Jeanett",
+   "age": 53,
+   "gender": "Female",
+   "city": "Teaneck",
+   "facts": {
+    "prediabetes": true,
+    "type2Diabetes": {
+     "since": 2026
+    }
+   }
+  },
+  {
+   "id": "ff86475f-3000-0652-d58c-2551419a9134",
+   "firstName": "Derrick",
+   "age": 31,
+   "gender": "Male",
+   "city": "North Hanover",
+   "facts": {
+    "ckd": {
+     "stage": "1"
+    }
+   }
+  },
+  {
+   "id": "ffc04549-14f4-367e-3f0a-92c5c63c0dda",
+   "firstName": "Claudie",
+   "age": 79,
+   "gender": "Female",
+   "city": "Glassboro",
+   "facts": {
+    "type2Diabetes": {
+     "since": 1995
+    },
+    "heart": {
+     "event": "heart disease",
+     "year": 2008
+    },
+    "ckd": {
+     "stage": "3"
+    },
+    "insulinRecent": true
+   }
+  },
+  {
+   "id": "0039063d-30e1-005d-94aa-221859c54012",
+   "firstName": "Barbara",
+   "age": 45,
+   "gender": "Female",
+   "city": "Bayonne",
+   "facts": {}
+  },
+  {
+   "id": "00678072-f1d8-d161-6dca-087ab8c0aa3b",
+   "firstName": "Ralph",
+   "age": 36,
+   "gender": "Male",
+   "city": "Monroe",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "009b873a-40bd-45a5-ec9b-7a7a3c2ec055",
+   "firstName": "Jerrold",
+   "age": 78,
+   "gender": "Male",
+   "city": "East Brunswick",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0125a0d7-075f-2b3d-2453-aff0cf0bb59e",
+   "firstName": "Son",
+   "age": 62,
+   "gender": "Male",
+   "city": "Parsippany-Troy Hills",
+   "facts": {}
+  },
+  {
+   "id": "01267528-b900-4424-5346-9f7fabb02a01",
+   "firstName": "Kathi",
+   "age": 37,
+   "gender": "Female",
+   "city": "Hamilton",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "018e41e3-0f0a-da47-0e4a-7d1c07a72106",
+   "firstName": "Liliana",
+   "age": 44,
+   "gender": "Female",
+   "city": "North Bergen",
+   "facts": {}
+  },
+  {
+   "id": "022d5e4e-0fba-b683-209f-c642b7068139",
+   "firstName": "Lorette",
+   "age": 49,
+   "gender": "Female",
+   "city": "Washington",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "02834f0c-000b-e463-d18b-5f4be45268d5",
+   "firstName": "Helena",
+   "age": 44,
+   "gender": "Female",
+   "city": "Avenel",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "029a5e36-53f7-0aa2-05b8-06283e6151eb",
+   "firstName": "Ricardo",
+   "age": 38,
+   "gender": "Male",
+   "city": "Lindenwold",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "02a3abd6-d38d-2fc4-437b-18d9e891a26b",
+   "firstName": "Lupita",
+   "age": 35,
+   "gender": "Female",
+   "city": "Trenton",
+   "facts": {
+    "pregnant": true
+   }
+  },
+  {
+   "id": "031952ec-db63-399c-67d5-2123b8403518",
+   "firstName": "Shaunte",
+   "age": 46,
+   "gender": "Female",
+   "city": "Elizabeth",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "036c7255-e581-1eb9-a88e-83494a21127b",
+   "firstName": "Bruno",
+   "age": 61,
+   "gender": "Male",
+   "city": "Asbury Park",
+   "facts": {}
+  },
+  {
+   "id": "04212be4-8b7d-7fce-a4ae-1d466c407b3d",
+   "firstName": "Marilynn",
+   "age": 42,
+   "gender": "Female",
+   "city": "Springdale",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "04f0a062-c4d4-20e2-7e32-f3266bd8675d",
+   "firstName": "Shila",
+   "age": 76,
+   "gender": "Female",
+   "city": "Bergenfield",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "058a86bc-93df-d9db-cfe8-df0cdf0eb445",
+   "firstName": "Irvin",
+   "age": 38,
+   "gender": "Male",
+   "city": "Howell",
+   "facts": {}
+  },
+  {
+   "id": "05d46d60-4f09-37b4-d128-69858d3490d8",
+   "firstName": "Myrl",
+   "age": 40,
+   "gender": "Female",
+   "city": "Irvington",
+   "facts": {}
+  },
+  {
+   "id": "06314922-b4b2-4ae1-fe9b-7874a78c30d3",
+   "firstName": "Emile",
+   "age": 46,
+   "gender": "Male",
+   "city": "Oceanport",
+   "facts": {}
+  },
+  {
+   "id": "063e6930-72ed-e0a0-b0f8-5ae39778a073",
+   "firstName": "Emile",
+   "age": 63,
+   "gender": "Male",
+   "city": "Manalapan",
+   "facts": {}
+  },
+  {
+   "id": "068bb24a-91aa-4929-4c3b-e7d8a5a45bb1",
+   "firstName": "Julienne",
+   "age": 40,
+   "gender": "Female",
+   "city": "Newark",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "06b7fec7-32a1-1b37-08f0-ab7ae5713e59",
+   "firstName": "Bernita",
+   "age": 57,
+   "gender": "Female",
+   "city": "Harmony",
+   "facts": {}
+  },
+  {
+   "id": "074d5de7-e248-3faa-2cda-5026165a41ea",
+   "firstName": "Gilberto",
+   "age": 38,
+   "gender": "Male",
+   "city": "Wyckoff",
+   "facts": {}
+  },
+  {
+   "id": "08162e78-6819-bef9-d2e6-4d4afec2a731",
+   "firstName": "Albertina",
+   "age": 56,
+   "gender": "Female",
+   "city": "Woodbridge",
+   "facts": {}
+  },
+  {
+   "id": "09d08bd2-ec25-9766-f64b-6c2a94c310b2",
+   "firstName": "Heidi",
+   "age": 43,
+   "gender": "Female",
+   "city": "Atlantic City",
+   "facts": {}
+  },
+  {
+   "id": "0a446e95-775a-01b4-7a04-d8f7245ad1bd",
+   "firstName": "Melany",
+   "age": 51,
+   "gender": "Female",
+   "city": "Egg Harbor",
+   "facts": {}
+  },
+  {
+   "id": "0a63707b-902d-f1f8-be07-7964602b4099",
+   "firstName": "Kasey",
+   "age": 36,
+   "gender": "Male",
+   "city": "Lakewood",
+   "facts": {}
+  },
+  {
+   "id": "0a701627-bb27-6da7-2ba0-8ed4b84d2b9c",
+   "firstName": "Adriane",
+   "age": 57,
+   "gender": "Female",
+   "city": "Hillside",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0acbe833-4ba5-89d4-24bc-2eb57ecab02f",
+   "firstName": "Alica",
+   "age": 51,
+   "gender": "Female",
+   "city": "Palisades Park",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0af603bf-8d3f-5d30-a2f0-c300d88ef1fd",
+   "firstName": "Adela",
+   "age": 43,
+   "gender": "Female",
+   "city": "Westfield",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0b9cc6aa-6b7f-6914-5ada-4ddfde5f0a2b",
+   "firstName": "Vanessa",
+   "age": 71,
+   "gender": "Female",
+   "city": "Teaneck",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0bb1c3c1-6b2f-8ce3-a479-cb4e6fbb79ed",
+   "firstName": "Margarete",
+   "age": 59,
+   "gender": "Female",
+   "city": "Hackettstown",
+   "facts": {}
+  },
+  {
+   "id": "0c2994d1-cca8-9a7b-db95-a7785dc6a2a0",
+   "firstName": "Amiee",
+   "age": 49,
+   "gender": "Female",
+   "city": "Garfield",
+   "facts": {}
+  },
+  {
+   "id": "0c451cd4-9532-8139-02a4-da14d0f4bdc8",
+   "firstName": "Elisa",
+   "age": 43,
+   "gender": "Female",
+   "city": "North Hanover",
+   "facts": {}
+  },
+  {
+   "id": "0c4c76cb-cbff-3e61-ad72-0a41ca4b94d8",
+   "firstName": "Syble",
+   "age": 52,
+   "gender": "Female",
+   "city": "Atlantic City",
+   "facts": {}
+  },
+  {
+   "id": "0ca4b478-80b7-ac0e-0bbd-50f1d90ab374",
+   "firstName": "Carletta",
+   "age": 66,
+   "gender": "Female",
+   "city": "Rochelle Park",
+   "facts": {}
+  },
+  {
+   "id": "0cfb4938-22ce-ba41-ac76-d344590680fa",
+   "firstName": "Darius",
+   "age": 38,
+   "gender": "Male",
+   "city": "Edison",
+   "facts": {}
+  },
+  {
+   "id": "0d846ff1-f3c5-0019-60f3-4b7975820386",
+   "firstName": "Warren",
+   "age": 55,
+   "gender": "Male",
+   "city": "Englewood",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0ed1d571-d4d8-dec4-b6e2-9492a81d48e2",
+   "firstName": "Benito",
+   "age": 52,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {}
+  },
+  {
+   "id": "0edc4095-fa39-2cee-bca4-edb754394001",
+   "firstName": "Yi",
+   "age": 49,
+   "gender": "Female",
+   "city": "Hopatcong",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "0f2e88e8-c7ba-9dcb-f3a7-8b9ab3e70437",
+   "firstName": "Donovan",
+   "age": 39,
+   "gender": "Male",
+   "city": "Belmar",
+   "facts": {}
+  },
+  {
+   "id": "0f4fbf75-546c-0181-8a6b-eabec8a1249e",
+   "firstName": "Danial",
+   "age": 43,
+   "gender": "Male",
+   "city": "Mount Laurel",
+   "facts": {}
+  },
+  {
+   "id": "0fbd2661-cdd8-5124-05a9-56ad0aae1bdd",
+   "firstName": "Dennise",
+   "age": 36,
+   "gender": "Female",
+   "city": "Eatontown",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "10808e70-17aa-e24a-2c2f-bd6f7be16431",
+   "firstName": "Cristopher",
+   "age": 38,
+   "gender": "Male",
+   "city": "Cherry Hill",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1089cf64-e87e-d672-cd70-53fbc72711bf",
+   "firstName": "Kay",
+   "age": 38,
+   "gender": "Female",
+   "city": "Sayreville",
+   "facts": {}
+  },
+  {
+   "id": "108f975b-2109-a91f-1d60-df76aceb2643",
+   "firstName": "Akiko",
+   "age": 72,
+   "gender": "Female",
+   "city": "North Caldwell",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "10bf2166-9d5c-949e-2a01-6b180ea12936",
+   "firstName": "Thomasena",
+   "age": 37,
+   "gender": "Female",
+   "city": "Magnolia",
+   "facts": {}
+  },
+  {
+   "id": "1162e22d-5ceb-517c-06ee-a451614e75d2",
+   "firstName": "Isabell",
+   "age": 42,
+   "gender": "Female",
+   "city": "Passaic",
+   "facts": {}
+  },
+  {
+   "id": "11d75457-4771-e584-9f6c-15922b9e5715",
+   "firstName": "Selena",
+   "age": 56,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1211995d-c000-2ace-556d-29fff6b24722",
+   "firstName": "Loren",
+   "age": 37,
+   "gender": "Male",
+   "city": "Williamstown",
+   "facts": {}
+  },
+  {
+   "id": "12460331-5a4b-e1c0-b4c1-6faf3e4829ef",
+   "firstName": "May",
+   "age": 53,
+   "gender": "Female",
+   "city": "Cherry Hill",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "125d74db-1da9-321d-03d2-2def941a9f5b",
+   "firstName": "Gerald",
+   "age": 62,
+   "gender": "Male",
+   "city": "Egg Harbor",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "12adbbb8-fc1b-a8c2-a9cd-eeb2395fa96f",
+   "firstName": "Marcie",
+   "age": 39,
+   "gender": "Female",
+   "city": "Woodcliff Lake",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1326b2b5-8847-b319-35b7-f74d25d7677c",
+   "firstName": "Samuel",
+   "age": 47,
+   "gender": "Male",
+   "city": "Sayreville",
+   "facts": {}
+  },
+  {
+   "id": "15ae3c7e-1003-51e1-4c95-f3203a8bb186",
+   "firstName": "Vivienne",
+   "age": 50,
+   "gender": "Female",
+   "city": "Totowa",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "15c8aaff-005d-518b-14cf-b17f810719a1",
+   "firstName": "Quinton",
+   "age": 52,
+   "gender": "Male",
+   "city": "Maywood",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "16bd8fab-9d48-b155-d6d1-5e3849475775",
+   "firstName": "Floyd",
+   "age": 37,
+   "gender": "Male",
+   "city": "Williamstown",
+   "facts": {}
+  },
+  {
+   "id": "16c1856a-3f09-22ce-04d7-b679b25f2249",
+   "firstName": "Chelsie",
+   "age": 67,
+   "gender": "Female",
+   "city": "West Orange",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "16fb8437-4a49-05f7-da28-cabec5304040",
+   "firstName": "Marquis",
+   "age": 36,
+   "gender": "Male",
+   "city": "Mount Ephraim",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "17559083-e19d-db25-2de6-3eb0981ad81a",
+   "firstName": "Donny",
+   "age": 67,
+   "gender": "Male",
+   "city": "North Cape May",
+   "facts": {}
+  },
+  {
+   "id": "17845a23-93ba-d603-60a7-fd153b7506cb",
+   "firstName": "Margaret",
+   "age": 60,
+   "gender": "Female",
+   "city": "Gloucester",
+   "facts": {}
+  },
+  {
+   "id": "180a1707-6127-bde9-5aa0-6f1e911c5f0a",
+   "firstName": "Bennie",
+   "age": 52,
+   "gender": "Male",
+   "city": "Jackson",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "18d7b1d0-9e9a-a551-1716-eb56f024cc46",
+   "firstName": "Michal",
+   "age": 48,
+   "gender": "Male",
+   "city": "Manalapan",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "18f3c548-4e5b-d067-ff2a-32c2423b1b0c",
+   "firstName": "Talitha",
+   "age": 56,
+   "gender": "Female",
+   "city": "Oak Valley",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1aa15119-b0fd-a4f7-addc-4edfeedee2fd",
+   "firstName": "Russel",
+   "age": 40,
+   "gender": "Male",
+   "city": "Union City",
+   "facts": {}
+  },
+  {
+   "id": "1b29c56b-542a-06e6-735e-4b8db40d36cc",
+   "firstName": "Daron",
+   "age": 47,
+   "gender": "Male",
+   "city": "Haledon",
+   "facts": {}
+  },
+  {
+   "id": "1b851333-f0ac-ff25-8236-a7881b2fc072",
+   "firstName": "Lorinda",
+   "age": 70,
+   "gender": "Female",
+   "city": "Ewing",
+   "facts": {}
+  },
+  {
+   "id": "1c298bdc-b51b-ed17-54e6-d688d20b202f",
+   "firstName": "Blossom",
+   "age": 40,
+   "gender": "Female",
+   "city": "Hamilton",
+   "facts": {
+    "pregnant": true
+   }
+  },
+  {
+   "id": "1c4c2cba-e8ed-b85f-6aa6-643126a9879e",
+   "firstName": "Sharika",
+   "age": 37,
+   "gender": "Female",
+   "city": "Sayreville",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1c9d7926-178e-aa36-27b6-780c10f18fa5",
+   "firstName": "Maryanne",
+   "age": 50,
+   "gender": "Female",
+   "city": "Upper Freehold",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1d9e1f4a-01ad-1e0d-ecec-e0f3b7c23451",
+   "firstName": "Isabela",
+   "age": 39,
+   "gender": "Female",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1ddcdfee-01b0-2132-7d1e-863b433d116a",
+   "firstName": "Joleen",
+   "age": 61,
+   "gender": "Female",
+   "city": "Trenton",
+   "facts": {}
+  },
+  {
+   "id": "1e0dbcf9-7176-ee70-fbbd-053531fe6b4d",
+   "firstName": "Mickey",
+   "age": 35,
+   "gender": "Male",
+   "city": "Carlstadt",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1e0e501c-9fd6-72a8-3a8c-3d0da90c4211",
+   "firstName": "Napoleon",
+   "age": 39,
+   "gender": "Male",
+   "city": "North Brunswick",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1e750e7b-6ef5-c0ed-11c6-ad12861019fb",
+   "firstName": "Garth",
+   "age": 35,
+   "gender": "Male",
+   "city": "Lakewood",
+   "facts": {}
+  },
+  {
+   "id": "1e778879-b8d9-2c1d-bea1-afe173f79729",
+   "firstName": "Justin",
+   "age": 53,
+   "gender": "Male",
+   "city": "Howell",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1e8b3800-644a-9da0-06e0-4850eafb752f",
+   "firstName": "Orville",
+   "age": 37,
+   "gender": "Male",
+   "city": "Clifton",
+   "facts": {}
+  },
+  {
+   "id": "1eadc045-65cc-d007-0603-62e9b6c89e73",
+   "firstName": "Dorotha",
+   "age": 54,
+   "gender": "Female",
+   "city": "Englewood",
+   "facts": {}
+  },
+  {
+   "id": "1f1dc9cd-7541-3711-b820-7acdd71e937c",
+   "firstName": "Billy",
+   "age": 49,
+   "gender": "Male",
+   "city": "Robbinsville",
+   "facts": {}
+  },
+  {
+   "id": "1f7e4c52-2e76-f95e-0c5d-1de83bbfcbe4",
+   "firstName": "Alia",
+   "age": 67,
+   "gender": "Female",
+   "city": "Monroe",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "1fdbab91-8719-9724-efc5-9486bd40ede0",
+   "firstName": "Kallie",
+   "age": 43,
+   "gender": "Female",
+   "city": "North Arlington",
+   "facts": {
+    "pregnant": true
+   }
+  },
+  {
+   "id": "2006118a-0545-64e4-7296-10a821f0d55c",
+   "firstName": "Kittie",
+   "age": 58,
+   "gender": "Female",
+   "city": "North Bergen",
+   "facts": {}
+  },
+  {
+   "id": "209e4a48-50d9-0bfb-dfbc-a06c66605c0f",
+   "firstName": "Terrance",
+   "age": 39,
+   "gender": "Male",
+   "city": "Passaic",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "20c21547-624a-8a15-3c61-2e589d1ed81f",
+   "firstName": "Trish",
+   "age": 35,
+   "gender": "Female",
+   "city": "Dover",
+   "facts": {}
+  },
+  {
+   "id": "20ef1d98-dd4d-90fd-916b-d2c27fd1db9f",
+   "firstName": "Anton",
+   "age": 51,
+   "gender": "Male",
+   "city": "Tinton Falls",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "214e8868-4eff-275b-0cb4-4bc0d0563e76",
+   "firstName": "Linh",
+   "age": 37,
+   "gender": "Female",
+   "city": "Upper",
+   "facts": {}
+  },
+  {
+   "id": "217b462b-e1a0-e2e4-2458-462975326116",
+   "firstName": "Charlotte",
+   "age": 75,
+   "gender": "Female",
+   "city": "Franklin",
+   "facts": {}
+  },
+  {
+   "id": "2187a063-0a99-5512-edfd-c5231684e209",
+   "firstName": "Elna",
+   "age": 40,
+   "gender": "Female",
+   "city": "Madison Park",
+   "facts": {}
+  },
+  {
+   "id": "21a6bbe3-bfe8-ea2b-e59c-e91866f564f2",
+   "firstName": "Natashia",
+   "age": 50,
+   "gender": "Female",
+   "city": "Westampton",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "22103e7a-a32a-aa46-cd23-4299e2a5cc22",
+   "firstName": "Jose",
+   "age": 38,
+   "gender": "Male",
+   "city": "Willingboro",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "226ead60-d35e-9941-8833-4b31f5f5a200",
+   "firstName": "Ezra",
+   "age": 38,
+   "gender": "Male",
+   "city": "Nutley",
+   "facts": {}
+  },
+  {
+   "id": "22f3b2aa-f261-21ba-786f-ac1ce549026c",
+   "firstName": "Wilford",
+   "age": 38,
+   "gender": "Male",
+   "city": "Hazlet",
+   "facts": {}
+  },
+  {
+   "id": "232b0ec2-0f6e-1d45-e03b-10707340c0c5",
+   "firstName": "Arvilla",
+   "age": 62,
+   "gender": "Female",
+   "city": "South Plainfield",
+   "facts": {}
+  },
+  {
+   "id": "247639dc-3d9c-0e36-7598-8b8cde4a8b31",
+   "firstName": "Raquel",
+   "age": 40,
+   "gender": "Female",
+   "city": "Lacey",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "24bb3116-4772-8382-605c-0627dbf7384e",
+   "firstName": "Devon",
+   "age": 50,
+   "gender": "Male",
+   "city": "Wall",
+   "facts": {}
+  },
+  {
+   "id": "24cb61a6-43b7-39a6-5dc6-ea722cbcaab5",
+   "firstName": "Soledad",
+   "age": 36,
+   "gender": "Female",
+   "city": "West Orange",
+   "facts": {}
+  },
+  {
+   "id": "25d158ae-5fb1-4e50-249d-f0026a358ad9",
+   "firstName": "Glynda",
+   "age": 43,
+   "gender": "Female",
+   "city": "Manalapan",
+   "facts": {}
+  },
+  {
+   "id": "2668ccde-a33b-af50-4985-8ee9965ae8f1",
+   "firstName": "Darrel",
+   "age": 66,
+   "gender": "Male",
+   "city": "Franklin",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "26dd8b6f-264e-8c27-9180-ec44582c8785",
+   "firstName": "Alex",
+   "age": 51,
+   "gender": "Male",
+   "city": "Atlantic City",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "273c2be5-5257-f5a6-c97f-67464517362e",
+   "firstName": "Deedee",
+   "age": 54,
+   "gender": "Female",
+   "city": "East Orange",
+   "facts": {}
+  },
+  {
+   "id": "27b98e90-42ee-113a-f23d-f4c2acf9f272",
+   "firstName": "Bradly",
+   "age": 51,
+   "gender": "Male",
+   "city": "Wyckoff",
+   "facts": {}
+  },
+  {
+   "id": "27c698e3-efc2-8796-933d-b288405cfa47",
+   "firstName": "Khalilah",
+   "age": 56,
+   "gender": "Female",
+   "city": "Hazlet",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "27e24898-337e-9c24-e41c-84a0b457be3f",
+   "firstName": "Rico",
+   "age": 43,
+   "gender": "Male",
+   "city": "Ridgefield",
+   "facts": {}
+  },
+  {
+   "id": "27e2f74b-f2b7-4c8c-d845-0e438a5b1b7d",
+   "firstName": "Maryam",
+   "age": 54,
+   "gender": "Female",
+   "city": "Hasbrouck Heights",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "280ce32f-8f8a-ab55-1208-c3e367716175",
+   "firstName": "Lyndsey",
+   "age": 79,
+   "gender": "Female",
+   "city": "Elmer",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "28644c35-3cf1-957c-724a-7aefd0dba2bb",
+   "firstName": "Karry",
+   "age": 51,
+   "gender": "Female",
+   "city": "Winslow",
+   "facts": {}
+  },
+  {
+   "id": "288e3dec-6943-2342-3b24-a798f503ed05",
+   "firstName": "Darrell",
+   "age": 48,
+   "gender": "Male",
+   "city": "Jersey City",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "28cc073d-76f1-e614-07a9-5ae9786dda4a",
+   "firstName": "Ralph",
+   "age": 37,
+   "gender": "Male",
+   "city": "Mountainside",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2936d051-2728-7eb6-4e26-0bd9ece86c9e",
+   "firstName": "Arnetta",
+   "age": 62,
+   "gender": "Female",
+   "city": "Emerson",
+   "facts": {}
+  },
+  {
+   "id": "294cfa61-5824-d7ec-d19c-276c79cb0aa5",
+   "firstName": "Frank",
+   "age": 59,
+   "gender": "Male",
+   "city": "Piscataway",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2973b7f3-cf44-d6b7-a51d-5a42af93f275",
+   "firstName": "Lyndia",
+   "age": 68,
+   "gender": "Female",
+   "city": "Paramus",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "29adb4c8-5d26-105f-189d-63af8df376b4",
+   "firstName": "Marcos",
+   "age": 54,
+   "gender": "Male",
+   "city": "Paterson",
+   "facts": {}
+  },
+  {
+   "id": "29ebea49-7422-4242-5d72-89532d06531e",
+   "firstName": "Granville",
+   "age": 49,
+   "gender": "Male",
+   "city": "Millville",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2a0e8d7b-8567-1904-ada7-94711fdba62c",
+   "firstName": "Hans",
+   "age": 57,
+   "gender": "Male",
+   "city": "Jackson",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2a229e26-59b6-c94c-30c1-ed0f3ebb3fa8",
+   "firstName": "Rory",
+   "age": 49,
+   "gender": "Male",
+   "city": "Absecon",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2aaca730-098d-b357-6b9b-f7dd96642d73",
+   "firstName": "Chong",
+   "age": 38,
+   "gender": "Male",
+   "city": "Brookdale",
+   "facts": {}
+  },
+  {
+   "id": "2b4bfdb9-c1e1-db92-73e5-ca929de59592",
+   "firstName": "Lonna",
+   "age": 45,
+   "gender": "Female",
+   "city": "Hopewell",
+   "facts": {}
+  },
+  {
+   "id": "2b669027-3cff-8ca8-5d1a-2a90c3d30972",
+   "firstName": "Myrtice",
+   "age": 48,
+   "gender": "Female",
+   "city": "Kingwood",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2b7d37dd-ebce-ad95-54e7-2256d39c716c",
+   "firstName": "Walton",
+   "age": 42,
+   "gender": "Male",
+   "city": "Bellmawr",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2bc6617a-b8be-16bd-cfcb-7a3c96e7b0eb",
+   "firstName": "Jina",
+   "age": 40,
+   "gender": "Female",
+   "city": "Paterson",
+   "facts": {}
+  },
+  {
+   "id": "2be04974-61d1-9621-98ac-e3d36f484083",
+   "firstName": "Jeanmarie",
+   "age": 60,
+   "gender": "Female",
+   "city": "Echelon",
+   "facts": {
+    "prediabetes": true
+   }
+  },
+  {
+   "id": "2c1fb69d-b7b6-9323-85ee-38c48c8fec92",
+   "firstName": "Isabel",
+   "age": 37,
+   "gender": "Female",
+   "city": "Livingston",
+   "facts": {}
+  }
+ ]
+}

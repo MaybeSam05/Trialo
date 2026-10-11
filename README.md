@@ -179,7 +179,8 @@ npm run seed:demo        # three synthetic campaigns and about 55 sessions over 
 npm run demo:user        # create (or reset) the shared "trialo-demo" coordinator account
 ```
 
-- `seed:demo` only replaces campaigns whose slug starts with `demo-`, so it's safe to re-run. Add `-- --clear-all` to wipe every campaign first, or run `npx tsx scripts/seed-demo.ts --dry-run` to preview without touching the database.
+- Demo participants are synthetic patients from [Synthea](https://github.com/synthetichealth/synthea): their age, gender, first name and answers about diagnoses, medicines and procedures come from each patient's simulated record in [`scripts/data/synthea-participants.json`](scripts/data/synthea-participants.json). To regenerate it, run Synthea with its CSV exporter and then `npx tsx scripts/synthea-extract.ts path/to/output/csv` (see the script for the exact command).
+- `seed:demo` only replaces campaigns whose slug starts with `demo-`, so it's safe to re-run. It stops without changing anything if those campaigns belong to more than one account. Add `-- --clear-all` to wipe every campaign first, or run `npx tsx scripts/seed-demo.ts --dry-run` to preview without touching the database.
 - `demo:user` prints a fresh password and gives the account every campaign without an owner. The portal's **Demo** button signs visitors into it with a one-time token.
 
 ## Scripts
