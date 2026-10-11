@@ -101,8 +101,8 @@ sequenceDiagram
 ### 1. Install
 
 ```bash
-git clone https://github.com/MaybeSam05/Popplio-Trial.git trialo
-cd trialo
+git clone https://github.com/MaybeSam05/Trialo.git
+cd Trialo
 npm install
 ```
 
