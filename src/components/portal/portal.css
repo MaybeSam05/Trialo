@@ -12,6 +12,12 @@
 .portal-copy li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); transform: translateY(-2px); }
 .portal-ollie { margin-top: auto; align-self: flex-end; }
 .portal-form { display: grid; place-items: center; padding: clamp(24px, 5vw, 64px) 16px; }
+.portal-form-inner { display: grid; justify-items: center; gap: 20px; width: 100%; max-width: 420px; }
+.portal-demo { display: grid; justify-items: center; gap: 10px; width: 100%; text-align: center; }
+.portal-demo-or { display: flex; align-items: center; gap: 12px; width: 100%; color: var(--muted); font-size: 0.875rem; font-weight: 700; }
+.portal-demo-or::before, .portal-demo-or::after { content: ""; flex: 1; height: 1.5px; background: var(--line); }
+.portal-demo-btn { width: 100%; max-width: 400px; }
+.portal-demo p { font-size: 0.875rem; }
 
 @media (max-width: 900px) {
   .portal { grid-template-columns: 1fr; }

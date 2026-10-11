@@ -11,6 +11,7 @@ const isPublic = createRouteMatcher([
   "/api/sessions/(.*)",
   "/api/elevenlabs/(.*)",
   "/__clerk/(.*)",
+  "/api/portal/demo",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

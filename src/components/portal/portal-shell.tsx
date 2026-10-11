@@ -2,7 +2,7 @@ import { Ollie } from "@/components/ollie";
 import "./portal.css";
 
 /** Coordinator portal: Ollie and a short explainer beside Clerk's sign-in / sign-up form. */
-export function PortalShell({ title, lede, children }: { title: string; lede: string; children: React.ReactNode }) {
+export function PortalShell({ title, lede, children, demoUnavailable = false }: { title: string; lede: string; children: React.ReactNode; demoUnavailable?: boolean }) {
   return <main id="main" className="portal">
     <section className="portal-intro">
       <div className="portal-brand"><Ollie face="hello" size={44} /><strong>Trialo</strong><span>Coordinator portal</span></div>
@@ -17,7 +17,18 @@ export function PortalShell({ title, lede, children }: { title: string; lede: st
       </div>
       <div className="portal-ollie" aria-hidden><Ollie face="hello" size={220} /></div>
     </section>
-    <section className="portal-form" aria-label="Account">{children}</section>
+    <section className="portal-form" aria-label="Account">
+      <div className="portal-form-inner">
+        {children}
+        <div className="portal-demo">
+          <span className="portal-demo-or"><span>or</span></span>
+          {/* A plain link: the route signs into the shared demo account and comes back to finish sign-in. */}
+          <a className="btn btn-secondary portal-demo-btn" href="/api/portal/demo">Demo</a>
+          <p className="muted">Explore Trialo with sample campaigns and sessions, no account needed.</p>
+          {demoUnavailable && <p className="error" role="alert">The demo isn&apos;t available right now. Please try again later.</p>}
+        </div>
+      </div>
+    </section>
   </main>;
 }
 
