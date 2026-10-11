@@ -18,6 +18,15 @@ Minimal hackathon implementation of a QR-based clinical-trial pre-screening flow
 3. Copy `.env.example` to `.env.local` and fill in the Supabase URL, Supabase service-role key, ElevenLabs API key, and Ollie's Agent ID.
 4. Run `npm run dev`.
 
+## Coordinator accounts (Clerk)
+
+Coordinators sign in at `/portal` with a username and password (sign-up is open at `/portal/sign-up`). Each account only sees the campaigns it created (`studies.owner_id`) and their sessions. Participants never sign in: `/s/<slug>`, the participant APIs and the ElevenLabs webhook stay public.
+
+- Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to `.env.local` (and Netlify), plus `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/portal`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/portal/sign-up` and both `..._FALLBACK_REDIRECT_URL=/dashboard`. Without the keys every page fails to load.
+- Run the `owner_id` lines in `supabase/schema.sql` once.
+- `npm run demo:user` creates (or resets the password of) the shared `trialo-demo` account and gives it every campaign without an owner.
+- If sign-in loops back to the portal locally, sync your computer clock; Clerk session tokens are sensitive to clock drift.
+
 ## Demo data
 
 `npm run seed:demo` fills Supabase with realistic, fully synthetic data: three campaigns with their own question lists and about 55 sessions over the past two weeks (completed, unsure, exclusions, drop-offs, links opened but never started, and two people "answering now"). It replaces only campaigns whose slug starts with `demo-`, so it is safe to re-run.
