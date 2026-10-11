@@ -248,16 +248,19 @@ function ago(ms: number) {
   return `${Math.round(seconds / 60)} min ago`;
 }
 
-/** The participant's best fits among the account's other studies, from answers they already gave. Details are in the report. */
+/** The participant's best fits among the account's other studies, as colour-coded pills (icon + label, never colour alone). */
 function OtherStudies({ session }: { session: BoardSession }) {
   if (session.othersTotal === 0) return <span className="dashboard-secondary">No other studies</span>;
-  if (!session.others.length) return <span className="dashboard-secondary">{session.othersUnlikely === session.othersTotal ? "Unlikely for other studies" : "Not enough information yet"}</span>;
-  const more = session.others.length - 2;
-  return <>
-    <ul className="board-fits">{session.others.slice(0, 2).map((study) => <li key={study.label} title={study.summary}>
-      <span className={`board-fit is-${study.fit}`}>{study.fit === "match" ? "Potential match" : "Needs review"}</span>
+  const shown = session.others.slice(0, 3);
+  const more = session.others.length - shown.length;
+  return <div className="board-fits">
+    {shown.map((study) => <span key={study.label} className={`board-fit is-${study.fit}`} title={`${study.fit === "match" ? "Potential match for follow-up" : "Needs review"}: ${study.summary}`}>
+      <span className="board-fit-icon" aria-hidden="true">{study.fit === "match" ? "✓" : "?"}</span>
+      <span className="dashboard-sr-only">{study.fit === "match" ? "Potential match: " : "Needs review: "}</span>
       <span className="board-fit-name">{study.label}</span>
-    </li>)}</ul>
-    {more > 0 && <span className="dashboard-secondary">+{more} more in the report</span>}
-  </>;
+    </span>)}
+    {more > 0 && <span className="board-fit is-more">+{more} more</span>}
+    {session.othersUnlikely > 0 && <span className="board-fit is-unlikely" title="Unlikely match for these studies"><span className="board-fit-icon" aria-hidden="true">✕</span>{session.othersUnlikely} unlikely</span>}
+    {shown.length === 0 && session.othersUnlikely === 0 && <span className="dashboard-secondary">Not enough information yet</span>}
+  </div>;
 }

@@ -1,0 +1,66 @@
+/* Other studies to consider: colour-coded study cards (always with an icon and a label, never colour alone) */
+.os {
+  --os-fit: #1f9d6b;
+  --os-open: #e3a008;
+  --os-miss: #d64545;
+  --os-ask: #b7cfe0;
+}
+.os-lede { max-width: 62ch; margin-top: 4px; }
+
+/* Summary tiles */
+.os-tally { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.os-tally li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 10px; padding: 12px 14px; border-radius: 16px; }
+.os-tally strong { font-size: 1.5rem; line-height: 1; }
+.os-tally li > span:last-child { grid-column: 2; font-size: .8125rem; font-weight: 700; }
+.os-tally-icon { grid-row: 1 / span 2; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--card); }
+.os-tally .is-match { background: var(--match-bg); color: var(--match-text); }
+.os-tally .is-possible { background: var(--missing-bg); color: var(--missing-text); }
+.os-tally .is-unlikely { background: var(--exclude-bg); color: var(--exclude-text); }
+.os-tally .is-unknown { background: var(--panel); color: var(--muted); }
+.os-tally .is-zero { opacity: .55; }
+
+/* Study cards */
+.os-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.os-card { --tone: var(--os-ask); --tint: var(--panel); --ink-tone: var(--muted); display: grid; gap: 14px; align-content: start; padding: 18px; border: 1.5px solid var(--line); border-top: 6px solid var(--tone); border-radius: 18px; background: linear-gradient(180deg, var(--tint), var(--card) 90px); }
+.os-card.is-match { --tone: var(--os-fit); --tint: var(--match-bg); --ink-tone: var(--match-text); }
+.os-card.is-possible { --tone: var(--os-open); --tint: var(--missing-bg); --ink-tone: var(--missing-text); }
+.os-card.is-unlikely { --tone: var(--os-miss); --tint: var(--exclude-bg); --ink-tone: var(--exclude-text); }
+.os-card-head { display: flex; align-items: flex-start; gap: 12px; }
+.os-card h3 { margin: 2px 0 0; font-size: 1.0625rem; line-height: 1.3; }
+.os-badge { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--tone); color: #fff; box-shadow: 0 0 0 5px color-mix(in srgb, var(--tone) 22%, transparent); }
+.os-badge svg { width: 20px; height: 20px; }
+.os-verdict { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--card); color: var(--ink-tone); font-size: .75rem; font-weight: 800; letter-spacing: .02em; }
+
+/* Coverage meter: one segment per criterion */
+.os-coverage { display: grid; gap: 6px; }
+.os-meter { display: flex; gap: 4px; height: 10px; }
+.os-meter span { flex: 1; border-radius: 999px; background: var(--os-ask); }
+.os-meter .is-fit { background: var(--os-fit); }
+.os-meter .is-miss { background: var(--os-miss); }
+.os-meter .is-open { background: var(--os-open); }
+.os-coverage-text { font-size: .8125rem; font-weight: 700; color: var(--muted); }
+
+/* Criteria checklist */
+.os-criteria { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.os-criteria li { display: flex; gap: 10px; align-items: flex-start; font-size: .9375rem; line-height: 1.35; }
+.os-mark { flex: none; display: grid; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; color: #fff; background: var(--os-ask); }
+.os-mark svg { width: 13px; height: 13px; }
+.os-criteria .is-fit .os-mark { background: var(--os-fit); }
+.os-criteria .is-miss .os-mark { background: var(--os-miss); }
+.os-criteria .is-open .os-mark { background: var(--os-open); }
+.os-criteria .is-ask .os-mark { color: var(--muted); }
+.os-criterion { display: grid; gap: 1px; }
+.os-criterion small { color: var(--muted); font-size: .8125rem; }
+.os-criteria .is-ask .os-criterion > span:first-child { color: var(--muted); }
+.os-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Studies with nothing to compare yet */
+.os-unknown { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 14px; background: var(--panel); font-size: .875rem; }
+.os-unknown p { margin: 0; font-weight: 700; color: var(--muted); }
+.os-unknown ul { display: contents; list-style: none; }
+.os-unknown li { padding: 3px 10px; border: 1.5px dashed var(--os-ask); border-radius: 999px; background: var(--card); font-weight: 700; }
+
+@media (max-width: 760px) {
+  .os-tally { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .os-grid { grid-template-columns: 1fr; }
+}

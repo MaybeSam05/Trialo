@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/ollie/hello.webp" alt="Ollie the penguin waving" width="140">
+  <img src="public/ollie/logo.svg" alt="Ollie, the Trialo penguin, waving" width="140">
 </p>
 
 <h1 align="center">Trialo</h1>
