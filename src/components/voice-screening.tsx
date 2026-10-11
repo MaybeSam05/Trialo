@@ -49,16 +49,18 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
   const onError = useCallback((message: string, context?: unknown) => console.warn("[Trialo] conversation error", message, context), []);
 
   // Hold to talk: the microphone stays muted (Ollie hears silence, not background noise) except while the talk button is held.
+  // Text interviews have no microphone, and the SDK throws if asked to mute one, so mute is only controlled in voice mode.
   const [talking, setTalking] = useState(false);
+  const [textMode, setTextMode] = useState(false);
 
-  return <ConversationProvider isMuted={!talking} onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
+  return <ConversationProvider isMuted={textMode ? undefined : !talking} onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
     <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); setDropped(""); setDisconnectReason(null); }}
-      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} disconnectReason={disconnectReason} talking={talking} onTalk={setTalking} />
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} disconnectReason={disconnectReason} talking={talking} onTalk={setTalking} onTextMode={setTextMode} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped, disconnectReason, talking, onTalk }: {
-  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string; disconnectReason: string | null; talking: boolean; onTalk: (talking: boolean) => void;
+function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped, disconnectReason, talking, onTalk, onTextMode }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string; disconnectReason: string | null; talking: boolean; onTalk: (talking: boolean) => void; onTextMode: (text: boolean) => void;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
@@ -108,7 +110,7 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
 
   async function start(nextMode: InterviewMode, typedName = name) {
     try {
-      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedAnswers({}); setParticipantEnded(false); resetMessages();
+      setName(typedName); setError(""); setStarted(true); setMode(nextMode); onTextMode(nextMode === "text"); setWasConnected(false); setSavedAnswers({}); setParticipantEnded(false); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; questions?: Question[] | null; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
