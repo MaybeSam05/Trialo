@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { matchTrials } from "@/lib/matching";
-import { answerProgress, matchQuestions, sessionQuestions } from "@/lib/questions";
+import { saveAnswer, type AnswerStore } from "@/lib/save-answer";
 import { getSupabase } from "@/lib/supabase";
-import type { Trial } from "@/lib/types";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,18 +8,21 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const { field, value } = await request.json() as { field?: string; value?: string };
     if (!field || !value || field.length > 80 || value.length > 2000) return NextResponse.json({ error: "A valid field and value are required." }, { status: 400 });
     const supabase = getSupabase();
-    // "*" so this keeps working before screening_sessions.questions has been added.
-    const { data: session, error: sessionError } = await supabase.from("screening_sessions").select("*").eq("id", id).single();
-    if (sessionError || !session) return NextResponse.json({ error: "Unknown session." }, { status: 404 });
-    const answers = { ...(session.answers ?? {}), [field]: value };
-    const { data: study, error: studyError } = await supabase.from("studies").select("*").eq("id", session.study_id).single();
-    if (studyError || !study) throw studyError ?? new Error("Study not found.");
-    // Score against the questions this session was asked, not the campaign's latest edit.
-    const { questions } = sessionQuestions(session.questions, study.questions);
-    // "completed" only once every question that applies has an answer; recomputed on every save, so corrections count.
-    const status = questions && answerProgress(answers, questions).complete ? "completed" : "needs_review";
-    const { error } = await supabase.from("screening_sessions").update({ answers, updated_at: new Date().toISOString(), match_results: questions ? matchQuestions(answers, questions) : matchTrials(answers, study.trials as Trial[]), status }).eq("id", id);
-    if (error) throw error;
+    const store: AnswerStore = {
+      // "*" so this keeps working before screening_sessions.questions has been added.
+      // A read error is a 500 (the client retries); only a missing row is an unknown session.
+      readSession: async (sessionId) => { const { data, error } = await supabase.from("screening_sessions").select("*").eq("id", sessionId).maybeSingle(); if (error) throw error; return data; },
+      readStudy: async (studyId) => { const { data, error } = await supabase.from("studies").select("*").eq("id", studyId).maybeSingle(); if (error) throw error; return data; },
+      writeIfUnchanged: async (sessionId, expected, patch) => {
+        const { data, error } = await supabase.from("screening_sessions").update(patch).eq("id", sessionId).eq("updated_at", expected).select("id");
+        if (error) throw error;
+        return Boolean(data?.length);
+      },
+    };
+    const result = await saveAnswer(store, id, field, value);
+    if (result === "unknown_session") return NextResponse.json({ error: "Unknown session." }, { status: 404 });
+    // Still contended after several tries: tell the client to retry rather than pretending it saved.
+    if (result === "busy") return NextResponse.json({ error: "The session was busy. Please retry." }, { status: 503 });
     return NextResponse.json({ ok: true });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Could not save response." }, { status: 500 });

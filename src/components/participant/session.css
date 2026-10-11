@@ -139,3 +139,8 @@
   .iv-talk { transition: none; }
   .iv-talk[aria-pressed="true"] svg { animation: none; }
 }
+/* Save status: only while saving or after a failure during the interview; the closing screen states the outcome */
+.iv-save { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; font-size: 0.875rem; font-weight: 700; color: var(--muted); }
+.iv-save.is-failed { color: var(--exclude-text); }
+.iv-save.is-saved { color: var(--match-text); }
+.iv-save-retry { min-height: 32px; padding: 4px 12px; border: 1.5px solid currentColor; border-radius: 999px; background: var(--card); color: inherit; font: inherit; cursor: pointer; }

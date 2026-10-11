@@ -191,23 +191,37 @@ function answerMatches(value: string, expected: string): boolean | null {
   return value.trim().toLowerCase().startsWith(expected);
 }
 
+/** Whether a question's age limits and "only if" condition are met: confirmed, confirmed not met, or not known yet. */
+export type RuleStatus = "met" | "not_met" | "unknown";
+
 /**
- * Whether a question applies to this participant given what they've answered so far.
+ * Checks a question's age limits and "only if" condition against the answers so far (including its parent's own rules).
+ * A missing, skipped or unclear answer ("not sure") makes a rule unknown, never met or not met.
+ */
+export function ruleStatus(question: Question, answers: Record<string, unknown>, questions: Question[]): RuleStatus {
+  let status: RuleStatus = "met";
+  if (question.minAge !== undefined || question.maxAge !== undefined) {
+    const age = toAge(String(answers.age ?? "").match(/\d+/)?.[0]);
+    if (age === undefined || Number.isNaN(age) || unclear.test(String(answers.age ?? ""))) status = "unknown";
+    else if ((question.minAge !== undefined && age < question.minAge) || (question.maxAge !== undefined && age > question.maxAge)) return "not_met";
+  }
+  if (!question.when) return status;
+  const whenKey = LEGACY_KEYS[question.when.key] ?? question.when.key;
+  const parent = questions.find((other) => other.key === whenKey);
+  const parentStatus = parent ? ruleStatus(parent, answers, questions) : "met";
+  if (parentStatus === "not_met") return "not_met";
+  const value = answers[whenKey];
+  const matches = value === undefined || value === null || value === "" ? null : answerMatches(String(value), question.when.equals);
+  if (matches === false) return "not_met";
+  return matches === null || parentStatus === "unknown" ? "unknown" : status;
+}
+
+/**
+ * Whether a question should still be asked given what they've answered so far.
  * Missing, skipped or unclear answers keep the question in (it may still be asked); only a confirmed mismatch drops it.
  */
 export function applies(question: Question, answers: Record<string, unknown>, questions: Question[]): boolean {
-  const age = toAge(String(answers.age ?? "").match(/\d+/)?.[0]);
-  if (age !== undefined && !Number.isNaN(age)) {
-    if (question.minAge !== undefined && age < question.minAge) return false;
-    if (question.maxAge !== undefined && age > question.maxAge) return false;
-  }
-  if (!question.when) return true;
-  const whenKey = LEGACY_KEYS[question.when.key] ?? question.when.key;
-  const parent = questions.find((other) => other.key === whenKey);
-  if (parent && !applies(parent, answers, questions)) return false;
-  const value = answers[whenKey];
-  if (value === undefined || value === null || value === "") return true;
-  return answerMatches(String(value), question.when.equals) !== false;
+  return ruleStatus(question, answers, questions) !== "not_met";
 }
 
 /**
@@ -248,35 +262,44 @@ export function applicableCount(questions: Question[], answers: Record<string, u
 
 export type Evidence = "supports" | "against" | "verify" | "skipped";
 
-/** How one scored answer bears on its study's result, using the same rules as matchQuestions. */
+/** How one scored answer bears on its study's result. matchQuestions uses the same rules, so reports and scoring agree. */
 export function answerEvidence(question: Question, answers: Record<string, unknown>, questions: Question[]): Evidence {
-  if (!applies(question, answers, questions)) return question.kind === "include" ? "against" : "skipped";
-  const answered = yesNo(String(answers[question.key] ?? ""));
-  if (!answered) return "verify";
-  const fits = question.kind === "include" ? answered === "yes" : answered === "no";
-  return fits ? "supports" : "against";
+  return judge(question, answers, questions).evidence;
 }
 
-/** Scores yes/no answers per trial group. A missing or unclear answer always needs review, never a rejection. */
+type Judgement = { evidence: Evidence; reason: string };
+
+function judge(question: Question, answers: Record<string, unknown>, questions: Question[]): Judgement {
+  const rule = ruleStatus(question, answers, questions);
+  // A "fits if yes" question ruled out by age, gender or an earlier answer is a requirement the person doesn't meet.
+  if (rule === "not_met") return question.kind === "include"
+    ? { evidence: "against", reason: `Profile or earlier answers are outside who this criterion is for: ${question.text}` }
+    : { evidence: "skipped", reason: "" };
+  const answered = yesNo(String(answers[question.key] ?? ""));
+  if (!answered) return { evidence: "verify", reason: `Needs coordinator verification: ${question.text}` };
+  const fits = question.kind === "include" ? answered === "yes" : answered === "no";
+  // Not meeting a requirement, or reporting nothing that flags, holds whether or not the criterion turns out to apply.
+  if (question.kind === "include" && !fits) return { evidence: "against", reason: `Reported answer may not fit this criterion: ${question.text}` };
+  if (question.kind === "exclude" && fits) return { evidence: "supports", reason: "" };
+  // Otherwise it only counts once we know the criterion applies (age or an earlier answer may be missing or unclear).
+  if (rule === "unknown") return { evidence: "verify", reason: `Needs coordinator verification (age or an earlier answer wasn't confirmed): ${question.text}` };
+  return fits ? { evidence: "supports", reason: "" } : { evidence: "against", reason: `Reported answer may not fit this criterion: ${question.text}` };
+}
+
+/**
+ * Scores yes/no answers per trial group. A confirmed answer that doesn't fit is a possible exclusion; a missing or unclear
+ * answer, or a criterion whose age limit or condition can't be confirmed, needs review; never a rejection, never a match.
+ */
 export function matchQuestions(answers: Record<string, unknown>, questions: Question[]): MatchResult[] {
   const scored = questions.filter((question) => question.kind !== "info");
   const trials = [...new Set(scored.map((question) => question.trial))];
   return trials.map((trial) => {
-    const all = scored.filter((question) => question.trial === trial);
-    // A "fits if yes" question that was ruled out by age, gender or an earlier answer is a requirement the person doesn't meet.
-    const ruledOut = all.find((question) => question.kind === "include" && !applies(question, answers, questions));
-    if (ruledOut) return { trialId: trial, trialName: trial, status: "possible_exclusion", reason: `Profile or earlier answers are outside who this criterion is for: ${ruledOut.text}` } satisfies MatchResult;
-    const group = all.filter((question) => applies(question, answers, questions));
-    let missing: Question | undefined;
-    for (const question of group) {
-      const answered = yesNo(String(answers[question.key] ?? ""));
-      if ((question.kind === "exclude" && answered === "yes") || (question.kind === "include" && answered === "no")) {
-        return { trialId: trial, trialName: trial, status: "possible_exclusion", reason: `Reported answer may not fit this criterion: ${question.text}` } satisfies MatchResult;
-      }
-      if (!answered && !missing) missing = question;
-    }
-    if (missing) return { trialId: trial, trialName: trial, status: "needs_information", reason: `Needs coordinator verification: ${missing.text}` } satisfies MatchResult;
-    if (group.length === 0) return { trialId: trial, trialName: trial, status: "needs_information", reason: "None of this study's questions applied to this participant's profile. Coordinator review is required." } satisfies MatchResult;
+    const judged = scored.filter((question) => question.trial === trial).map((question) => judge(question, answers, questions));
+    const against = judged.find((item) => item.evidence === "against");
+    if (against) return { trialId: trial, trialName: trial, status: "possible_exclusion", reason: against.reason } satisfies MatchResult;
+    const open = judged.find((item) => item.evidence === "verify");
+    if (open) return { trialId: trial, trialName: trial, status: "needs_information", reason: open.reason } satisfies MatchResult;
+    if (judged.every((item) => item.evidence === "skipped")) return { trialId: trial, trialName: trial, status: "needs_information", reason: "None of this study's questions applied to this participant's profile. Coordinator review is required." } satisfies MatchResult;
     return { trialId: trial, trialName: trial, status: "potential_match", reason: "Initial responses align with the configured criteria. Coordinator review is required." } satisfies MatchResult;
   });
 }

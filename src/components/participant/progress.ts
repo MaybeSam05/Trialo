@@ -32,15 +32,24 @@ export function matchQuestionKey(field: string, keys: readonly string[]): string
 }
 
 /**
- * The current question is the one after the furthest question answered so far, so a question the
- * participant skipped doesn't hold the count back, and a corrected earlier answer doesn't move it.
+ * Two different things, kept apart so they can't contradict each other:
+ * - `current` is where the interview is: the question after the furthest one answered, so a question the participant
+ *   skipped doesn't hold the position back and a corrected earlier answer doesn't move it.
+ * - `answered`, `percent` and `finished` count only questions that actually have an answer (the same count as the
+ *   dashboard and report), so a skipped question never shows as done.
+ * `atEnd` = the last question has been reached but some earlier ones are still unanswered.
  * `saved` is keyed by question key (see matchQuestionKey).
  */
 export function interviewProgress(saved: Record<string, string>, questions: Question[] | null) {
-  const order = questions ? applicableKeys(questions, saved) : null;
-  const total = order ? order.length : DEFAULT_TOTAL;
-  const done = order ? order.reduce((furthest, key, index) => key in saved ? index + 1 : furthest, 0) : Math.min(Object.keys(saved).length, total);
-  return { done, total, current: Math.min(done + 1, total), finished: done >= total, percent: Math.round((done / total) * 100) };
+  if (!questions) {
+    const answered = Math.min(Object.keys(saved).length, DEFAULT_TOTAL);
+    return { answered, total: DEFAULT_TOTAL, current: Math.min(answered + 1, DEFAULT_TOTAL), finished: answered >= DEFAULT_TOTAL, atEnd: false, percent: Math.round((answered / DEFAULT_TOTAL) * 100) };
+  }
+  const order = applicableKeys(questions, saved);
+  const furthest = order.reduce((last, key, index) => key in saved ? index + 1 : last, 0);
+  const { answered, total, complete } = answerProgress(saved, questions);
+  const count = total ?? order.length;
+  return { answered, total: count, current: Math.min(furthest + 1, count), finished: complete, atEnd: furthest >= count && !complete, percent: Math.round((answered / count) * 100) };
 }
 
 export type InterviewEnding = "complete" | "stopped" | "cut";

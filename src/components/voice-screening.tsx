@@ -4,6 +4,7 @@ import { ConversationProvider, useConversationClientTool, useConversationControl
 import { useCallback, useEffect, useRef, useState } from "react";
 import { agentQuestionList, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
+import { AnswerQueue, postAnswer, type QueueState } from "@/components/participant/answer-queue";
 import { endReasonFor, interviewEnding, interviewKeys, interviewProgress, matchQuestionKey, normalizeField } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 import { SpeechTimeline, stripExpressions, type Alignment } from "@/components/participant/speech-timeline";
@@ -75,23 +76,33 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
   const [questions, setQuestions] = useState(campaignQuestions);
   // Pressing "End interview" is the participant stopping, not finishing.
   const [participantEnded, setParticipantEnded] = useState(false);
+  // Answers are saved through an ordered, retrying queue (one per session); the counter only counts confirmed saves.
+  const queue = useRef<AnswerQueue | null>(null);
+  const [saves, setSaves] = useState<QueueState>({ pending: 0, failed: 0, retryable: 0 });
 
   // Configure an ElevenLabs client tool named record_screening_answer with field and value parameters.
   useConversationClientTool("record_screening_answer", async (parameters) => {
     const raw = typeof parameters.field === "string" ? parameters.field : "";
     const value = typeof parameters.value === "string" ? parameters.value : "";
     if (!raw || !value) return "A field name and confirmed answer are required.";
-    if (!sessionId) return "Screening session is not ready.";
+    if (!sessionId || !queue.current) return "Screening session is not ready.";
     // Save under the question's own key when Ollie words the field differently, so scoring and the counter both see it.
     const key = questions ? matchQuestionKey(raw, interviewKeys(questions)) : normalizeField(raw);
     const field = questions && key ? key : raw;
-    const response = await fetch(`/api/sessions/${sessionId}/answers`, {
-      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field, value }),
-    }).catch(() => null);
-    if (!response) return "Answer could not be saved because the connection failed; continue the interview.";
-    if (response.ok) { if (key) setSavedAnswers((saved) => ({ ...saved, [key]: value })); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
-    return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
+    // Ollie waits for this reply, so don't hold the conversation for every retry: the queue keeps going in the background.
+    const outcome = await Promise.race([queue.current.save(field, value), new Promise<"slow">((resolve) => setTimeout(() => resolve("slow"), 4_000))]);
+    if (outcome === "saved" || outcome === "replaced") return "Answer saved.";
+    if (outcome === "slow") return "Saving is taking a moment; the app keeps trying in the background. Continue the interview.";
+    return "This answer could not be saved yet; the participant can retry it on screen. Continue the interview.";
   });
+
+  // Leaving with answers still saving or unsaved would lose them: ask the browser to confirm first.
+  useEffect(() => {
+    if (!saves.pending && !saves.failed) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [saves.pending, saves.failed]);
 
   const [name, setName] = useState("");
 
@@ -102,12 +113,23 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
       const sessionBody = await sessionResponse.json() as { sessionId?: string; questions?: Question[] | null; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
       const asked = sessionBody.questions !== undefined ? sessionBody.questions : campaignQuestions;
-      setSessionId(sessionBody.sessionId);
+      const id = sessionBody.sessionId;
+      const keys = new Set(asked ? interviewKeys(asked) : []);
+      // A retried interview gets a new session and queue; the old queue may still finish its saves but no longer drives the screen.
+      const current = () => queue.current === sessionQueue;
+      const sessionQueue: AnswerQueue = new AnswerQueue((field, value) => postAnswer(id, field, value), (state) => { if (current()) setSaves(state); }, (field, value) => {
+        if (!current()) return;
+        // Only confirmed saves move the counter. The typed name isn't a question.
+        const key = asked ? (keys.has(field) ? field : null) : field === NAME_FIELD ? null : normalizeField(field);
+        if (key) setSavedAnswers((saved) => ({ ...saved, [key]: value }));
+        if (field !== NAME_FIELD) setHappyUntil(Date.now() + HAPPY_FOR_MS);
+      });
+      queue.current = sessionQueue;
+      setSaves(sessionQueue.state());
+      setSessionId(id);
       setQuestions(asked);
       // The name is typed, not spoken, so save it straight away rather than through Ollie.
-      if (typedName) await fetch(`/api/sessions/${sessionBody.sessionId}/answers`, {
-        method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field: NAME_FIELD, value: typedName }),
-      });
+      if (typedName) void sessionQueue.save(NAME_FIELD, typedName);
 
       const tokenResponse = await fetch("/api/elevenlabs/conversation-token", {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sessionId: sessionBody.sessionId }),
@@ -151,5 +173,6 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
   return <Session mode={mode} connected={connected} ended={ended} ending={ending} error={error} isSpeaking={isSpeaking} talking={talking}
     messages={messages} progress={interviewProgress(savedAnswers, questions)} lastActivity={lastActivity} happyUntil={happyUntil}
     getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send} timeline={mode === "voice" ? timeline : null}
+    saves={saves} onRetrySaves={() => queue.current?.retryFailed()}
     onTalk={onTalk} onEnd={() => { setParticipantEnded(true); endSession(); }} onRetry={() => start(mode)} />;
 }
