@@ -15,6 +15,9 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
   // Blocks a second save before the disabled button re-renders.
   const pending = useRef(false);
   const dirty = !same(questions, saved);
+  // The editor's current contents, readable when a save finishes.
+  const latest = useRef(questions);
+  useEffect(() => { latest.current = questions; }, [questions]);
 
   // Warn before leaving the page with unsaved edits.
   useEffect(() => {
@@ -30,15 +33,19 @@ export function EditQuestions({ slug, initial }: { slug: string; initial: Questi
     if ("error" in checked) { setMessage({ text: checked.error, error: true }); return; }
     if (pending.current) return;
     pending.current = true;
+    const submitted = questions;
     setSaving(true); setMessage(null);
     // Never throws, so "Saving…" always clears; unsaved edits stay on screen for a retry.
     const result = await requestJson<{ questions?: Question[] }>(`/api/studies/${slug}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ questions: kept }) }, "save your changes");
     pending.current = false;
     setSaving(false);
     if (!result.ok || !result.body.questions) { setMessage({ text: result.ok ? "Couldn't save your changes: the server sent an unexpected reply. Please try again." : result.error, error: true }); return; }
-    setSaved(result.body.questions);
-    setQuestions(result.body.questions);
-    setMessage({ text: "Saved. New interviews will use these questions.", error: false });
+    const stored = result.body.questions;
+    setSaved(stored);
+    // Edits made while the save was in flight are newer than what was stored: keep them on screen, still unsaved.
+    const editedSince = !same(latest.current, submitted);
+    if (!editedSince) setQuestions(stored);
+    setMessage({ text: editedSince ? "Saved your earlier changes. Your newer edits aren't saved yet." : "Saved. New interviews will use these questions.", error: editedSince });
   }
 
   return <>
