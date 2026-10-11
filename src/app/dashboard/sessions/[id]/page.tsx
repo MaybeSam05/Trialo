@@ -7,7 +7,7 @@ import { DashboardStatusChip } from "@/components/dashboard/status";
 import { getSessionOutcome } from "@/components/dashboard/session-outcome";
 import { stripExpressions } from "@/components/participant/speech-timeline";
 import { MatchChip } from "@/components/status-chip";
-import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, type Evidence, type Question } from "@/lib/questions";
+import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, sessionQuestions, type Evidence, type Question } from "@/lib/questions";
 import { requireOwner } from "@/lib/auth";
 import { getSupabase } from "@/lib/supabase";
 import type { MatchResult } from "@/lib/types";
@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 type Session = {
   id: string; status: string; answers: Record<string, unknown> | null; match_results: MatchResult[] | null;
-  transcript: unknown; created_at: string; updated_at: string; studies: { name: string; questions?: Question[] | null } | null;
+  transcript: unknown; created_at: string; updated_at: string; questions?: unknown; studies: { name: string; questions?: Question[] | null } | null;
 };
 type Turn = { who: string; text: string };
 
@@ -66,13 +66,14 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
   const owner = await requireOwner();
   let session: Session | null = null;
   try {
-    const result = await getSupabase().from("screening_sessions").select("id,status,answers,match_results,transcript,created_at,updated_at,studies!inner(*)").eq("id", id).eq("studies.owner_id", owner).maybeSingle();
+    const result = await getSupabase().from("screening_sessions").select("*,studies!inner(*)").eq("id", id).eq("studies.owner_id", owner).maybeSingle();
     session = result.data as unknown as Session | null;
   } catch { notFound(); }
   if (!session) notFound();
 
   const answers = session.answers ?? {};
-  const questions = Array.isArray(session.studies?.questions) ? session.studies.questions : null;
+  // The questions this session was asked (saved when it started), not the campaign's latest edit.
+  const { questions, fromCampaign } = sessionQuestions(session.questions, session.studies?.questions);
   const rows = answerRows(answers, questions);
   const answeredCount = rows.filter((row) => row.value !== null).length;
   const name = typeof answers[NAME_FIELD] === "string" ? answers[NAME_FIELD] as string : "";
@@ -97,6 +98,7 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
           <LiveUpdates />
         </div>
       </div>
+      {fromCampaign && <p className="panel">This session started before Trialo saved each session&apos;s questions, so it&apos;s shown against the campaign&apos;s current questions. If the campaign was edited after this interview, some questions may differ from what was asked.</p>}
       <p className="panel">Demo data only. These results come from published pre-screen criteria and need review by clinical research staff. They never determine eligibility.</p>
       <div className="report-grid">
         <div className="report-main">

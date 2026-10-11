@@ -210,6 +210,16 @@ export function applies(question: Question, answers: Record<string, unknown>, qu
   return answerMatches(String(value), question.when.equals) !== false;
 }
 
+/**
+ * The questions a session uses for Ollie, scoring, progress and its report: the copy saved when it started,
+ * so later campaign edits only affect new sessions. Sessions from before copies were saved fall back to the
+ * campaign's current questions and say so (`fromCampaign`), because the version they were asked wasn't stored.
+ */
+export function sessionQuestions(saved: unknown, campaign: unknown): { questions: Question[] | null; fromCampaign: boolean } {
+  if (Array.isArray(saved)) return { questions: saved as Question[], fromCampaign: false };
+  return Array.isArray(campaign) ? { questions: campaign as Question[], fromCampaign: true } : { questions: null, fromCampaign: false };
+}
+
 /** Questions this participant should get, including profile questions. Used for the progress bar. */
 export function applicableCount(questions: Question[], answers: Record<string, unknown>): number {
   return PROFILE_QUESTIONS.length + questions.filter((question) => applies(question, answers, questions)).length;

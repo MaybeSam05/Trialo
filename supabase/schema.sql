@@ -32,3 +32,8 @@ alter table public.studies add column if not exists questions jsonb;
 -- Clerk user ID of the coordinator who created the campaign. Coordinators only see their own campaigns and sessions.
 alter table public.studies add column if not exists owner_id text;
 create index if not exists studies_owner_id_idx on public.studies(owner_id);
+
+-- The questions a session was asked, copied from its campaign when the session starts, so editing a campaign only
+-- affects new sessions. Additive and safe to re-run. Null for sessions created before this column existed: those
+-- fall back to the campaign's current questions, and their report says so.
+alter table public.screening_sessions add column if not exists questions jsonb;

@@ -176,7 +176,7 @@ async function main() {
 
   const sessions = buildSessions();
   const { error } = await supabase.from("screening_sessions").insert(sessions);
-  if (error) throw error;
+  if (error) throw new Error(error.message.includes("questions") ? "The screening_sessions.questions column is missing. Re-run supabase/schema.sql first." : error.message);
   report(sessions);
   console.log("Two sessions show as \"Answering now\" for the next ~10 minutes.");
 }
@@ -196,6 +196,7 @@ function buildSessions() {
       status: completed ? "completed" : persona === "opened" ? "started" : "needs_review",
       elevenlabs_conversation_id: persona === "opened" ? null : `demo_conv_${sessions.length + 1}_${Math.floor(random() * 1e9).toString(36)}`,
       answers,
+      questions: campaign.questions,
       match_results: Object.keys(answers).length ? matchQuestions(answers, campaign.questions) : [],
       transcript: completed ? transcriptFor(campaign, answers) : null,
       created_at: created.toISOString(),

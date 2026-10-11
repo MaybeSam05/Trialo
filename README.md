@@ -48,6 +48,8 @@ In ElevenLabs Agent settings, add a **client tool** named `record_screening_answ
 
 Coordinators edit each campaign's questions at `/` (when creating) or `/dashboard/studies/<slug>` (afterwards). Questions are stored in `studies.questions` (run the last statement of `supabase/schema.sql` once on existing databases; until then campaigns fall back to the demo trials). Each question is yes/no and is marked as *include* (a yes fits), *exclude* (a yes is a flag) or *info* (collected, not scored).
 
+Each session keeps a copy of its campaign's questions from the moment it starts (`screening_sessions.questions`), and Ollie, scoring, progress and the session report all use that copy, so editing a campaign only affects new sessions. On existing databases run the `screening_sessions.questions` line at the end of `supabase/schema.sql` once (it only adds a column). Until then sessions start without a copy, as before. Sessions created before the column existed are shown against the campaign's current questions, with a note on the report.
+
 The app passes two dynamic variables when a session starts, so Ollie's system prompt must use them instead of a fixed question list:
 
 - `{{study_name}}`: the campaign name.

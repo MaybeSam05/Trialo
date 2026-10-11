@@ -5,14 +5,16 @@ import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { SessionsBoard, type BoardSession } from "@/components/dashboard/sessions-board";
 import { getSessionOutcome, type DashboardSession } from "@/components/dashboard/session-outcome";
 import { requireOwner } from "@/lib/auth";
+import { sessionQuestions } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
 import "@/components/dashboard/dashboard.css";
 
 export const dynamic = "force-dynamic";
 
-type Row = DashboardSession & { updated_at: string | null; studies: { name: string; questions?: unknown[] | null } | null };
+type Row = DashboardSession & { updated_at: string | null; questions?: unknown; studies: { name: string; questions?: unknown[] | null } | null };
 
 function toBoardSession(row: Row): BoardSession {
+  const { questions } = sessionQuestions(row.questions, row.studies?.questions);
   return {
     id: row.id,
     campaign: row.studies?.name ?? "Unknown study",
@@ -21,19 +23,23 @@ function toBoardSession(row: Row): BoardSession {
     completed: row.status === "completed",
     outcome: getSessionOutcome(row),
     answered: Object.keys(row.answers ?? {}).length,
-    total: Array.isArray(row.studies?.questions) && row.studies.questions.length ? row.studies.questions.length : null,
+    total: questions?.length || null,
   };
 }
 
 async function loadSessions(owner: string) {
   try {
-    const result = await getSupabase()
+    const query = (columns: string) => getSupabase()
       .from("screening_sessions")
       // studies!inner + owner filter: only sessions from this account's campaigns.
-      .select("id,status,answers,match_results,created_at,updated_at,studies!inner(*)")
+      .select(`${columns},studies!inner(*)`)
       .eq("studies.owner_id", owner)
       .order("created_at", { ascending: false })
       .limit(500);
+    const columns = "id,status,answers,match_results,created_at,updated_at";
+    let result = await query(`${columns},questions`);
+    // Before screening_sessions.questions exists, every session falls back to its campaign's questions.
+    if (result.error && (result.error.code === "42703" || /questions/.test(result.error.message))) result = await query(columns);
     if (result.error) throw result.error;
     return { sessions: ((result.data ?? []) as unknown as Row[]).map(toBoardSession), error: false, loadedAt: Date.now() };
   } catch {

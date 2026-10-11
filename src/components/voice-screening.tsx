@@ -51,7 +51,7 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped }: {
+function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped }: {
   slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
@@ -67,6 +67,8 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
   // Saved values by question key: they drive the question counter, and the total shrinks or grows as answers rule questions in or out.
   const [savedAnswers, setSavedAnswers] = useState<Record<string, string>>({});
   const [happyUntil, setHappyUntil] = useState(0);
+  // The questions this session was started with. The campaign may have been edited since the page loaded.
+  const [questions, setQuestions] = useState(campaignQuestions);
 
   // Configure an ElevenLabs client tool named record_screening_answer with field and value parameters.
   useConversationClientTool("record_screening_answer", async (parameters) => {
@@ -90,9 +92,11 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
     try {
       setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedAnswers({}); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
-      const sessionBody = await sessionResponse.json() as { sessionId?: string; error?: string };
+      const sessionBody = await sessionResponse.json() as { sessionId?: string; questions?: Question[] | null; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
+      const asked = sessionBody.questions !== undefined ? sessionBody.questions : campaignQuestions;
       setSessionId(sessionBody.sessionId);
+      setQuestions(asked);
       // The name is typed, not spoken, so save it straight away rather than through Ollie.
       if (typedName) await fetch(`/api/sessions/${sessionBody.sessionId}/answers`, {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field: NAME_FIELD, value: typedName }),
@@ -106,7 +110,7 @@ function VoiceScreeningControls({ slug, studyName, questions, messages, resetMes
 
       const conversationId = await startSession({ conversationToken: tokenBody.token, userId: sessionBody.sessionId, textOnly: nextMode === "text",
         // Ollie's prompt reads these with {{study_name}} / {{study_questions}} (see README).
-        dynamicVariables: { study_name: studyName, participant_name: typedName, study_questions: questions ? agentQuestionList(questions, typedName) : "" } });
+        dynamicVariables: { study_name: studyName, participant_name: typedName, study_questions: asked ? agentQuestionList(asked, typedName) : "" } });
       await fetch(`/api/sessions/${sessionBody.sessionId}/conversation`, {
         method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId }),
       });

@@ -1,7 +1,7 @@
 // Regression checks for screening rules and scoring. Run with `npm test` (no database or network needed).
 import assert from "node:assert/strict";
 import { interviewProgress } from "@/components/participant/progress";
-import { answerEvidence, applies, DEMO_QUESTIONS, matchQuestions, type Question } from "@/lib/questions";
+import { answerEvidence, applies, DEMO_QUESTIONS, matchQuestions, sessionQuestions, type Question } from "@/lib/questions";
 
 let failures = 0;
 function check(name: string, run: () => void) {
@@ -51,6 +51,45 @@ check("age below the minimum rules a fit question out", () => {
 });
 check("all fits answered yes and no flags is a potential match", () => {
   assert.equal(status({ ...profile, asthma: "yes", inhaler_weekly: "yes", smokes: "no" }), "potential_match");
+});
+
+// 3. Each session uses the questions it started with; campaign edits only affect new sessions.
+// An edit made mid-interview: the smoking flag becomes a fit question, the inhaler follow-up is removed and a new flag is added.
+const EDITED: Question[] = [
+  asthma,
+  { key: "smokes", text: "Do you currently smoke or vape?", kind: "include", trial: "Asthma study" },
+  { key: "recent_cold", text: "Have you had a cold in the last two weeks?", kind: "exclude", trial: "Asthma study" },
+];
+const finished = { ...profile, asthma: "yes", inhaler_weekly: "yes", smokes: "no" };
+
+check("a session started before an edit keeps scoring with its own questions", () => {
+  const { questions, fromCampaign } = sessionQuestions(DEMO_QUESTIONS, EDITED);
+  assert.equal(fromCampaign, false);
+  assert.deepEqual(questions, DEMO_QUESTIONS);
+  assert.equal(status(finished, questions!), "potential_match");
+  // Scored against the edited campaign, the same answers would have read as an exclusion.
+  assert.equal(status(finished, EDITED), "possible_exclusion");
+});
+check("progress mid-interview uses the session's questions after an edit", () => {
+  const { questions } = sessionQuestions(DEMO_QUESTIONS, EDITED);
+  const progress = interviewProgress({ ...profile, asthma: "yes" }, questions);
+  assert.equal(progress.total, 5);
+  assert.equal(progress.current, 4);
+});
+check("a historical report keeps the evidence from the questions that were asked", () => {
+  const { questions } = sessionQuestions(DEMO_QUESTIONS, EDITED);
+  assert.equal(answerEvidence(questions![1], finished, questions!), "supports"); // inhaler, removed from the campaign later
+  assert.equal(answerEvidence(questions![2], finished, questions!), "supports"); // "no" to the original smoking flag
+});
+check("an empty saved list is still the session's own copy", () => {
+  assert.deepEqual(sessionQuestions([], EDITED), { questions: [], fromCampaign: false });
+});
+check("legacy sessions without a saved copy fall back to the campaign's questions and say so", () => {
+  assert.deepEqual(sessionQuestions(undefined, EDITED), { questions: EDITED, fromCampaign: true });
+  assert.deepEqual(sessionQuestions(null, EDITED), { questions: EDITED, fromCampaign: true });
+});
+check("legacy keyword-matching campaigns (no question list) stay on legacy matching", () => {
+  assert.deepEqual(sessionQuestions(null, null), { questions: null, fromCampaign: false });
 });
 
 if (failures) { console.error(`\n${failures} check(s) failed`); process.exit(1); }
