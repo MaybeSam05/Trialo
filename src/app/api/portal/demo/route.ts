@@ -9,7 +9,7 @@ const DEMO_USERNAME = "trialo-demo";
  * short-lived Clerk sign-in token. The portal's <SignIn> picks up __clerk_ticket and finishes the sign-in.
  */
 export async function GET(request: Request) {
-  const portal = new URL("/portal", request.url);
+  const portal = new URL("/portal/sign-in", request.url);
   try {
     const clerk = await clerkClient();
     const { data } = await clerk.users.getUserList({ username: [DEMO_USERNAME] });

@@ -20,9 +20,9 @@ Minimal hackathon implementation of a QR-based clinical-trial pre-screening flow
 
 ## Coordinator accounts (Clerk)
 
-Coordinators sign in at `/portal` with a username and password (sign-up is open at `/portal/sign-up`). Each account only sees the campaigns it created (`studies.owner_id`) and their sessions. Participants never sign in: `/s/<slug>`, the participant APIs and the ElevenLabs webhook stay public.
+Coordinators sign in at `/portal` (forwards to `/portal/sign-in`) with a username and password (sign-up is open at `/portal/sign-up`). Each account only sees the campaigns it created (`studies.owner_id`) and their sessions. Participants never sign in: `/s/<slug>`, the participant APIs and the ElevenLabs webhook stay public.
 
-- Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to `.env.local` (and Netlify), plus `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/portal`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/portal/sign-up` and both `..._FALLBACK_REDIRECT_URL=/dashboard`. Without the keys every page fails to load.
+- Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to `.env.local` (and Netlify), plus `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/portal/sign-in`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/portal/sign-up` and both `..._FALLBACK_REDIRECT_URL=/dashboard`. Without the keys every page fails to load.
 - Run the `owner_id` lines in `supabase/schema.sql` once.
 - `npm run demo:user` creates (or resets the password of) the shared `trialo-demo` account and gives it every campaign without an owner.
 - If sign-in loops back to the portal locally, sync your computer clock; Clerk session tokens are sensitive to clock drift.

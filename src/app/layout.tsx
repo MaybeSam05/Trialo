@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en" className={nunito.variable}>
     <body>
-      <ClerkProvider signInUrl="/portal" signUpUrl="/portal/sign-up" signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/portal">
+      <ClerkProvider signInUrl="/portal/sign-in" signUpUrl="/portal/sign-up" signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard" afterSignOutUrl="/portal">
         {children}
       </ClerkProvider>
     </body>

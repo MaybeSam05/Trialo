@@ -8,6 +8,6 @@ export default async function PortalSignUp({ searchParams }: { searchParams: Pro
   await leavePortalIfSignedIn(searchParams);
   const demoUnavailable = (await searchParams).demo === "unavailable";
   return <PortalShell demoUnavailable={demoUnavailable} title="Create a coordinator account" lede="Pick a username and password. Your campaigns and their sessions are private to your account.">
-    <SignUp path="/portal/sign-up" routing="path" signInUrl="/portal" fallbackRedirectUrl="/dashboard" appearance={portalAppearance} />
+    <SignUp path="/portal/sign-up" routing="path" signInUrl="/portal/sign-in" fallbackRedirectUrl="/dashboard" appearance={portalAppearance} />
   </PortalShell>;
 }

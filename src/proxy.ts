@@ -22,7 +22,7 @@ export default clerkMiddleware(async (auth, request) => {
   if (request.nextUrl.pathname.startsWith("/api/")) return NextResponse.json({ error: "Sign in to continue." }, { status: 401 });
   return redirectToSignIn({ returnBackUrl: request.url });
 }, {
-  signInUrl: "/portal",
+  signInUrl: "/portal/sign-in",
   signUpUrl: "/portal/sign-up",
   // Session tokens are short-lived; allow for a dev machine's clock drifting a few seconds from Clerk's.
   clockSkewInMs: 10_000,
