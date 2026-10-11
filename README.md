@@ -1,72 +1,232 @@
-# Trialo
+<p align="center">
+  <img src="public/ollie/hello.webp" alt="Ollie the penguin waving" width="140">
+</p>
 
-Minimal hackathon implementation of a QR-based clinical-trial pre-screening flow.
+<h1 align="center">Trialo</h1>
 
-## Flow
+<p align="center">
+  <strong>Clinical-trial pre-screening by voice.</strong><br>
+  A coordinator shares a link or QR code, a participant has a short conversation with Ollie,<br>
+  and the research team gets structured answers and a preliminary summary to review.
+</p>
 
-1. A coordinator creates a campaign at `/`, receiving a unique `/s/<slug>` link and QR code.
-2. A participant scans the QR code and opens the mobile browser link.
-3. After the consent notice, the page starts an authenticated ElevenLabs voice session.
-4. Ollie uses the `record_screening_answer` client tool to store confirmed answers during the interview.
-5. The app runs conservative preliminary matching against the campaign's trial criteria and shows the result in `/dashboard` for coordinator review.
-6. ElevenLabs sends a post-call webhook so the dashboard marks the session complete and retains its transcript.
+<p align="center">
+  <a href="https://trialo-regen.netlify.app">Live demo</a> ·
+  <a href="#getting-started">Getting started</a> ·
+  <a href="#configure-ollie-elevenlabs">Configure Ollie</a> ·
+  <a href="#limitations-and-responsible-use">Limitations</a>
+</p>
 
-## Setup
+<p align="center">
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-149eca?logo=react">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white">
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres-3ecf8e?logo=supabase&logoColor=white">
+  <img alt="ElevenLabs" src="https://img.shields.io/badge/ElevenLabs-Conversational%20AI-000000">
+  <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+</p>
 
-1. Run `npm install`.
-2. Create a Supabase project. In its SQL Editor, run `supabase/schema.sql`.
-3. Copy `.env.example` to `.env.local` and fill in the Supabase URL, Supabase service-role key, ElevenLabs API key, and Ollie's Agent ID.
-4. Run `npm run dev`.
+> [!IMPORTANT]
+> Trialo is a hackathon prototype built for HackRU (Regeneron track). It uses **synthetic demo data only**. It is not a medical device and never decides eligibility: every result is a preliminary summary for clinical research staff to review.
 
-## Coordinator accounts (Clerk)
+## What it does
 
-Coordinators sign in at `/portal` (forwards to `/portal/sign-in`) with a username and password (sign-up is open at `/portal/sign-up`). Each account only sees the campaigns it created (`studies.owner_id`) and their sessions. Participants never sign in: `/s/<slug>`, the participant APIs and the ElevenLabs webhook stay public.
+**For coordinators**
 
-- Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` to `.env.local` (and Netlify), plus `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/portal/sign-in`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/portal/sign-up` and both `..._FALLBACK_REDIRECT_URL=/dashboard`. Without the keys every page fails to load.
-- Run the `owner_id` lines in `supabase/schema.sql` once.
-- `npm run demo:user` creates (or resets the password of) the shared `trialo-demo` account and gives it every campaign without an owner.
-- If sign-in loops back to the portal locally, sync your computer clock; Clerk session tokens are sensitive to clock drift.
+- **Create a campaign:** name it, add screening questions (write them, paste them, or upload a CSV), review, and get a participant link and QR code.
+- **Smart questions:** each question is *fits if yes*, *flag if yes*, or *info only*. Questions can depend on gender, an age range, or an earlier answer ("ask about inhaler use only if they have asthma").
+- **Live dashboard:** sessions update every few seconds and show how far each person got. Each one reads *in progress*, *complete*, or *stopped early* (participant ended it, the call ended, or the connection dropped), with a review status: **Potential match for follow-up**, **Needs review**, or **Unlikely match**.
+- **Session report:** every answer in interview order, which answers support or rule out each study, and the full call transcript.
+- **Private workspaces:** coordinators sign in (Clerk) and only see their own campaigns. A one-click demo account shows sample data.
+
+**For participants**
+
+- Scan a QR code, type a first name (optional), and talk to **Ollie**, an animated penguin with lip-synced speech and expressions.
+- **Hold to talk:** the mic is live only while you hold the button (or the Space bar on a computer), so background noise never gets in.
+- A clear counter ("Question 3 of 5"), large text, and a phone layout that fits one screen without scrolling.
+- Skip any question or stop at any time. Answers so far are saved, and the closing screen says honestly whether the interview finished.
+- No account, nothing to install. A text-only mode is also available.
+
+## How it works
+
+```mermaid
+sequenceDiagram
+    actor C as Coordinator
+    participant T as Trialo (Next.js)
+    participant DB as Supabase
+    actor P as Participant
+    participant O as Ollie (ElevenLabs)
+
+    C->>T: Create campaign (questions)
+    T->>DB: Save campaign
+    T-->>C: Link + QR code
+    P->>T: Open /s/<slug>
+    T->>DB: Start session (copy of the questions)
+    T->>O: Start voice session with a short-lived token and the question list
+    loop Each question
+        O->>P: Ask
+        P->>O: Answer (hold to talk)
+        O->>T: record_screening_answer(field, value)
+        T->>DB: Save answer, rescore
+    end
+    O->>T: Post-call webhook (transcript)
+    T->>DB: Save transcript
+    C->>T: Review dashboard and report
+```
+
+- **Questions are versioned per session.** Each session keeps a copy of the questions it started with, so editing a campaign never changes interviews in progress or past reports.
+- **Scoring is conservative.** A yes to a *fits* question supports a match; a no, or a yes to a *flag* question, may rule one out. "Not sure", "prefer not to say" and skipped questions are missing information that needs review, never an exclusion.
+- **Completion means every question that applies was answered.** Hanging up or receiving a transcript doesn't count as finishing.
+- **Secrets stay on the server.** The browser gets a short-lived ElevenLabs conversation token; the ElevenLabs and Supabase keys never leave the server.
+
+## Tech stack
+
+| Area | Choice |
+| --- | --- |
+| App | [Next.js 16](https://nextjs.org) (App Router), React 19, TypeScript, plain CSS |
+| Voice agent | [ElevenLabs Conversational AI](https://elevenlabs.io/conversational-ai) via `@elevenlabs/react` (client tool + post-call webhook) |
+| Database | [Supabase](https://supabase.com) Postgres, accessed only from server routes |
+| Auth | [Clerk](https://clerk.com) for coordinators; participants never sign in |
+| Hosting | [Netlify](https://www.netlify.com) |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js **22.13+**
+- A [Supabase](https://supabase.com) project, an [ElevenLabs](https://elevenlabs.io) agent, and a [Clerk](https://clerk.com) application
+
+### 1. Install
+
+```bash
+git clone https://github.com/MaybeSam05/Popplio-Trial.git trialo
+cd trialo
+npm install
+```
+
+### 2. Set up the database
+
+In the Supabase SQL Editor, run [`supabase/schema.sql`](supabase/schema.sql). It is idempotent: every statement is `create … if not exists` or `add column if not exists`, so re-running it on an existing database only adds what's missing.
+
+### 3. Configure environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role key (server only) |
+| `ELEVENLABS_API_KEY` | ElevenLabs API key (server only, used to mint conversation tokens) |
+| `ELEVENLABS_AGENT_ID` | Ollie's agent ID |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | Clerk keys. Without them, pages don't load |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/portal/sign-in` and `/portal/sign-up` |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`, `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` | `/dashboard` |
+| `NEXT_PUBLIC_APP_URL` | Optional base URL for participant links and QR codes |
+
+### 4. Run
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000, sign up at `/portal/sign-up`, and create a campaign. Use **Use the demo preset** for a ready-made three-question asthma study.
+
+> [!TIP]
+> If sign-in keeps looping back to the portal locally, sync your computer's clock. Clerk session tokens are sensitive to clock drift.
+
+## Configure Ollie (ElevenLabs)
+
+1. **Client tool.** Add a client tool named `record_screening_answer`, set to block the agent while it runs, with two string parameters:
+   - `field`: the question's field name
+   - `value`: the participant's confirmed answer
+2. **Dynamic variables.** Declare these in the agent; Trialo fills them in when each session starts:
+   - `{{study_name}}`: the campaign name
+   - `{{participant_name}}`: the name the participant typed (may be empty)
+   - `{{study_questions}}`: the full question list, with profile questions first and each question's `[field: …]` name and "only if" rule
+3. **System prompt.** Include something like:
+   > Ask the questions in {{study_questions}} one at a time, in order, in plain language. Skip a question only when its "only if" rule clearly doesn't match an earlier answer. After the participant confirms an answer, call `record_screening_answer` with `field` set to the exact field name in brackets and `value` set to their answer. Never tell the participant whether they are eligible.
+4. **Post-call webhook.** Point it at `https://YOUR_DOMAIN/api/elevenlabs/post-call`. It stores the transcript for the session report.
+
+## Screening questions
+
+Coordinators build questions in the app, or upload a CSV like this (a template can be downloaded from the editor):
+
+```csv
+id,question,type,study,ask_if,min_age,max_age
+allergies,Do you have seasonal allergies?,fit,Trial A,,12,
+allergy_medicine,Do you take allergy medicine during allergy season?,fit,Trial A,allergies=yes,,
+recent_cold,Have you had a cold or the flu in the last two weeks?,flag,Trial A,,,
+womens_group,Would you join a women-only group session?,info,Trial B,gender=female,18,
+```
+
+| Column | Meaning |
+| --- | --- |
+| `type` | `fit` (a yes fits), `flag` (a yes may rule out), or `info` (collected, not scored) |
+| `study` | Groups questions into separate study results within one campaign |
+| `ask_if` | Ask only when an earlier answer matches, e.g. `gender=female` or `allergies=yes` |
+| `min_age`, `max_age` | Ask only within an age range |
+
+Every interview starts with two profile questions, age and gender. The participant's name is typed on the welcome screen rather than spoken, because names are easy to mishear.
 
 ## Demo data
 
-`npm run seed:demo` fills Supabase with realistic, fully synthetic data: three campaigns with their own question lists and about 55 sessions over the past two weeks (completed, unsure, exclusions, drop-offs, links opened but never started, and two people "answering now"). It replaces only campaigns whose slug starts with `demo-`, so it is safe to re-run.
+```bash
+npm run seed:demo        # three synthetic campaigns and about 55 sessions over two weeks
+npm run demo:user        # create (or reset) the shared "trialo-demo" coordinator account
+```
 
-- `npm run seed:demo -- --clear-all` also deletes every other campaign and session first (use it to wipe old test data).
-- `npx tsx scripts/seed-demo.ts --dry-run` previews the data without touching the database.
+- `seed:demo` only replaces campaigns whose slug starts with `demo-`, so it's safe to re-run. Add `-- --clear-all` to wipe every campaign first, or run `npx tsx scripts/seed-demo.ts --dry-run` to preview without touching the database.
+- `demo:user` prints a fresh password and gives the account every campaign without an owner. The portal's **Demo** button signs visitors into it with a one-time token.
 
-Requires `.env.local` and the `studies.questions` column from `supabase/schema.sql`.
+## Scripts
 
-## Configure Ollie
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint |
+| `npm test` | Regression checks for rules, scoring, progress, endings, webhooks and request handling (no network or database needed) |
+| `npm run seed:demo` | Load synthetic demo data |
+| `npm run demo:user` | Create or reset the demo coordinator account |
 
-In ElevenLabs Agent settings, add a **client tool** named `record_screening_answer`:
+## Project structure
 
-- Set it to block the agent while it runs.
-- Parameters: `field` (string, the normalized answer key) and `value` (string, the confirmed answer).
-- Add this instruction to Ollie's system prompt: "After the participant confirms each answer, call `record_screening_answer` with a concise field name and the exact confirmed value. Do not call it before consent."
+```text
+src/
+  app/
+    page.tsx                  Create a campaign
+    s/[slug]/                 Participant interview (public)
+    dashboard/                Sessions board, campaigns, session reports
+    portal/                   Coordinator sign-in and sign-up (Clerk)
+    api/
+      studies/                Create campaigns, edit questions
+      public/[slug]/sessions  Start a session (public)
+      sessions/[id]/          Save answers, link the conversation, record how the call ended
+      elevenlabs/             Conversation tokens, post-call webhook
+  components/
+    voice-screening.tsx       ElevenLabs wiring: client tool, dynamic variables, hold-to-talk mic
+    participant/              Welcome, interview screen, Ollie, speech bubble, talk button
+    coordinator/              Question editor, campaign review and sharing
+    dashboard/                Live sessions board, outcome and interview-state rules
+  lib/
+    questions.ts              Question model, conditions, scoring, progress, CSV parsing
+supabase/schema.sql           Tables and additive migrations
+scripts/                      Demo seeding, demo account, regression checks
+```
 
-### Coordinator-defined questions
+## Deployment
 
-Coordinators edit each campaign's questions at `/` (when creating) or `/dashboard/studies/<slug>` (afterwards). Questions are stored in `studies.questions` (run the last statement of `supabase/schema.sql` once on existing databases; until then campaigns fall back to the demo trials). Each question is yes/no and is marked as *include* (a yes fits), *exclude* (a yes is a flag) or *info* (collected, not scored).
+Trialo runs on Netlify (Next.js is detected automatically). Set the environment variables above in the Netlify site settings, run `supabase/schema.sql` on the production database, and update Ollie's post-call webhook URL to the deployed domain.
 
-Each session keeps a copy of its campaign's questions from the moment it starts (`screening_sessions.questions`), and Ollie, scoring, progress and the session report all use that copy, so editing a campaign only affects new sessions. On existing databases run the `screening_sessions.questions` line at the end of `supabase/schema.sql` once (it only adds a column). Until then sessions start without a copy, as before. Sessions created before the column existed are shown against the campaign's current questions, with a note on the report.
+## Limitations and responsible use
 
-A session is complete only when every question that applies has an answer; the post-call webhook just stores the transcript. The interview page also records how the call ended (`screening_sessions.end_reason`: participant, agent or connection) so the dashboard can tell stopping early from a dropped call. Run the `end_reason` line at the end of `supabase/schema.sql` once; until then the end reason is simply unknown.
+- **Synthetic data only.** Don't enter real health information. The participant screen says so too.
+- **Not an eligibility decision.** Results are limited to *potential match*, *needs information* and *possible exclusion*, summarised as **Potential match for follow-up**, **Needs review** or **Unlikely match**, and always need review by qualified research staff.
+- **Before any real use**, add webhook signature verification, role-based access and audit logs, data retention and deletion controls, protocol-reviewed criteria, and a formal privacy/HIPAA review.
+- Voice-agent behaviour (which questions get asked, how answers are worded) depends on the ElevenLabs agent's prompt and settings.
 
-The app passes two dynamic variables when a session starts, so Ollie's system prompt must use them instead of a fixed question list:
+## License
 
-- `{{study_name}}`: the campaign name.
-- `{{study_questions}}`: a numbered list such as `1. [field: q1] Do you have type 2 diabetes?`.
-
-Add to Ollie's system prompt: "Ask the questions in {{study_questions}} one at a time, in order, in plain language. After the participant confirms an answer, call `record_screening_answer` with `field` set to the exact field name in brackets and `value` set to yes, no or not sure. If {{study_questions}} is empty, use your default questions." Then declare both variables in the agent's dynamic-variable settings.
-
-Set Ollie's post-call webhook to:
-
-`https://YOUR_DEPLOYED_DOMAIN/api/elevenlabs/post-call`
-
-The application requests a server-generated ElevenLabs conversation token, so the ElevenLabs API key is never sent to the browser.
-
-## Important limits
-
-- The default five trials in `src/lib/defaults.ts` are synthetic demo criteria. Replace them with protocol-reviewed criteria before any real use.
-- `src/lib/matching.ts` intentionally produces only `potential_match`, `needs_information`, or `possible_exclusion`. It must not be used to make an eligibility decision.
-- This hackathon implementation has no coordinator login. Add authenticated, role-based access, webhook signature verification, retention/deletion controls, audit logs, and a formal privacy/HIPAA review before handling real participant health information.
+[MIT](LICENSE) © 2026 The Trialo team
