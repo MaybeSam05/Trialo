@@ -162,3 +162,13 @@
   .iv-expand-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .iv-log { padding-right: 44px; }
 }
+/* Phones: answers are spoken or typed, so Yes / No / Not sure stay on desktop only and the captions get the room */
+@media (max-width: 760px) {
+  .iv-quick, .iv-answer > .iv-label, .iv-answer:not(:has(.iv-compose)) { display: none; }
+  .iv-log { max-height: clamp(96px, 24dvh, 240px); min-height: 72px; }
+  .iv-sheet:has(.iv-compose) .iv-log { max-height: clamp(72px, 18dvh, 190px); }
+}
+@media (max-width: 760px) and (max-height: 680px) {
+  .iv-log { max-height: 18dvh; min-height: 64px; }
+  .iv-sheet:has(.iv-compose) .iv-log { max-height: 13dvh; min-height: 52px; }
+}
