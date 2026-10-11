@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Ollie } from "@/components/ollie";
 import { DashboardStatusChip } from "./status";
-import type { SessionOutcome } from "./session-outcome";
+import { interviewState, type SessionOutcome } from "./session-outcome";
 import "./sessions-board.css";
 
 export type BoardSession = {
@@ -12,7 +12,10 @@ export type BoardSession = {
   campaign: string;
   createdAt: string;
   lastActivity: string;
+  /** Every applicable question answered (not just "the call ended"). */
   completed: boolean;
+  hasTranscript: boolean;
+  endReason: string | null;
   outcome: SessionOutcome;
   answered: number;
   total: number | null;
@@ -37,16 +40,11 @@ const OUTCOMES: { value: SessionOutcome; label: string; tone: string; note: stri
 const STATUS_LABEL: Record<Status, string> = { all: "All statuses", live: "Answering now", potential_match: "Potential match for follow-up", needs_review: "Needs review", unlikely_match: "Unlikely match" };
 const SORT_LABEL: Record<Sort, string> = { newest: "Newest first", oldest: "Oldest first", activity: "Latest activity" };
 
-type Interview = { label: string; detail: string; tone: "live" | "done" | "stopped" | "idle" };
-
-/** What happened in the interview itself, kept separate from the review outcome. */
-function interviewState(session: BoardSession, live: boolean, now: number): Interview {
-  const all = session.total !== null && session.answered >= session.total;
-  if (session.completed) return { label: "Complete", detail: "Interview finished", tone: "done" };
-  if (live) return { label: "In progress", detail: session.answered === 0 ? "Started, no answers yet" : `Last answer ${ago(now - Date.parse(session.lastActivity))}`, tone: "live" };
-  if (session.answered === 0) return { label: "Not started", detail: "Opened the link, never answered", tone: "idle" };
-  if (all) return { label: "Answers complete", detail: "Call didn't close, so no transcript", tone: "stopped" };
-  return { label: "Stopped early", detail: "Left before the last question", tone: "stopped" };
+/** What happened in the interview itself (see interviewState), kept separate from the review outcome. */
+function stateOf(session: BoardSession, now: number) {
+  const since = now - Date.parse(session.lastActivity);
+  return interviewState({ complete: session.completed, answered: session.answered, hasTranscript: session.hasTranscript, endReason: session.endReason, recent: since < LIVE_WINDOW_MS },
+    session.answered === 0 ? "Started, no answers yet" : `Last answer ${ago(since)}`);
 }
 
 export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession[]; renderedAt: number }) {
@@ -83,7 +81,7 @@ export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession
     return () => clearTimeout(timer);
   }, [highlights]);
 
-  const isLive = (session: BoardSession) => !session.completed && now - Date.parse(session.lastActivity) < LIVE_WINDOW_MS;
+  const isLive = (session: BoardSession) => stateOf(session, now).live;
   const campaigns = useMemo(() => [...new Set(sessions.map((session) => session.campaign))].sort(), [sessions]);
 
   // Everything except the status filter, so the status options can show live counts.
@@ -195,8 +193,8 @@ export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession
             <thead><tr><th scope="col">Session / campaign</th><th scope="col">Started (UTC)</th><th scope="col">Interview</th><th scope="col">Review status</th><th scope="col"><span className="dashboard-sr-only">Report</span></th></tr></thead>
             <tbody>{visible.map((session) => {
               const date = new Date(session.createdAt);
-              const live = isLive(session);
-              const interview = interviewState(session, live, now);
+              const interview = stateOf(session, now);
+              const live = interview.live;
               const fresh = highlights.fresh.includes(session.id);
               return <tr key={session.id} className={fresh ? "board-row-new" : undefined}>
                 <th scope="row" className="dashboard-session-cell">
@@ -231,7 +229,7 @@ export function SessionsBoard({ sessions, renderedAt }: { sessions: BoardSession
           <button type="button" className="btn btn-secondary" disabled={current >= pages - 1} onClick={() => setPage(current + 1)}>Next</button>
         </nav>
         <footer className="dashboard-table-footer board-legend">
-          <p className="muted"><strong>Interview</strong> is what happened on the call: in progress, complete, stopped early, or answers complete but the call didn&apos;t close (no transcript yet). <strong>Review status</strong> is the pre-screening summary for staff; it reads &ldquo;Not ready&rdquo; while someone is still answering.</p>
+          <p className="muted"><strong>Interview</strong> is what happened on the call: in progress, complete (every question that applies was answered), or stopped early (the participant ended the call, the call or connection dropped, or they left). <strong>Review status</strong> is the pre-screening summary for staff; it reads &ldquo;Not ready&rdquo; while someone is still answering.</p>
         </footer>
       </>}
     </section>

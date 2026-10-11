@@ -4,7 +4,7 @@ import { Ollie } from "@/components/ollie";
 import { coordinatorLinks, SiteHeader } from "@/components/site-header";
 import { LiveUpdates } from "@/components/dashboard/live-updates";
 import { DashboardStatusChip } from "@/components/dashboard/status";
-import { getSessionOutcome } from "@/components/dashboard/session-outcome";
+import { getSessionOutcome, interviewState, sessionProgress } from "@/components/dashboard/session-outcome";
 import { stripExpressions } from "@/components/participant/speech-timeline";
 import { MatchChip } from "@/components/status-chip";
 import { answerEvidence, applies, NAME_FIELD, PROFILE_QUESTIONS, sessionQuestions, type Evidence, type Question } from "@/lib/questions";
@@ -15,9 +15,13 @@ import "@/components/coordinator/report.css";
 
 export const dynamic = "force-dynamic";
 
+/** Matches the dashboard: no activity for this long and no end recorded means the participant left. */
+const LIVE_WINDOW_MS = 10 * 60_000;
+const isRecent = (time: string) => Date.now() - Date.parse(time) < LIVE_WINDOW_MS;
+
 type Session = {
   id: string; status: string; answers: Record<string, unknown> | null; match_results: MatchResult[] | null;
-  transcript: unknown; created_at: string; updated_at: string; questions?: unknown; studies: { name: string; questions?: Question[] | null } | null;
+  transcript: unknown; created_at: string; updated_at: string; questions?: unknown; end_reason?: string | null; studies: { name: string; questions?: Question[] | null } | null;
 };
 type Turn = { who: string; text: string };
 
@@ -76,6 +80,10 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
   const { questions, fromCampaign } = sessionQuestions(session.questions, session.studies?.questions);
   const rows = answerRows(answers, questions);
   const answeredCount = rows.filter((row) => row.value !== null).length;
+  // Same count and completion rule as the dashboard and the participant's counter; ending the call alone isn't completion.
+  const progress = sessionProgress(session, questions);
+  const interview = interviewState({ complete: progress.complete, answered: progress.answered, hasTranscript: session.transcript !== null && session.transcript !== undefined,
+    endReason: session.end_reason ?? null, recent: isRecent(session.updated_at) });
   const name = typeof answers[NAME_FIELD] === "string" ? answers[NAME_FIELD] as string : "";
   const results = session.match_results ?? [];
   const transcript = toTurns(session.transcript);
@@ -89,8 +97,9 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
         <div className="titles">
           <h1>{session.studies?.name ?? "Unknown study"}</h1>
           <div className="report-meta">
-            <DashboardStatusChip status={getSessionOutcome({ status: session.status, match_results: session.match_results })} />
-            <span className="chip">{session.status === "completed" ? "Interview complete" : "Interview not finished"}</span>
+            <DashboardStatusChip status={getSessionOutcome({ status: progress.complete ? "completed" : "needs_review", match_results: session.match_results })} />
+            <span className="chip">{interview.label === "Complete" ? "Interview complete" : interview.label}</span>
+            {interview.detail && <span className="muted">{interview.detail}</span>}
             {name && <span className="muted">Preferred name: {name}</span>}
             <span className="muted">Started {new Date(session.created_at).toLocaleString()}</span>
             <span className="muted">Session {session.id.slice(0, 8)}</span>
@@ -123,11 +132,11 @@ export default async function SessionReport({ params }: { params: Promise<{ id: 
               })}</div>}
           </section>
           <section className="card stack" aria-labelledby="answers-h">
-            <h2 id="answers-h">Answers <span className="muted answer-count">{answeredCount} of {rows.length} answered, in interview order</span></h2>
+            <h2 id="answers-h">Answers <span className="muted answer-count">{progress.total === null ? `${progress.answered} answered` : `${progress.answered} of ${progress.total} answered`}, in interview order</span></h2>
             {answeredCount === 0 ? <p className="muted">No answers were saved in this session.</p>
               : <dl className="answer-list">{rows.map((row) => <div key={row.key} className={row.value === null ? "is-empty" : undefined}>
                 <dt>{row.number && <span className="answer-num">{row.number}</span>}{row.text}</dt>
-                <dd>{row.value ?? (row.skipped ? "Not asked (didn't apply)" : session.status === "completed" ? "Not answered" : "No answer yet")}</dd>
+                <dd>{row.value ?? (row.skipped ? "Not asked (didn't apply)" : interview.live ? "No answer yet" : "Not answered")}</dd>
               </div>)}</dl>}
           </section>
         </div>

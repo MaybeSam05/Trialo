@@ -37,3 +37,7 @@ create index if not exists studies_owner_id_idx on public.studies(owner_id);
 -- affects new sessions. Additive and safe to re-run. Null for sessions created before this column existed: those
 -- fall back to the campaign's current questions, and their report says so.
 alter table public.screening_sessions add column if not exists questions jsonb;
+
+-- How the call ended, reported by the interview page: participant (pressed End), agent (Ollie hung up) or connection
+-- (dropped). Lets coordinators tell stopping early from a dropped call. Additive and safe to re-run; null = unknown.
+alter table public.screening_sessions add column if not exists end_reason text;

@@ -50,6 +50,8 @@ Coordinators edit each campaign's questions at `/` (when creating) or `/dashboar
 
 Each session keeps a copy of its campaign's questions from the moment it starts (`screening_sessions.questions`), and Ollie, scoring, progress and the session report all use that copy, so editing a campaign only affects new sessions. On existing databases run the `screening_sessions.questions` line at the end of `supabase/schema.sql` once (it only adds a column). Until then sessions start without a copy, as before. Sessions created before the column existed are shown against the campaign's current questions, with a note on the report.
 
+A session is complete only when every question that applies has an answer; the post-call webhook just stores the transcript. The interview page also records how the call ended (`screening_sessions.end_reason`: participant, agent or connection) so the dashboard can tell stopping early from a dropped call. Run the `end_reason` line at the end of `supabase/schema.sql` once; until then the end reason is simply unknown.
+
 The app passes two dynamic variables when a session starts, so Ollie's system prompt must use them instead of a fixed question list:
 
 - `{{study_name}}`: the campaign name.

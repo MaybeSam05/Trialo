@@ -1,10 +1,10 @@
 "use client";
 
 import { ConversationProvider, useConversationClientTool, useConversationControls, useConversationInput, useConversationMode, useConversationStatus } from "@elevenlabs/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { agentQuestionList, NAME_FIELD, type Question } from "@/lib/questions";
 import { Intro } from "@/components/participant/intro";
-import { interviewKeys, interviewProgress, matchQuestionKey, normalizeField } from "@/components/participant/progress";
+import { endReasonFor, interviewEnding, interviewKeys, interviewProgress, matchQuestionKey, normalizeField } from "@/components/participant/progress";
 import { Session, type InterviewMode, type Message } from "@/components/participant/session";
 import { SpeechTimeline, stripExpressions, type Alignment } from "@/components/participant/speech-timeline";
 
@@ -37,22 +37,24 @@ export function VoiceScreening({ slug, studyName, questions }: { slug: string; s
   const onAudioAlignment = useCallback((alignment: Alignment) => timeline.add(alignment, performance.now()), [timeline]);
   const onInterruption = useCallback(() => timeline.interrupt(performance.now()), [timeline]);
 
-  // Why the call ended. A connection error is shown to the participant instead of the "all done" screen.
+  // Why the call ended ("user", "agent" or "error"). A connection error is shown to the participant instead of the closing screen.
   const [dropped, setDropped] = useState("");
+  const [disconnectReason, setDisconnectReason] = useState<string | null>(null);
   const onDisconnect = useCallback((details: { reason: string; message?: string; closeCode?: number; closeReason?: string; context?: unknown }) => {
     console.info("[Trialo] conversation ended", details);
+    setDisconnectReason(details.reason);
     if (details.reason === "error") setDropped(details.message || details.closeReason || "The connection to Ollie dropped.");
   }, []);
   const onError = useCallback((message: string, context?: unknown) => console.warn("[Trialo] conversation error", message, context), []);
 
   return <ConversationProvider onMessage={onMessage} onAudioAlignment={onAudioAlignment} onInterruption={onInterruption} onDisconnect={onDisconnect} onError={onError}>
-    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); setDropped(""); }}
-      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} />
+    <VoiceScreeningControls slug={slug} studyName={studyName} questions={questions} messages={messages} resetMessages={() => { setMessages([]); setLastActivity(Date.now()); timeline.reset(); setDropped(""); setDisconnectReason(null); }}
+      addOwnAnswer={addOwnAnswer} lastActivity={lastActivity} timeline={timeline} dropped={dropped} disconnectReason={disconnectReason} />
   </ConversationProvider>;
 }
 
-function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped }: {
-  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string;
+function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions, messages, resetMessages, addOwnAnswer, lastActivity, timeline, dropped, disconnectReason }: {
+  slug: string; studyName: string; questions: Question[] | null; messages: Message[]; resetMessages: () => void; addOwnAnswer: (text: string) => void; lastActivity: number; timeline: SpeechTimeline; dropped: string; disconnectReason: string | null;
 }) {
   const { startSession, endSession, sendUserMessage, getInputVolume, getOutputVolume } = useConversationControls();
   const { status } = useConversationStatus();
@@ -69,6 +71,8 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
   const [happyUntil, setHappyUntil] = useState(0);
   // The questions this session was started with. The campaign may have been edited since the page loaded.
   const [questions, setQuestions] = useState(campaignQuestions);
+  // Pressing "End interview" is the participant stopping, not finishing.
+  const [participantEnded, setParticipantEnded] = useState(false);
 
   // Configure an ElevenLabs client tool named record_screening_answer with field and value parameters.
   useConversationClientTool("record_screening_answer", async (parameters) => {
@@ -81,7 +85,8 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
     const field = questions && key ? key : raw;
     const response = await fetch(`/api/sessions/${sessionId}/answers`, {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ field, value }),
-    });
+    }).catch(() => null);
+    if (!response) return "Answer could not be saved because the connection failed; continue the interview.";
     if (response.ok) { if (key) setSavedAnswers((saved) => ({ ...saved, [key]: value })); setHappyUntil(Date.now() + HAPPY_FOR_MS); }
     return response.ok ? "Answer saved." : "Answer could not be saved; continue the interview.";
   });
@@ -90,7 +95,7 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
 
   async function start(nextMode: InterviewMode, typedName = name) {
     try {
-      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedAnswers({}); resetMessages();
+      setName(typedName); setError(""); setStarted(true); setMode(nextMode); setWasConnected(false); setSavedAnswers({}); setParticipantEnded(false); resetMessages();
       const sessionResponse = await fetch(`/api/public/${slug}/sessions`, { method: "POST" });
       const sessionBody = await sessionResponse.json() as { sessionId?: string; questions?: Question[] | null; error?: string };
       if (!sessionResponse.ok || !sessionBody.sessionId) throw new Error(sessionBody.error ?? "Could not start screening.");
@@ -122,6 +127,17 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
   const connected = status === "connected";
   if (connected && !wasConnected) setWasConnected(true);
   const ended = wasConnected && status === "disconnected" && !error;
+  const ending = interviewEnding(savedAnswers, questions, participantEnded, disconnectReason);
+
+  // Record how the call ended, once per session, so coordinators can tell stopping early from a dropped call.
+  const reported = useRef<string | null>(null);
+  useEffect(() => {
+    if (!sessionId || !disconnectReason || !wasConnected || reported.current === sessionId) return;
+    reported.current = sessionId;
+    fetch(`/api/sessions/${sessionId}/end`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ reason: endReasonFor(disconnectReason, participantEnded) }),
+    }).catch(() => {});
+  }, [sessionId, disconnectReason, wasConnected, participantEnded]);
 
   function send(text: string) {
     sendUserMessage(text);
@@ -130,8 +146,8 @@ function VoiceScreeningControls({ slug, studyName, questions: campaignQuestions,
 
   if (!started) return <Intro studyName={studyName} onStart={(typed) => start("voice", typed)} onType={(typed) => start("text", typed)} />;
 
-  return <Session mode={mode} connected={connected} ended={ended} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
+  return <Session mode={mode} connected={connected} ended={ended} ending={ending} error={error} isSpeaking={isSpeaking} isMuted={isMuted}
     messages={messages} progress={interviewProgress(savedAnswers, questions)} lastActivity={lastActivity} happyUntil={happyUntil}
     getInputVolume={getInputVolume} getOutputVolume={getOutputVolume} onSend={send} timeline={mode === "voice" ? timeline : null}
-    onToggleMute={() => setMuted(!isMuted)} onEnd={() => endSession()} onRetry={() => start(mode)} />;
+    onToggleMute={() => setMuted(!isMuted)} onEnd={() => { setParticipantEnded(true); endSession(); }} onRetry={() => start(mode)} />;
 }

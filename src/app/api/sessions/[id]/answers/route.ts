@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { matchTrials } from "@/lib/matching";
-import { matchQuestions, sessionQuestions } from "@/lib/questions";
+import { answerProgress, matchQuestions, sessionQuestions } from "@/lib/questions";
 import { getSupabase } from "@/lib/supabase";
 import type { Trial } from "@/lib/types";
 
@@ -18,7 +18,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (studyError || !study) throw studyError ?? new Error("Study not found.");
     // Score against the questions this session was asked, not the campaign's latest edit.
     const { questions } = sessionQuestions(session.questions, study.questions);
-    const { error } = await supabase.from("screening_sessions").update({ answers, updated_at: new Date().toISOString(), match_results: questions ? matchQuestions(answers, questions) : matchTrials(answers, study.trials as Trial[]), status: "needs_review" }).eq("id", id);
+    // "completed" only once every question that applies has an answer; recomputed on every save, so corrections count.
+    const status = questions && answerProgress(answers, questions).complete ? "completed" : "needs_review";
+    const { error } = await supabase.from("screening_sessions").update({ answers, updated_at: new Date().toISOString(), match_results: questions ? matchQuestions(answers, questions) : matchTrials(answers, study.trials as Trial[]), status }).eq("id", id);
     if (error) throw error;
     return NextResponse.json({ ok: true });
   } catch (error) {

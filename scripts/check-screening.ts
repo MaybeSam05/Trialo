@@ -1,13 +1,14 @@
 // Regression checks for screening rules and scoring. Run with `npm test` (no database or network needed).
 import assert from "node:assert/strict";
-import { interviewProgress } from "@/components/participant/progress";
-import { answerEvidence, applies, DEMO_QUESTIONS, matchQuestions, sessionQuestions, type Question } from "@/lib/questions";
+import { interviewState, sessionProgress } from "@/components/dashboard/session-outcome";
+import { endReasonFor, interviewEnding, interviewProgress } from "@/components/participant/progress";
+import { postCallUpdate } from "@/lib/post-call";
+import { answerEvidence, answerProgress, applies, DEMO_QUESTIONS, matchQuestions, NAME_FIELD, sessionQuestions, type Question } from "@/lib/questions";
+import { requestJson } from "@/lib/request";
 
-let failures = 0;
-function check(name: string, run: () => void) {
-  try { run(); console.log(`ok   ${name}`); }
-  catch (error) { failures++; console.error(`FAIL ${name}\n     ${error instanceof Error ? error.message : error}`); }
-}
+// Checks run in order (some are async); failures are counted and reported at the end.
+const checks: [string, () => void | Promise<void>][] = [];
+const check = (name: string, run: () => void | Promise<void>) => { checks.push([name, run]); };
 
 const [asthma, inhaler] = DEMO_QUESTIONS;
 const status = (answers: Record<string, string>, questions: Question[] = DEMO_QUESTIONS) => matchQuestions(answers, questions)[0].status;
@@ -92,5 +93,115 @@ check("legacy keyword-matching campaigns (no question list) stay on legacy match
   assert.deepEqual(sessionQuestions(null, null), { questions: null, fromCampaign: false });
 });
 
-if (failures) { console.error(`\n${failures} check(s) failed`); process.exit(1); }
-console.log("\nAll checks passed");
+// 4. Dashboard and report progress: one set of applicable questions for both numbers.
+check("typed name, age and gender before screening: 2 of 5, not 3 of 3", () => {
+  assert.deepEqual(answerProgress({ [NAME_FIELD]: "Sam", ...profile }, DEMO_QUESTIONS), { answered: 2, total: 5, complete: false });
+});
+check("a conditional question ruled out by a confirmed answer leaves the total", () => {
+  assert.deepEqual(answerProgress({ ...profile, asthma: "no", smokes: "no" }, DEMO_QUESTIONS), { answered: 4, total: 4, complete: true });
+});
+check("a correction that rules out an answered follow-up stops counting it", () => {
+  // Answered the inhaler question, then corrected asthma to no: the inhaler answer no longer applies.
+  assert.deepEqual(answerProgress({ ...profile, asthma: "no", inhaler_weekly: "yes" }, DEMO_QUESTIONS), { answered: 3, total: 4, complete: false });
+});
+check("a skipped question keeps the screening incomplete even when later ones are answered", () => {
+  const answers = { ...profile, asthma: "yes", smokes: "no" }; // inhaler skipped
+  assert.deepEqual(answerProgress(answers, DEMO_QUESTIONS), { answered: 4, total: 5, complete: false });
+  assert.equal(interviewProgress(answers, DEMO_QUESTIONS).finished, true); // the counter's position passes it…
+  assert.equal(interviewEnding(answers, DEMO_QUESTIONS, false, "agent"), "cut"); // …but that isn't completion
+});
+check("an unsure answer counts as answered", () => {
+  assert.equal(answerProgress({ ...profile, asthma: "not sure", inhaler_weekly: "yes", smokes: "no" }, DEMO_QUESTIONS).complete, true);
+});
+check("legacy sessions: no question list means no total, name excluded, stored status decides", () => {
+  assert.deepEqual(answerProgress({ [NAME_FIELD]: "Sam", diabetes: "yes" }, null), { answered: 1, total: null, complete: false });
+  assert.equal(sessionProgress({ status: "completed", answers: { diabetes: "yes" } }, null).complete, true);
+});
+check("a stored \"completed\" status from the old webhook doesn't make a partial session complete", () => {
+  assert.equal(sessionProgress({ status: "completed", answers: { ...profile } }, DEMO_QUESTIONS).complete, false);
+});
+
+// 5. Completion, stopping early, connection failure and transcripts are told apart.
+const full = { ...profile, asthma: "yes", inhaler_weekly: "yes", smokes: "no" };
+const partial = { ...profile, asthma: "yes" };
+check("participant: all answered is complete however the call ended", () => {
+  assert.equal(interviewEnding(full, DEMO_QUESTIONS, false, "agent"), "complete");
+  assert.equal(interviewEnding(full, DEMO_QUESTIONS, true, "user"), "complete");
+});
+check("participant: pressing End early is stopped, not all done", () => {
+  assert.equal(interviewEnding(partial, DEMO_QUESTIONS, true, "user"), "stopped");
+  assert.equal(endReasonFor("user", true), "participant");
+});
+check("participant: Ollie hanging up early is a cut call, not all done", () => {
+  assert.equal(interviewEnding(partial, DEMO_QUESTIONS, false, "agent"), "cut");
+  assert.equal(endReasonFor("agent", false), "agent");
+});
+check("participant: a dropped connection is recorded as a connection failure", () => {
+  assert.equal(endReasonFor("error", false), "connection");
+  assert.equal(endReasonFor("error", true), "connection");
+});
+const board = (overrides: Partial<Parameters<typeof interviewState>[0]>) => interviewState({ complete: false, answered: 3, hasTranscript: false, endReason: null, recent: false, ...overrides });
+check("coordinator: a transcript alone doesn't make a partial interview complete", () => {
+  assert.equal(board({ hasTranscript: true }).label, "Stopped early");
+  assert.equal(board({ hasTranscript: true }).live, false);
+});
+check("coordinator: early stop, dropped connection and agent hang-up are distinguished", () => {
+  assert.match(board({ endReason: "participant" }).detail, /Participant ended the call/);
+  assert.match(board({ endReason: "connection" }).detail, /Connection dropped/);
+  assert.match(board({ endReason: "agent" }).detail, /Ollie's call ended/);
+});
+check("coordinator: recent activity with no end recorded is in progress; an ended call isn't", () => {
+  assert.equal(board({ recent: true }).label, "In progress");
+  assert.equal(board({ recent: true, endReason: "participant" }).label, "Stopped early");
+});
+check("coordinator: normal completion, with or without the transcript yet", () => {
+  assert.equal(board({ complete: true, hasTranscript: true }).label, "Complete");
+  assert.match(board({ complete: true }).detail, /transcript not received yet/);
+});
+check("webhook: stores only the transcript, never a status, and repeats are identical", () => {
+  const payload = { type: "post_call_transcription", data: { conversation_id: "conv_1", transcript: [{ role: "agent", message: "Hi" }] } };
+  const first = postCallUpdate(payload);
+  assert.deepEqual(first, { conversationId: "conv_1", transcript: [{ role: "agent", message: "Hi" }] });
+  assert.deepEqual(postCallUpdate(payload), first);
+  assert.equal(first && "status" in first, false);
+});
+check("webhook: no transcript (e.g. an audio webhook) stores nothing; no conversation ID is rejected", () => {
+  assert.equal(postCallUpdate({ type: "post_call_audio", data: { conversation_id: "conv_1" } }), null);
+  assert.deepEqual(postCallUpdate({ data: {} }), { error: "Missing conversation ID." });
+});
+
+// 6. Failed save/create requests always resolve with a usable message.
+const realFetch = globalThis.fetch;
+async function withFetch(fake: () => Promise<Response>, run: () => Promise<void>) {
+  globalThis.fetch = fake as typeof fetch;
+  try { await run(); } finally { globalThis.fetch = realFetch; }
+}
+check("request: network failure", () => withFetch(() => Promise.reject(new TypeError("Failed to fetch")), async () => {
+  const result = await requestJson("/api/studies", { method: "POST" }, "create the campaign");
+  assert.equal(result.ok, false);
+  assert.match(!result.ok ? result.error : "", /no connection/);
+}));
+check("request: HTML gateway error page", () => withFetch(async () => new Response("<html>502 Bad Gateway</html>", { status: 502, headers: { "content-type": "text/html" } }), async () => {
+  const result = await requestJson("/api/studies", { method: "POST" }, "create the campaign");
+  assert.deepEqual(result, { ok: false, error: "Couldn't create the campaign (server error 502). Please try again." });
+}));
+check("request: JSON server error keeps the server's message", () => withFetch(async () => Response.json({ error: "Sign in to continue." }, { status: 401 }), async () => {
+  assert.deepEqual(await requestJson("/api/studies/x", { method: "PUT" }, "save your changes"), { ok: false, error: "Sign in to continue." });
+}));
+check("request: success with a non-JSON body is an error, not a crash", () => withFetch(async () => new Response("ok", { status: 200 }), async () => {
+  assert.equal((await requestJson("/api/studies/x", { method: "PUT" }, "save your changes")).ok, false);
+}));
+check("request: success", () => withFetch(async () => Response.json({ slug: "abc" }), async () => {
+  assert.deepEqual(await requestJson("/api/studies", { method: "POST" }, "create the campaign"), { ok: true, body: { slug: "abc" } });
+}));
+
+async function main() {
+  let failures = 0;
+  for (const [name, run] of checks) {
+    try { await run(); console.log(`ok   ${name}`); }
+    catch (error) { failures++; console.error(`FAIL ${name}\n     ${error instanceof Error ? error.message : error}`); }
+  }
+  if (failures) { console.error(`\n${failures} of ${checks.length} checks failed`); process.exit(1); }
+  console.log(`\nAll ${checks.length} checks passed`);
+}
+void main();

@@ -220,6 +220,27 @@ export function sessionQuestions(saved: unknown, campaign: unknown): { questions
   return Array.isArray(campaign) ? { questions: campaign as Question[], fromCampaign: true } : { questions: null, fromCampaign: false };
 }
 
+/** Keys of the profile and campaign questions that apply to this participant, in interview order. */
+export function applicableKeys(questions: Question[], answers: Record<string, unknown>): string[] {
+  return [...PROFILE_QUESTIONS.map((question) => question.key), ...questions.filter((question) => applies(question, answers, questions)).map((question) => question.key)];
+}
+
+const hasAnswer = (value: unknown) => value !== undefined && value !== null && String(value).trim() !== "";
+
+/**
+ * How many of the questions that apply have a saved answer, for the dashboard and the session report.
+ * "Not sure" counts as answered (it's a reply that needs review); the typed name and fields that aren't questions
+ * don't count, and a corrected answer counts once. `complete` means every applicable question has an answer: the only
+ * proof the screening finished (ending the call or receiving a transcript isn't). Without a question list (legacy
+ * keyword campaigns) the total, and so completion, is unknown.
+ */
+export function answerProgress(answers: Record<string, unknown>, questions: Question[] | null): { answered: number; total: number | null; complete: boolean } {
+  if (!questions) return { answered: Object.keys(answers).filter((key) => key !== NAME_FIELD && hasAnswer(answers[key])).length, total: null, complete: false };
+  const keys = applicableKeys(questions, answers);
+  const answered = keys.filter((key) => hasAnswer(answers[key])).length;
+  return { answered, total: keys.length, complete: answered === keys.length };
+}
+
 /** Questions this participant should get, including profile questions. Used for the progress bar. */
 export function applicableCount(questions: Question[], answers: Record<string, unknown>): number {
   return PROFILE_QUESTIONS.length + questions.filter((question) => applies(question, answers, questions)).length;

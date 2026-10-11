@@ -107,6 +107,8 @@ function answersFor(questions: Question[], persona: Persona) {
     : persona === "live" ? 1 + Math.floor(random() * (questions.length - 2))
     : questions.length;
   const answers: Record<string, string> = {};
+  // Ollie asks age and gender first, and they count toward progress and completion like any question.
+  if (count > 0) { answers.age = String(Math.round(between(41, 74))); answers.gender = pick(["Female", "Male"]); }
   for (const question of questions.slice(0, count)) {
     answers[question.key] = question.key === unsure ? pick(UNSURE)
       : question.key === flagged ? yesFor(question.key)
